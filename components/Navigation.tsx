@@ -11,17 +11,23 @@ interface NavigationProps {
   locale: Locale
 }
 
-const navItems = {
+const BLOG_EXTERNAL_URL = 'https://blog.heimdex.co'
+
+type NavItem = { href: string; label: string; external?: boolean }
+
+const navItems: Record<Locale, NavItem[]> = {
   ko: [
     { href: '/', label: '홈' },
     { href: '/product', label: '제품' },
     { href: '/company', label: '회사' },
+    { href: BLOG_EXTERNAL_URL, label: '블로그', external: true },
     { href: '/contact', label: '문의' },
   ],
   en: [
     { href: '/', label: 'Home' },
     { href: '/product', label: 'Product' },
     { href: '/company', label: 'Company' },
+    { href: BLOG_EXTERNAL_URL, label: 'Blog', external: true },
     { href: '/contact', label: 'Contact' },
   ],
 }
@@ -56,6 +62,23 @@ export default function Navigation({ locale }: NavigationProps) {
           {/* Center Navigation */}
           <div className="hidden md:flex items-center gap-1">
             {items.map((item) => {
+              const linkClass =
+                'relative px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors'
+
+              if (item.external) {
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={linkClass}
+                  >
+                    {item.label}
+                  </a>
+                )
+              }
+
               const fullPath = getLocalizedPath(item.href, locale)
               const isActive =
                 item.href === '/'
