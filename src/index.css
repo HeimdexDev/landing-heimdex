@@ -2,11 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Product Sans — only the Bold weight is available, so map every weight to it */
+/* Product Sans — Regular (400) and Bold (700). Weights in between (e.g.
+   font-medium 500) fall back to Regular per CSS weight matching. */
+@font-face {
+  font-family: 'Product Sans';
+  src: url('/fonts/ProductSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 @font-face {
   font-family: 'Product Sans';
   src: url('/fonts/ProductSans-Bold.woff2') format('woff2');
-  font-weight: 100 900;
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
