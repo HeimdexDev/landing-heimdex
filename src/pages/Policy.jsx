@@ -38,12 +38,12 @@ export default function Policy() {
         {/* Document */}
         <article className="mt-12 w-full text-sm text-grayscale-800">
           <h1 className="text-2xl font-bold tracking-[-0.5px]">{doc.title}</h1>
-          {doc.intro && <p className="mt-6 leading-[1.7] text-grayscale-500">{doc.intro}</p>}
+          {doc.intro && <p className="mt-6 leading-[1.7] text-grayscale-800">{doc.intro}</p>}
           <div className="mt-8 space-y-7">
             {doc.sections.map((sec) => (
               <section key={sec.title}>
                 <h2 className="mb-2 text-base font-bold leading-[1.5]">{sec.title}</h2>
-                <div className="space-y-2 text-grayscale-500">
+                <div className="space-y-2 text-grayscale-800">
                   <Blocks blocks={sec.blocks} />
                 </div>
               </section>

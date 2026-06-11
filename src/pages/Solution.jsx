@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { TABS, SOLUTIONS } from '../data/solutions.js'
 import CtaBanner from '../components/CtaBanner.jsx'
+import Reveal from '../components/Reveal.jsx'
 
 const ICONS = { clock: ClockArrowDown, brain: BrainCircuit, shield: ShieldCheck }
 
@@ -42,7 +43,7 @@ export default function Solution() {
           </div>
 
           {/* Hero copy + image */}
-          <div className="flex w-full items-center gap-[100px]">
+          <Reveal className="flex w-full items-center gap-[100px]">
             <div className="flex flex-1 flex-col items-start gap-10">
               <div className="flex flex-col gap-5">
                 <p className="font-product text-2xl font-bold leading-[1.4] text-navy-500">
@@ -66,11 +67,11 @@ export default function Solution() {
               alt=""
               className="h-[313px] w-[515px] shrink-0 rounded-[10px] object-cover"
             />
-          </div>
+          </Reveal>
         </div>
 
         {/* Question cards */}
-        <div className="mt-[120px] flex overflow-hidden rounded-[20px] bg-white shadow-card">
+        <Reveal className="mt-[120px] flex overflow-hidden rounded-[20px] bg-white shadow-card" delay={120}>
           {data.questions.map((q, i) => (
             <div
               key={i}
@@ -87,11 +88,11 @@ export default function Solution() {
               </p>
             </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       {/* ───────── Steps ───────── */}
-      <section className="flex items-center justify-center py-[100px]">
+      <Reveal as="section" className="flex items-center justify-center py-[100px]">
         <div className="flex flex-col items-center gap-10">
           {data.steps.map((step, i) => (
             <div key={i} className="flex flex-col items-center gap-10">
@@ -116,10 +117,10 @@ export default function Solution() {
             </div>
           ))}
         </div>
-      </section>
+      </Reveal>
 
       {/* ───────── Reasons ───────── */}
-      <section className="flex flex-col items-center gap-20 pb-[200px] pt-[100px]">
+      <Reveal as="section" className="flex flex-col items-center gap-20 pb-[200px] pt-[100px]">
         <h2 className="text-center text-[40px] font-bold leading-[1.4] tracking-[-1px] text-neutral-800">
           <span className="text-navy-500">{data.reasonHighlight}</span>가
           <br />
@@ -152,18 +153,20 @@ export default function Solution() {
             )
           })}
         </div>
-      </section>
+      </Reveal>
 
       {/* ───────── CTA ───────── */}
-      <CtaBanner
-        title={data.cta.title}
-        subtitle={
-          <>
-            <span className="font-semibold text-navy-500">{data.cta.highlight}</span>
-            {data.cta.rest}
-          </>
-        }
-      />
+      <Reveal>
+        <CtaBanner
+          title={data.cta.title}
+          subtitle={
+            <>
+              <span className="font-semibold text-navy-500">{data.cta.highlight}</span>
+              {data.cta.rest}
+            </>
+          }
+        />
+      </Reveal>
     </div>
   )
 }

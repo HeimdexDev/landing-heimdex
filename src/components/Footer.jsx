@@ -22,7 +22,6 @@ export default function Footer() {
             <div className="flex items-center gap-[10px]">
               {LINKS.map((link, i) => (
                 <div key={link.label} className="flex items-center gap-[10px]">
-                  {i > 0 && <span className="h-4 w-px bg-neutral-300" />}
                   <Link
                     to={link.to}
                     className="text-base font-medium tracking-[-0.4px] text-grayscale-800 hover:text-navy-500"

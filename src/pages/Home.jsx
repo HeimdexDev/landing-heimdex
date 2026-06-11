@@ -1,14 +1,17 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowUp,
   ArrowUpRight,
-  Loader,
-  MonitorSpeaker,
-  ClockArrowDown,
+  Plus,
+  CloudOff,
+  Network,
+  Clock,
   ShieldCheck,
 } from 'lucide-react'
 import CtaBanner from '../components/CtaBanner.jsx'
 import HeroAppMockup from '../components/HeroAppMockup.jsx'
+import Reveal from '../components/Reveal.jsx'
 
 const LOGOS = [
   { src: '/assets/logo-1.png', w: 144 },
@@ -85,11 +88,114 @@ const TESTIMONIALS = [
 ]
 
 const FEATURES = [
-  { icon: Loader, title: '업로드 없이', desc: ['대용량 영상도 서버에 올리는 시간 없이,', '원본이 있는 자리에서 바로 분석합니다.'] },
-  { icon: MonitorSpeaker, title: '구축 부담 없이', desc: ['사내 서버, NAS, 로컬 PC까지.', '기존 환경을 그대로 연동해 구축 부담이 없습니다.'] },
-  { icon: ClockArrowDown, title: '기다림 없이', desc: ['영상을 다 보지 않아도 됩니다. 텍스트로 검색해', '필요한 구간만 클립으로 만드세요.'] },
-  { icon: ShieldCheck, title: '유출 걱정 없이', desc: ['외부 전송 없이 폐쇄망 안에서 분석합니다.', '영상 데이터가 외부로 나가지 않습니다.'] },
+  { title: '업로드 없이', icon: CloudOff, desc: ['대용량 영상도 서버에 올리는 시간 없이,', '원본이 있는 자리에서 바로 분석합니다.'] },
+  { title: '구축 부담 없이', icon: Network, desc: ['사내 서버, NAS, 로컬 PC까지.', '기존 환경을 그대로 연동해 구축 부담이 없습니다.'] },
+  { title: '기다림 없이', icon: Clock, desc: ['영상을 다 보지 않아도 됩니다. 텍스트로 검색해', '필요한 구간만 클립으로 만드세요.'] },
+  { title: '유출 걱정 없이', icon: ShieldCheck, desc: ['외부 전송 없이 폐쇄망 안에서 분석합니다.', '영상 데이터가 외부로 나가지 않습니다.'] },
 ]
+
+// VESSL-style numbered accordion paired with a 3D icon that reflects the
+// active item, sitting on a radial glow that fades out at the edges.
+function FeatureShowcase() {
+  const [open, setOpen] = useState(0)
+  const [iconIndex, setIconIndex] = useState(0)
+  const toggle = (i) => {
+    if (open === i) setOpen(-1)
+    else {
+      setOpen(i)
+      setIconIndex(i)
+    }
+  }
+  const ActiveIcon = FEATURES[iconIndex].icon
+
+  return (
+    <div className="grid w-full max-w-page grid-cols-[460px_560px] items-center justify-center gap-[72px]">
+      {/* Left — numbered accordion */}
+      <div className="w-full border-t border-grayscale-100">
+        {FEATURES.map((f, i) => {
+          const active = open === i
+          return (
+            <button
+              key={f.title}
+              type="button"
+              onClick={() => toggle(i)}
+              className="group relative block w-full text-left"
+            >
+            <div className="flex items-center gap-6 py-6">
+              <span className="font-product text-base tabular-nums text-grayscale-500">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3
+                className={`text-2xl font-bold tracking-[-0.5px] transition-colors ${
+                  active ? 'text-navy-500' : 'text-grayscale-800'
+                }`}
+              >
+                {f.title}
+              </h3>
+              <span
+                className={`ml-auto transition-colors ${
+                  active ? 'text-navy-500' : 'text-grayscale-500 group-hover:text-navy-500'
+                }`}
+              >
+                {/* plus rotates counter-clockwise into a close (×) */}
+                <Plus
+                  size={30}
+                  strokeWidth={1}
+                  className={`transition-transform duration-300 ease-out ${
+                    active ? '-rotate-45' : 'rotate-0'
+                  }`}
+                />
+              </span>
+            </div>
+            <div
+              className={`grid transition-all duration-500 ease-out ${
+                active ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+              }`}
+            >
+              <div className="overflow-hidden">
+                <p className="pb-6 pl-[42px] font-noto text-lg leading-[1.5] tracking-[-0.45px] text-grayscale-500">
+                  {f.desc.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </p>
+              </div>
+            </div>
+            {/* base divider + animated accent line */}
+            <span className="absolute bottom-0 left-0 right-0 h-px bg-grayscale-100" />
+            <span
+              className={`absolute bottom-0 left-0 right-0 h-px origin-left bg-navy-500 transition-transform duration-500 ease-out ${
+                active ? 'scale-x-100' : 'scale-x-0'
+              }`}
+            />
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Right — 3D icon on a radial glow that fades out at the edges */}
+      <div className="relative flex h-[440px] items-center justify-center">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,145,255,0.20)_0%,_rgba(57,145,255,0.06)_42%,_transparent_72%)]" />
+        <div className="relative flex h-[240px] w-[240px] items-center justify-center rounded-full bg-gradient-to-b from-white to-[#e9f0fb] shadow-[0_34px_70px_-22px_rgba(35,76,119,0.45),inset_0_3px_6px_rgba(255,255,255,0.95),inset_0_-10px_18px_rgba(35,76,119,0.1)] ring-1 ring-white/70">
+          <div key={iconIndex} className="icon-pop relative">
+            {/* extruded shadow copy for depth */}
+            <ActiveIcon
+              size={104}
+              strokeWidth={1.6}
+              className="absolute left-0 top-0 translate-y-[6px] text-navy-500/30 blur-[3px]"
+            />
+            <ActiveIcon
+              size={104}
+              strokeWidth={1.6}
+              className="relative text-navy-500 drop-shadow-[0_8px_10px_rgba(35,76,119,0.3)]"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   return (
@@ -109,7 +215,7 @@ export default function Home() {
       >
         <div className="relative mx-auto flex w-full max-w-page flex-col items-center px-[60px] pb-0 pt-[160px] text-center">
           {/* Centered copy */}
-          <div className="flex max-w-[760px] flex-col items-center gap-4">
+          <Reveal className="flex max-w-[760px] flex-col items-center gap-4">
             <h1 className="font-product text-[58px] font-bold leading-[1.3] text-white">
               영상 속 원하는 장면,
               <br />
@@ -118,12 +224,12 @@ export default function Home() {
             <p className="font-noto text-lg leading-[1.5] tracking-[-0.45px] text-[#cdd9ec]">
               업로드 없이, 시청 없이.
               <br />
-              검색 한 줄로 필요한 장면을 찾고 숏폼·리포트까지 자동으로 만들어 드립니다.
+              검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로 만들어 드립니다.
             </p>
-          </div>
+          </Reveal>
 
           {/* Centered actions */}
-          <div className="mt-10 flex justify-center gap-5">
+          <Reveal className="mt-10 flex justify-center gap-5" delay={120}>
             <a
               href="https://playground.heimdex.co/"
               target="_blank"
@@ -140,7 +246,7 @@ export default function Home() {
               한 달 무료신청
               <ArrowUpRight size={20} strokeWidth={2} />
             </Link>
-          </div>
+          </Reveal>
 
           {/* Product screen — the real 동영상 검색 dashboard, scaled to fit and
               bottom-clipped so it reads as embedded in the hero. */}
@@ -173,20 +279,25 @@ export default function Home() {
       </section>
 
       {/* ───────── Trusted-by logos ───────── */}
-      <section className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8 px-[60px] pt-[80px] pb-[100px]">
-        {LOGOS.map((logo) => (
-          <img
-            key={logo.src}
-            src={logo.src}
-            alt=""
-            style={{ width: logo.w }}
-            className="h-[60px] object-contain"
-          />
-        ))}
-      </section>
+      <Reveal as="section" className="flex flex-col items-center gap-10 px-[60px] pt-[120px] pb-[120px]">
+        <p className="font-product text-2xl font-medium tracking-[0.02em] text-grayscale-800">
+          Trusted by
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8">
+          {LOGOS.map((logo) => (
+            <img
+              key={logo.src}
+              src={logo.src}
+              alt=""
+              style={{ width: logo.w }}
+              className="h-[60px] object-contain"
+            />
+          ))}
+        </div>
+      </Reveal>
 
       {/* ───────── 직군별 고민 ───────── */}
-      <section className="flex flex-col items-center gap-[60px] px-[60px] py-[100px]">
+      <Reveal as="section" className="flex flex-col items-center gap-[60px] px-[60px] py-[100px]">
         <h2 className="text-center text-[50px] font-bold leading-[1.4] tracking-[-1.25px]">
           <span className="text-navy-500">직군마다 다른 영상 고민,</span>
           <br />
@@ -245,11 +356,14 @@ export default function Home() {
         <div className="relative mt-4 w-screen overflow-hidden py-14">
           {/* soft gradient band — fades into the page bg top & bottom so there's no visible edge */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-grayscale-10 via-[#e6eefb] to-grayscale-10" />
-          <div className="pointer-events-none absolute -top-10 left-[16%] h-64 w-64 rounded-full bg-softblue-500/25 blur-[110px]" />
-          <div className="pointer-events-none absolute -bottom-12 right-[18%] h-72 w-72 rounded-full bg-navy-500/20 blur-[120px]" />
+          <div className="pointer-events-none absolute -top-24 left-[8%] h-96 w-[34rem] rounded-full bg-softblue-500/25 blur-[150px]" />
+          <div className="pointer-events-none absolute -bottom-28 right-[10%] h-[28rem] w-[40rem] rounded-full bg-navy-500/20 blur-[170px]" />
           {/* edge fade for a clean marquee */}
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r from-grayscale-10 to-transparent" />
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-grayscale-10 to-transparent" />
+          {/* top/bottom fade into the page bg so the section edges are invisible */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-grayscale-10 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-20 bg-gradient-to-t from-grayscale-10 to-transparent" />
 
           <div className="marquee-track relative flex w-max gap-6">
             {[...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
@@ -279,40 +393,20 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {/* ───────── 영상을 옮기지 않고 ───────── */}
-      <section className="flex flex-col items-center gap-20 px-[60px] pb-[200px] pt-[100px]">
+      <Reveal as="section" className="flex flex-col items-center gap-20 px-[60px] pb-[200px] pt-[100px]">
         <h2 className="text-center text-[50px] font-bold leading-[1.4] tracking-[-1.25px]">
-          <span className="text-navy-500">영상을 옮기지 않고, </span>
+          <span className="text-navy-500">영상을 옮기지 않고,</span>
+          <br />
           <span className="text-neutral-800">바로 분석합니다</span>
         </h2>
-        <div className="grid grid-cols-2 gap-[60px]">
-          {FEATURES.map((f) => {
-            const Icon = f.icon
-            return (
-              <div
-                key={f.title}
-                className="flex w-[409px] flex-col gap-5 rounded-[20px] bg-white p-[30px] shadow-card"
-              >
-                <Icon size={80} strokeWidth={1.5} className="text-navy-500" />
-                <h3 className="text-[28px] font-bold leading-[1.4] tracking-[-0.7px] text-grayscale-800">
-                  {f.title}
-                </h3>
-                <p className="font-noto text-lg leading-[1.4] tracking-[-0.45px] text-grayscale-800">
-                  {f.desc.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
-                </p>
-              </div>
-            )
-          })}
-        </div>
-      </section>
+        <FeatureShowcase />
+      </Reveal>
 
       {/* ───────── CTA ───────── */}
+      <Reveal>
       <CtaBanner
         title="영상을 옮기지 않고, 가치를 꺼내보세요"
         subtitle={
@@ -322,6 +416,7 @@ export default function Home() {
           </>
         }
       />
+      </Reveal>
     </div>
   )
 }
