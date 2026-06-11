@@ -34,8 +34,8 @@ const SOURCES = {
   Disk: '#c4c5d4', // grayscale/300
 }
 
-// Thumbnails themed to the query (stage/concert) via loremflickr, seeded so each
-// tile is stable. Vertical crop to match the 세로 card ratio.
+// Thumbnails themed to the query (stage/concert), served locally so nothing
+// renders from an external host at runtime.
 const SOURCE_CYCLE = ['Drive', 'Youtube', 'Local', 'Disk']
 // Varied per-card titles — a few long enough to trigger the ellipsis.
 const TITLES = [
@@ -60,8 +60,7 @@ const TITLES = [
 const CARDS = Array.from({ length: 16 }, (_, i) => ({
   source: SOURCE_CYCLE[i % SOURCE_CYCLE.length],
   title: TITLES[i % TITLES.length],
-  // 13th card (index 12) uses a different seed for a distinct photo
-  img: `https://loremflickr.com/360/640/concert,stage?lock=${i === 12 ? 87 : i + 1}`,
+  img: `/assets/stage/stage-${i + 1}.jpg`,
 }))
 
 function SourceChip({ source }) {
@@ -321,10 +320,10 @@ export default function HeroAppMockup() {
             <div className="flex items-center gap-[12px]">
               <div className="flex flex-col items-end">
                 <p className="text-[16px] font-medium tracking-[-0.4px] text-grayscale-800">
-                  김준수
+                  하임덱스
                 </p>
                 <p className="text-[12px] tracking-[-0.3px] text-grayscale-500">
-                  example@email.com
+                  heimdex@heimdex.co
                 </p>
               </div>
               <span className="flex items-center justify-center rounded-full bg-[#d9dae9] p-[8px]">
