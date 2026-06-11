@@ -1,0 +1,29 @@
+<svg width="413" height="470" viewBox="0 0 413 470" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="rs-bg" x1="0" y1="0" x2="413" y2="470" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#13496a"/>
+      <stop offset="0.55" stop-color="#0d3046"/>
+      <stop offset="1" stop-color="#08202d"/>
+    </linearGradient>
+    <radialGradient id="rs-glow" cx="0.5" cy="0.24" r="0.72">
+      <stop offset="0" stop-color="#23c4c4" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#23c4c4" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="rs-grid" width="34" height="34" patternUnits="userSpaceOnUse">
+      <path d="M34 0H0V34" fill="none" stroke="#ffffff" stroke-opacity="0.05"/>
+    </pattern>
+  </defs>
+  <rect width="413" height="470" fill="url(#rs-bg)"/>
+  <rect width="413" height="470" fill="url(#rs-grid)"/>
+  <rect width="413" height="470" fill="url(#rs-glow)"/>
+  <!-- waveform / anomaly pulse (lucide activity) -->
+  <g transform="translate(206.5 150) scale(8) translate(-12 -12)" stroke="#e7fbfb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.92">
+    <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>
+  </g>
+  <!-- small data markers -->
+  <g fill="#7fe3e3" opacity="0.8">
+    <circle cx="120" cy="250" r="3"/>
+    <circle cx="206" cy="232" r="3.5"/>
+    <circle cx="292" cy="258" r="3"/>
+  </g>
+</svg>

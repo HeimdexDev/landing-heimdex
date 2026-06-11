@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #234c77;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
+  background: #fcfcff;
+  color: #272833;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@keyframes caret-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+.caret {
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@layer components {
+  /* Reusable navy/outline pill+arrow buttons matching Figma "버튼" component */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-1 rounded-lg bg-navy-500 px-6 py-5 text-base font-semibold text-white transition-colors hover:bg-[#1b3c5e];
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-1 rounded-lg border border-navy-500 px-6 py-5 text-base font-semibold text-navy-500 transition-colors hover:bg-navy-500/5;
+  }
+}

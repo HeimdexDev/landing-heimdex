@@ -1,0 +1,27 @@
+<svg width="413" height="470" viewBox="0 0 413 470" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="lg-bg" x1="0" y1="0" x2="413" y2="470" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1c3f63"/>
+      <stop offset="0.55" stop-color="#102943"/>
+      <stop offset="1" stop-color="#0a1a2c"/>
+    </linearGradient>
+    <radialGradient id="lg-glow" cx="0.3" cy="0.28" r="0.7">
+      <stop offset="0" stop-color="#3991ff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#3991ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="lg-grid" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.5" fill="#ffffff" fill-opacity="0.06"/>
+    </pattern>
+  </defs>
+  <rect width="413" height="470" fill="url(#lg-bg)"/>
+  <rect width="413" height="470" fill="url(#lg-grid)"/>
+  <rect width="413" height="470" fill="url(#lg-glow)"/>
+  <!-- scales of justice (lucide scale), centered upper -->
+  <g transform="translate(206.5 168) scale(7.2) translate(-12 -12)" stroke="#eaf3ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.92">
+    <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+    <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+    <path d="M7 21h10"/>
+    <path d="M12 3v18"/>
+    <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+  </g>
+</svg>

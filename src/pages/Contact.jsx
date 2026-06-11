@@ -1,0 +1,189 @@
+import { useState } from 'react'
+import { Check as CheckIcon, ChevronDown, ChevronUp } from 'lucide-react'
+import PrivacyModal from '../components/PrivacyModal.jsx'
+
+function Checkbox({ checked, onChange }) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      onClick={onChange}
+      className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[4px] border p-[3px] transition-colors ${
+        checked ? 'border-navy-500 bg-navy-500' : 'border-neutral-100 bg-white'
+      }`}
+    >
+      {checked && <CheckIcon size={16} strokeWidth={3} className="text-white" />}
+    </button>
+  )
+}
+
+function Field({ label, required, children }) {
+  return (
+    <div className="flex flex-1 flex-col gap-2">
+      <div className="flex items-center gap-1">
+        <span className="text-base font-medium tracking-[-0.4px] text-grayscale-800">{label}</span>
+        {required && <span className="text-[#fa5252]">*</span>}
+      </div>
+      {children}
+    </div>
+  )
+}
+
+const inputCls =
+  'w-full rounded-[10px] border border-grayscale-500 px-4 py-3 text-sm font-medium tracking-[-0.35px] text-grayscale-800 placeholder:text-neutral-300 focus:border-navy-500 focus:outline-none'
+
+export default function Contact() {
+  const [form, setForm] = useState({ name: '', phone: '', email: '', company: '', message: '' })
+  const [agreeRequired, setAgreeRequired] = useState(false)
+  const [agreeMarketing, setAgreeMarketing] = useState(false)
+  const [marketingOpen, setMarketingOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
+
+  const canSubmit =
+    form.name.trim() &&
+    form.phone.trim() &&
+    form.email.trim() &&
+    form.message.trim() &&
+    agreeRequired
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    if (!canSubmit) return
+    alert('상담 신청이 접수되었습니다. 곧 연락드리겠습니다.')
+  }
+
+  return (
+    <div className="bg-grayscale-10">
+      <section className="mx-auto flex max-w-page items-start justify-center gap-20 px-[60px] pb-[120px] pt-[200px]">
+        {/* Left headline — top-anchored so it stays put when the form card grows */}
+        <div className="flex shrink-0 flex-col gap-4 pt-[60px]">
+          <h1 className="text-[40px] font-bold leading-[1.4] tracking-[0.8px]">
+            <span className="block text-navy-500">HEIMDEX</span>
+            <span className="block text-grayscale-800">데모 상담을 신청하세요</span>
+          </h1>
+          <p className="text-base leading-[1.4] tracking-[0.32px] text-grayscale-500">
+            15분 상담으로 현재 영상 관리 방식과 문제를 빠르게 진단하고,
+            <br />
+            HEIMDEX가 줄일 수 있는 작업 시간을 함께 계산해드립니다.
+          </p>
+        </div>
+
+        {/* Form card */}
+        <form
+          onSubmit={onSubmit}
+          className="flex w-[671px] shrink-0 flex-col gap-6 rounded-[10px] bg-white p-[30px] shadow-card"
+        >
+          <div className="flex flex-col gap-[10px]">
+            <div className="flex gap-[10px]">
+              <Field label="이름" required>
+                <input className={inputCls} placeholder="이름을 입력해주세요." value={form.name} onChange={set('name')} />
+              </Field>
+              <Field label="연락처" required>
+                <input className={inputCls} placeholder="대시(-)를 제외한 숫자만 입력해주세요." value={form.phone} onChange={set('phone')} inputMode="numeric" />
+              </Field>
+            </div>
+            <Field label="이메일주소" required>
+              <input className={inputCls} placeholder="이메일 주소를 입력해주세요." type="email" value={form.email} onChange={set('email')} />
+            </Field>
+            <Field label="회사명">
+              <input className={inputCls} placeholder="회사명을 입력해주세요." value={form.company} onChange={set('company')} />
+            </Field>
+            <Field label="문의내용">
+              <div className="relative">
+                <textarea
+                  className={`${inputCls} h-[93px] resize-none`}
+                  placeholder="내용을 입력해주세요."
+                  maxLength={300}
+                  value={form.message}
+                  onChange={set('message')}
+                />
+                <span className="pointer-events-none absolute bottom-3 right-4 text-sm text-grayscale-300">
+                  {form.message.length}/300
+                </span>
+              </div>
+            </Field>
+          </div>
+
+          <div className="h-px w-full bg-neutral-100" />
+
+          {/* Consent */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-base font-bold tracking-[-0.4px] text-grayscale-800">
+              개인정보 수집 및 이용에 관한 동의
+            </h2>
+
+            <div className="flex flex-col gap-4">
+              {/* Required */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-[10px]">
+                  <Checkbox checked={agreeRequired} onChange={() => setAgreeRequired((v) => !v)} />
+                  <span className="flex items-center gap-1 text-sm font-semibold tracking-[-0.35px]">
+                    <span className="text-grayscale-800">개인정보 처리방침에 동의합니다.</span>
+                    <span className="text-softblue-500">(필수)</span>
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(true)}
+                  className="text-sm font-medium tracking-[-0.35px] text-grayscale-500 hover:text-grayscale-800"
+                >
+                  전문보기
+                </button>
+              </div>
+
+              {/* Marketing (expandable) — always top-aligned so the label doesn't shift on toggle */}
+              <div className="flex w-full items-start gap-[10px]">
+                <Checkbox checked={agreeMarketing} onChange={() => setAgreeMarketing((v) => !v)} />
+                <div className="flex flex-1 flex-col gap-[10px]">
+                  <span className="flex items-center gap-1 py-px text-sm font-semibold tracking-[-0.35px]">
+                    <span className="text-grayscale-800">하임덱스의 마케팅 정보를 수신하는 데 동의합니다.</span>
+                    <span className="text-softblue-500">(선택)</span>
+                  </span>
+                  {marketingOpen && (
+                    <div className="text-xs font-medium leading-[1.6] tracking-[-0.3px] text-grayscale-800">
+                      <p>하임덱스의 서비스 업데이트 및 이벤트 정보를 수신하는 데 동의합니다.</p>
+                      <ul className="list-disc pl-[18px]">
+                        <li>수집 항목: 이메일 주소, 휴대전화 번호</li>
+                        <li>수집 목적: 신규 기능 안내, 웨비나/이벤트 초대, 맞춤형 비즈니스 솔루션 제안</li>
+                        <li>보유 기간: 동의 철회 시 또는 회원 탈퇴 시까지</li>
+                      </ul>
+                      <p className="mt-3">
+                        해당 내용에 대한 동의를 거부할 권리가 있습니다. 다만, 동의를 거부할 경우 주요 업데이트 안내를 받지 못할 수 있습니다.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMarketingOpen((v) => !v)}
+                  aria-label={marketingOpen ? '접기' : '펼치기'}
+                  className="shrink-0 text-neutral-300 transition-colors hover:text-grayscale-500"
+                >
+                  {marketingOpen ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={!canSubmit}
+            className={`h-11 w-full rounded-lg text-base font-semibold transition-colors ${
+              canSubmit
+                ? 'bg-navy-500 text-white hover:bg-[#1b3c5e]'
+                : 'cursor-not-allowed bg-neutral-100 text-neutral-300'
+            }`}
+          >
+            상담 예약하기
+          </button>
+        </form>
+      </section>
+
+      <PrivacyModal open={modalOpen} onClose={() => setModalOpen(false)} />
+    </div>
+  )
+}
