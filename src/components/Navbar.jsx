@@ -79,7 +79,7 @@ export default function Navbar() {
             rel="noopener noreferrer"
             className={`flex h-10 items-center justify-center rounded-lg px-4 py-[10px] text-[15px] font-semibold transition-colors ${
               overHero
-                ? 'text-[#becfe6] hover:bg-white/10'
+                ? 'text-[#e3edfb] hover:bg-white/10'
                 : 'text-navy-500 hover:bg-navy-500/5'
             }`}
           >

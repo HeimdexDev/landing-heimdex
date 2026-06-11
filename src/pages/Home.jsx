@@ -155,10 +155,14 @@ export default function Home() {
             {/* Translucent glass bezel — peeks out a touch behind the screen */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-x-4 -top-4 bottom-0 rounded-t-[22px] bg-white/[0.07] ring-1 ring-white/20 backdrop-blur-[2px]"
+              className="pointer-events-none absolute -inset-x-5 -top-5 bottom-0 rounded-t-[24px] bg-white/[0.07] ring-1 ring-white/[0.06] backdrop-blur-[2px]"
             />
 
-            <div className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40">
+            <div
+              className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40"
+              // own compositing layer so the rounded clip survives the child zoom transform
+              style={{ transform: 'translateZ(0)' }}
+            >
               {/* 1040 / 1440 ≈ 0.7222 — scale the 1440-wide app down to the frame */}
               <div className="origin-top-left scale-[0.7222]">
                 <HeroAppMockup />
