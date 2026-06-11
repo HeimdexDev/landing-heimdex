@@ -152,6 +152,12 @@ export default function Home() {
               <div className="absolute -top-10 left-1/2 h-40 w-[55%] -translate-x-1/2 rounded-full bg-white/25 blur-[90px]" />
             </div>
 
+            {/* Translucent glass bezel — peeks out a touch behind the screen */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-x-4 -top-4 bottom-0 rounded-t-[22px] bg-white/[0.07] ring-1 ring-white/20 backdrop-blur-[2px]"
+            />
+
             <div className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40">
               {/* 1040 / 1440 ≈ 0.7222 — scale the 1440-wide app down to the frame */}
               <div className="origin-top-left scale-[0.7222]">
