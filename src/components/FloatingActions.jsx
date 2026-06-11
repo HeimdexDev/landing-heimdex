@@ -23,7 +23,7 @@ export default function FloatingActions() {
 
   return (
     <div
-      className={`fixed bottom-10 right-10 z-40 flex w-[52px] flex-col items-center gap-6 transition-all duration-300 ${
+      className={`fixed bottom-10 right-10 z-40 flex w-[52px] flex-col items-center gap-6 transition-all duration-300 max-lg:right-5 max-sm:right-4 ${
         show ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
       }`}
     >
@@ -46,7 +46,7 @@ export default function FloatingActions() {
         >
           <MessageSquareText size={24} className="text-white" />
         </Link>
-        <span className="text-xs font-semibold tracking-[-0.3px] text-navy-500">문의하기</span>
+        <span className="text-xs font-semibold tracking-[-0.3px] text-navy-500 max-lg:hidden">문의하기</span>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowUp,
@@ -89,8 +89,8 @@ const TESTIMONIALS = [
 
 const FEATURES = [
   { title: '업로드 없이', icon: CloudOff, desc: ['대용량 영상도 서버에 올리는 시간 없이,', '원본이 있는 자리에서 바로 분석합니다.'] },
-  { title: '구축 부담 없이', icon: Network, desc: ['사내 서버, NAS, 로컬 PC까지.', '기존 환경을 그대로 연동해 구축 부담이 없습니다.'] },
-  { title: '기다림 없이', icon: Clock, desc: ['영상을 다 보지 않아도 됩니다. 텍스트로 검색해', '필요한 구간만 클립으로 만드세요.'] },
+  { title: '구축 부담 없이', icon: Network, desc: ['사내 서버, NAS, 로컬 PC까지.', '기존 환경을 그대로 연동해 구축 부담이', '없습니다.'] },
+  { title: '기다림 없이', icon: Clock, desc: ['영상을 다 보지 않아도 됩니다.', '텍스트로 검색해 필요한 구간만 클립으로 만드세요.'] },
   { title: '유출 걱정 없이', icon: ShieldCheck, desc: ['외부 전송 없이 폐쇄망 안에서 분석합니다.', '영상 데이터가 외부로 나가지 않습니다.'] },
 ]
 
@@ -109,7 +109,7 @@ function FeatureShowcase() {
   const ActiveIcon = FEATURES[iconIndex].icon
 
   return (
-    <div className="grid w-full max-w-page grid-cols-[460px_560px] items-center justify-center gap-[72px]">
+    <div className="grid w-full max-w-page grid-cols-[460px_560px] items-center justify-center gap-[72px] max-lg:grid-cols-1 max-lg:gap-12 max-lg:justify-items-center">
       {/* Left — numbered accordion */}
       <div className="w-full border-t border-grayscale-100">
         {FEATURES.map((f, i) => {
@@ -174,8 +174,8 @@ function FeatureShowcase() {
         })}
       </div>
 
-      {/* Right — 3D icon on a radial glow that fades out at the edges */}
-      <div className="relative flex h-[440px] items-center justify-center">
+      {/* Right — 3D icon on a radial glow; hidden once the layout stacks vertically */}
+      <div className="relative flex h-[440px] items-center justify-center max-lg:hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,145,255,0.20)_0%,_rgba(57,145,255,0.06)_42%,_transparent_72%)]" />
         <div className="relative flex h-[240px] w-[240px] items-center justify-center rounded-full bg-gradient-to-b from-white to-[#e9f0fb] shadow-[0_34px_70px_-22px_rgba(35,76,119,0.45),inset_0_3px_6px_rgba(255,255,255,0.95),inset_0_-10px_18px_rgba(35,76,119,0.1)] ring-1 ring-white/70">
           <div key={iconIndex} className="icon-pop relative">
@@ -197,6 +197,36 @@ function FeatureShowcase() {
   )
 }
 
+// Measures the frame width and scales the fixed 1440-wide HeroAppMockup so it
+// always fits at any screen size (replacing the static scale-[0.7222]).
+function FluidMockup({ children }) {
+  const frameRef = useRef(null)
+  const [scale, setScale] = useState(0.7222)
+
+  useEffect(() => {
+    const el = frameRef.current
+    if (!el) return
+    const update = () => setScale(el.clientWidth / 1440)
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={frameRef}
+      className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40 max-md:h-[320px] max-sm:h-[230px]"
+      // own compositing layer so the rounded clip survives the child zoom transform
+      style={{ transform: 'translateZ(0)' }}
+    >
+      <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
 export default function Home() {
   return (
     <div>
@@ -213,35 +243,37 @@ export default function Home() {
             'linear-gradient(180deg, #07203f 0%, #0b2a55 45%, #143a73 100%)',
         }}
       >
-        <div className="relative mx-auto flex w-full max-w-page flex-col items-center px-[60px] pb-0 pt-[160px] text-center">
+        <div className="relative mx-auto flex w-full max-w-page flex-col items-center px-[60px] max-lg:px-8 max-sm:px-5 pb-0 pt-[160px] max-lg:pt-[120px] max-sm:pt-[100px] text-center">
           {/* Centered copy */}
           <Reveal className="flex max-w-[760px] flex-col items-center gap-4">
-            <h1 className="font-product text-[58px] font-bold leading-[1.3] text-white">
+            <h1 className="font-product text-[58px] max-md:text-[34px] max-sm:text-[28px] font-bold leading-[1.3] text-white">
               영상 속 원하는 장면,
               <br />
               검색 한 줄로
             </h1>
-            <p className="font-noto text-lg leading-[1.5] tracking-[-0.45px] text-[#cdd9ec]">
+            <p className="font-noto text-lg leading-[1.5] tracking-[-0.45px] text-[#cdd9ec] max-sm:text-[15px]">
               업로드 없이, 시청 없이.
               <br />
-              검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로 만들어 드립니다.
+              검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로
+              <br />
+              만들어 드립니다.
             </p>
           </Reveal>
 
           {/* Centered actions */}
-          <Reveal className="mt-10 flex justify-center gap-5" delay={120}>
+          <Reveal className="mt-10 flex justify-center gap-5 max-sm:flex-col max-sm:w-full" delay={120}>
             <a
               href="https://playground.heimdex.co/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1 rounded-lg bg-[#e0e8f5] px-6 py-5 text-base font-semibold text-navy-500 transition-colors hover:bg-white"
+              className="inline-flex items-center justify-center gap-1 rounded-lg bg-[#e0e8f5] px-6 py-5 max-sm:w-full max-sm:px-5 max-sm:py-4 text-base font-semibold text-navy-500 transition-colors hover:bg-white"
             >
               웹에서 체험하기
               <ArrowUpRight size={20} strokeWidth={2} />
             </a>
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center gap-1 rounded-lg border border-white px-6 py-5 text-base font-semibold text-white transition-colors hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-1 rounded-lg border border-white px-6 py-5 max-sm:w-full max-sm:px-5 max-sm:py-4 text-base font-semibold text-white transition-colors hover:bg-white/10"
             >
               한 달 무료신청
               <ArrowUpRight size={20} strokeWidth={2} />
@@ -250,67 +282,66 @@ export default function Home() {
 
           {/* Product screen — the real 동영상 검색 dashboard, scaled to fit and
               bottom-clipped so it reads as embedded in the hero. */}
-          <div className="relative mt-[72px] w-full max-w-[1040px]">
+          <div className="relative mt-[72px] max-sm:mt-12 w-full max-w-[1040px]">
             {/* Attention glow — brand-color halo that draws the eye to the screen */}
             <div aria-hidden className="pointer-events-none absolute inset-0">
-              <div className="absolute left-1/2 top-[46%] h-[118%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-[48px] bg-softblue-500/30 blur-[130px] animate-pulse [animation-duration:5s]" />
-              <div className="absolute left-1/2 top-1/2 h-[85%] w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#68b2ff]/30 blur-[100px]" />
+              <div className="absolute left-1/2 top-[46%] h-[118%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-[48px] bg-softblue-500/30 blur-[130px] max-md:blur-[70px] animate-pulse [animation-duration:5s]" />
+              <div className="absolute left-1/2 top-1/2 h-[85%] w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#68b2ff]/30 blur-[100px] max-md:blur-[60px]" />
               <div className="absolute -top-10 left-1/2 h-40 w-[55%] -translate-x-1/2 rounded-full bg-white/25 blur-[90px]" />
             </div>
 
             {/* Translucent glass bezel — peeks out a touch behind the screen */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-x-5 -top-5 bottom-0 rounded-t-[24px] bg-white/[0.07] ring-1 ring-white/[0.06] backdrop-blur-[2px]"
+              className="pointer-events-none absolute -inset-x-5 -top-5 bottom-0 rounded-t-[24px] bg-white/[0.07] ring-1 ring-white/[0.06] backdrop-blur-[2px] max-sm:-inset-x-3 max-sm:-top-3"
             />
 
-            <div
-              className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40"
-              // own compositing layer so the rounded clip survives the child zoom transform
-              style={{ transform: 'translateZ(0)' }}
-            >
-              {/* 1040 / 1440 ≈ 0.7222 — scale the 1440-wide app down to the frame */}
-              <div className="origin-top-left scale-[0.7222]">
-                <HeroAppMockup />
-              </div>
-            </div>
+            {/* Fluid JS-measured scale fits the 1440-wide app to the frame width */}
+            <FluidMockup>
+              <HeroAppMockup />
+            </FluidMockup>
           </div>
         </div>
       </section>
 
       {/* ───────── Trusted-by logos ───────── */}
-      <Reveal as="section" className="flex flex-col items-center gap-10 px-[60px] pt-[120px] pb-[120px]">
+      <Reveal as="section" className="flex flex-col items-center gap-10 px-[60px] max-lg:px-8 max-sm:px-5 pt-[120px] pb-[120px] max-lg:pt-[100px] max-lg:pb-[100px] max-sm:pt-[72px] max-sm:pb-[72px]">
         <p className="font-product text-2xl font-medium tracking-[0.02em] text-grayscale-800">
           Trusted by
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8">
+        <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8 max-sm:gap-x-3 max-sm:gap-y-6">
+          {/* On phones each logo takes ~30% width → exactly 3 per row (3 + 2) */}
           {LOGOS.map((logo) => (
-            <img
+            <div
               key={logo.src}
-              src={logo.src}
-              alt=""
-              style={{ width: logo.w }}
-              className="h-[60px] object-contain"
-            />
+              className="flex items-center justify-center max-sm:w-[30%]"
+            >
+              <img
+                src={logo.src}
+                alt=""
+                style={{ width: logo.w }}
+                className="h-[60px] object-contain max-sm:!h-[34px] max-sm:!w-full"
+              />
+            </div>
           ))}
         </div>
       </Reveal>
 
       {/* ───────── 직군별 고민 ───────── */}
-      <Reveal as="section" className="flex flex-col items-center gap-[60px] px-[60px] py-[100px]">
-        <h2 className="text-center text-[50px] font-bold leading-[1.4] tracking-[-1.25px]">
+      <Reveal as="section" className="flex flex-col items-center gap-[60px] max-lg:gap-12 px-[60px] max-lg:px-8 max-sm:px-5 py-[100px] max-lg:py-[80px] max-sm:py-[64px]">
+        <h2 className="text-center text-[50px] max-md:text-[30px] max-sm:text-[24px] font-bold leading-[1.4] tracking-[-1.25px]">
           <span className="text-navy-500">직군마다 다른 영상 고민,</span>
           <br />
           <span className="text-neutral-800">하임덱스는 이렇게 해결합니다</span>
         </h2>
 
         {/* 3 photo cards */}
-        <div className="flex gap-[30px]">
+        <div className="flex gap-[30px] max-lg:flex-col max-lg:items-center max-lg:w-full">
           {CARDS.map((card) => (
             <Link
               key={card.title}
               to={card.to}
-              className="group relative flex h-[470px] w-[413px] flex-col items-end justify-between overflow-hidden rounded-[24px] p-5 transition-shadow duration-300 hover:shadow-[0_4px_20px_0_rgba(0,0,0,0.4)]"
+              className="group relative flex h-[470px] w-[413px] max-lg:w-full max-lg:max-w-[413px] flex-col items-end justify-between overflow-hidden rounded-[24px] p-5 transition-shadow duration-300 hover:shadow-[0_4px_20px_0_rgba(0,0,0,0.4)]"
             >
               {/* Background photo */}
               <img
@@ -369,22 +400,22 @@ export default function Home() {
             {[...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
               <article
                 key={i}
-                className="relative flex w-[460px] shrink-0 flex-col gap-5 overflow-hidden rounded-[24px] border border-white/70 bg-white/50 p-9 shadow-[0_18px_44px_-18px_rgba(35,76,119,0.32)] backdrop-blur-xl"
+                className="relative flex w-[460px] max-sm:w-[200px] shrink-0 flex-col gap-5 max-sm:gap-3 overflow-hidden rounded-[24px] max-sm:rounded-2xl border border-white/70 bg-white/50 p-9 max-sm:p-4 shadow-[0_18px_44px_-18px_rgba(35,76,119,0.32)] backdrop-blur-xl"
               >
                 {/* top sheen */}
                 <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 max-sm:gap-2">
                   <span
-                    className="flex h-12 w-12 items-center justify-center rounded-full text-xl font-semibold text-white ring-2 ring-white/60"
+                    className="flex h-12 w-12 max-sm:h-8 max-sm:w-8 items-center justify-center rounded-full text-xl max-sm:text-sm font-semibold text-white ring-2 max-sm:ring-1 ring-white/60"
                     style={{ backgroundColor: t.color }}
                   >
                     {t.initial}
                   </span>
-                  <p className="text-lg font-bold tracking-[-0.5px] text-grayscale-800">
+                  <p className="text-lg max-sm:text-xs font-bold tracking-[-0.5px] text-grayscale-800">
                     {t.name}
                   </p>
                 </div>
-                <p className="text-[15px] font-semibold leading-[1.7] tracking-[-0.4px] text-grayscale-800">
+                <p className="text-[15px] max-sm:text-[11px] font-semibold leading-[1.7] max-sm:leading-[1.5] tracking-[-0.4px] text-grayscale-800">
                   {t.pre}
                   <span className="font-bold text-navy-500">{t.hl}</span>
                   {t.post}
@@ -396,8 +427,8 @@ export default function Home() {
       </Reveal>
 
       {/* ───────── 영상을 옮기지 않고 ───────── */}
-      <Reveal as="section" className="flex flex-col items-center gap-20 px-[60px] pb-[200px] pt-[100px]">
-        <h2 className="text-center text-[50px] font-bold leading-[1.4] tracking-[-1.25px]">
+      <Reveal as="section" className="flex flex-col items-center gap-20 max-lg:gap-12 px-[60px] max-lg:px-8 max-sm:px-5 pb-[200px] pt-[100px] max-lg:pb-[100px] max-lg:pt-[80px] max-sm:pb-[72px] max-sm:pt-[64px]">
+        <h2 className="text-center text-[50px] max-md:text-[30px] max-sm:text-[24px] font-bold leading-[1.4] tracking-[-1.25px]">
           <span className="text-navy-500">영상을 옮기지 않고,</span>
           <br />
           <span className="text-neutral-800">바로 분석합니다</span>

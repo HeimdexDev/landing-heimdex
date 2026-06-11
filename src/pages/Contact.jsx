@@ -58,28 +58,30 @@ export default function Contact() {
 
   return (
     <div className="bg-grayscale-10">
-      <section className="mx-auto flex min-h-[1180px] max-w-page items-start justify-center gap-20 px-[60px] pb-[120px] pt-[200px]">
+      <section className="mx-auto flex min-h-[1180px] max-w-page items-start justify-center gap-20 px-[60px] pb-[120px] pt-[200px] max-lg:flex-col max-lg:items-center max-lg:min-h-0 max-lg:gap-10 max-lg:px-8 max-lg:pt-[120px] max-lg:pb-[80px] max-sm:px-5 max-sm:pt-[100px]">
         {/* Left headline — top-anchored so it stays put when the form card grows */}
-        <Reveal className="flex shrink-0 flex-col gap-4 pt-[60px]">
-          <h1 className="font-product text-[48px] font-bold leading-[1.4] tracking-[0.8px]">
+        <Reveal className="flex shrink-0 flex-col gap-4 pt-[60px] max-lg:pt-0 max-lg:items-center max-lg:text-center max-lg:w-full max-lg:max-w-[671px] max-lg:shrink">
+          <h1 className="font-product text-[48px] font-bold leading-[1.4] tracking-[0.8px] max-md:text-[34px] max-sm:text-[28px]">
             <span className="block text-navy-500">데모 상담 신청</span>
             <span className="block text-grayscale-800">찾지 말고, 검색하세요</span>
           </h1>
           <p className="text-base leading-[1.4] tracking-[0.32px] text-grayscale-500">
-            15분 상담으로 지금 영상 관리에서 어디서 시간이 새는지 진단하고,
+            15분 상담으로 지금 영상 관리에서{' '}
+            <br className="sm:hidden" />
+            어디서 시간이 새는지 진단하고,
             <br />
             하임덱스가 줄여줄 작업 시간을 함께 계산해드립니다.
           </p>
         </Reveal>
 
         {/* Form card */}
-        <Reveal className="shrink-0" delay={120}>
+        <Reveal className="shrink-0 max-lg:w-full max-lg:max-w-[671px] max-lg:shrink" delay={120}>
         <form
           onSubmit={onSubmit}
-          className="flex w-[671px] shrink-0 -translate-y-[20px] translate-x-[100px] flex-col gap-6 rounded-[10px] bg-white p-[30px] shadow-card"
+          className="flex w-[671px] shrink-0 -translate-y-[20px] translate-x-[100px] flex-col gap-6 rounded-[10px] bg-white p-[30px] shadow-card max-lg:w-full max-lg:translate-x-0 max-lg:translate-y-0 max-lg:shrink max-sm:p-5"
         >
           <div className="flex flex-col gap-[20px]">
-            <div className="flex gap-[10px]">
+            <div className="flex gap-[10px] max-sm:flex-col">
               <Field label="이름" required>
                 <input className={inputCls} placeholder="이름을 입력해주세요." value={form.name} onChange={set('name')} />
               </Field>
@@ -144,9 +146,9 @@ export default function Contact() {
               <div className="flex w-full items-start gap-[10px]">
                 <Checkbox checked={agreeMarketing} onChange={() => setAgreeMarketing((v) => !v)} />
                 <div className="flex flex-1 flex-col">
-                  <span className="flex items-center gap-1 py-px text-sm font-semibold tracking-[-0.35px]">
-                    <span className="text-grayscale-800">하임덱스의 마케팅 정보를 수신하는 데 동의합니다.</span>
-                    <span className="text-navy-500">(선택)</span>
+                  <span className="py-px text-sm font-semibold tracking-[-0.35px] text-grayscale-800">
+                    하임덱스의 마케팅 정보를 수신하는 데 동의합니다.
+                    <span className="text-navy-500"> (선택)</span>
                   </span>
                   {/* expandable detail with a smooth height + fade transition */}
                   <div

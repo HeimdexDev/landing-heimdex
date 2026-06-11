@@ -1,5 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  // Only apply hover: styles on devices that actually support hover (mouse),
+  // so touch devices don't get "stuck" hover states after a tap.
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {

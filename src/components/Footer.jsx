@@ -9,38 +9,46 @@ const LINKS = [
 export default function Footer() {
   return (
     <footer className="flex justify-center">
-      <div className="flex w-full max-w-page flex-col items-center gap-[120px] p-[60px]">
+      <div className="flex w-full max-w-page flex-col items-center gap-[120px] p-[60px] max-lg:gap-20 max-lg:px-8 max-lg:py-12 max-sm:gap-14 max-sm:px-5 max-sm:py-10">
+        {/* Keeps the desktop row layout at every size — only the logo/text sizes scale down */}
         <div className="flex w-full items-start justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-[7px]">
-            <img src="/assets/logo-symbol.svg" alt="" className="h-[34px] w-[31px]" />
-            <img src="/assets/logo-wordmark.svg" alt="heimdex" className="h-[23px] w-[112px]" />
+          <div className="flex items-center gap-[7px] max-sm:gap-[5px]">
+            <img
+              src="/assets/logo-symbol.svg"
+              alt=""
+              className="h-[34px] w-[31px] max-sm:h-[24px] max-sm:w-[22px]"
+            />
+            <img
+              src="/assets/logo-wordmark.svg"
+              alt="heimdex"
+              className="h-[23px] w-[112px] max-sm:h-[16px] max-sm:w-[78px]"
+            />
           </div>
 
           {/* Links + email */}
           <div className="flex flex-col items-end gap-1">
-            <div className="flex items-center gap-[10px]">
-              {LINKS.map((link, i) => (
-                <div key={link.label} className="flex items-center gap-[10px]">
-                  <Link
-                    to={link.to}
-                    className="text-base font-medium tracking-[-0.4px] text-grayscale-800 hover:text-navy-500"
-                  >
-                    {link.label}
-                  </Link>
-                </div>
+            <div className="flex items-center gap-[10px] max-sm:gap-2">
+              {LINKS.map((link) => (
+                <Link
+                  key={link.label}
+                  to={link.to}
+                  className="text-base font-medium tracking-[-0.4px] text-grayscale-800 hover:text-navy-500 max-sm:text-[11px]"
+                >
+                  {link.label}
+                </Link>
               ))}
             </div>
             <a
               href="mailto:heimdex@heimdex.co"
-              className="text-sm font-medium tracking-[-0.35px] text-grayscale-500"
+              className="text-sm font-medium tracking-[-0.35px] text-grayscale-500 max-sm:text-[11px]"
             >
               heimdex@heimdex.co
             </a>
           </div>
         </div>
 
-        <p className="text-sm font-medium tracking-[-0.35px] text-grayscale-500">
+        <p className="text-sm font-medium tracking-[-0.35px] text-grayscale-500 max-sm:text-xs">
           © 2026 Heimdex. All rights reserved.
         </p>
       </div>
