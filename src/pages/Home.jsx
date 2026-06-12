@@ -234,15 +234,32 @@ export default function Home() {
       <section
         className="relative overflow-hidden"
         style={{
-          // Deep brand-color gradient — keeps the white header legible while
-          // echoing the soft corner-glow composition of the reference hero.
+          // Predawn night sky in the navy palette: deepest navy up top (night),
+          // a softblue dawn glow rising from the horizon, faint nebula up-left.
           background:
-            'radial-gradient(58% 50% at 18% 20%, rgba(57,145,255,0.40) 0%, rgba(57,145,255,0) 60%),' +
-            'radial-gradient(55% 48% at 84% 16%, rgba(100,178,255,0.34) 0%, rgba(100,178,255,0) 55%),' +
-            'radial-gradient(85% 60% at 50% 118%, rgba(57,145,255,0.30) 0%, rgba(57,145,255,0) 60%),' +
-            'linear-gradient(180deg, #07203f 0%, #0b2a55 45%, #143a73 100%)',
+            'radial-gradient(46% 42% at 12% 6%, rgba(35,76,119,0.55) 0%, rgba(35,76,119,0) 62%),' +
+            'radial-gradient(40% 38% at 88% 10%, rgba(57,145,255,0.22) 0%, rgba(57,145,255,0) 58%),' +
+            'linear-gradient(180deg, #050d1c 0%, #081429 26%, #0c2245 52%, #123257 74%, #1c4577 100%)',
         }}
       >
+        {/* Star field — sparse, fades out toward the dawn-lit horizon */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              'radial-gradient(1.5px 1.5px at 25px 35px, rgba(255,255,255,0.9), transparent),' +
+              'radial-gradient(1px 1px at 90px 80px, rgba(200,220,255,0.7), transparent),' +
+              'radial-gradient(1.2px 1.2px at 150px 140px, rgba(255,255,255,0.6), transparent),' +
+              'radial-gradient(1px 1px at 60px 175px, rgba(180,205,255,0.6), transparent),' +
+              'radial-gradient(1.4px 1.4px at 195px 55px, rgba(255,255,255,0.5), transparent)',
+            backgroundSize: '230px 230px',
+            maskImage:
+              'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.45) 38%, rgba(0,0,0,0) 62%)',
+            WebkitMaskImage:
+              'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.45) 38%, rgba(0,0,0,0) 62%)',
+          }}
+        />
         <div className="relative mx-auto flex w-full max-w-page flex-col items-center px-[60px] max-lg:px-8 max-sm:px-5 pb-0 pt-[160px] max-lg:pt-[120px] max-sm:pt-[100px] text-center">
           {/* Centered copy */}
           <Reveal className="flex max-w-[760px] flex-col items-center gap-4">
@@ -254,9 +271,7 @@ export default function Home() {
             <p className="font-noto text-lg leading-[1.5] tracking-[-0.45px] text-[#cdd9ec] max-sm:text-[15px]">
               업로드 없이, 시청 없이.
               <br />
-              검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로
-              <br />
-              만들어 드립니다.
+              검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로 만들어 드립니다.
             </p>
           </Reveal>
 
@@ -266,7 +281,7 @@ export default function Home() {
               href="https://playground.heimdex.co/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1 rounded-lg bg-[#e0e8f5] px-6 py-5 max-sm:w-full max-sm:px-5 max-sm:py-4 text-base font-semibold text-navy-500 transition-colors hover:bg-white"
+              className="inline-flex items-center justify-center gap-1 rounded-lg bg-white px-6 py-5 max-sm:w-full max-sm:px-5 max-sm:py-4 text-base font-semibold text-navy-500 transition-colors hover:bg-grayscale-10"
             >
               웹에서 체험하기
               <ArrowUpRight size={20} strokeWidth={2} />
