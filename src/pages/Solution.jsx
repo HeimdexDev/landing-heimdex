@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
   ArrowUpRight,
@@ -17,23 +18,45 @@ export default function Solution() {
   const tab = SOLUTIONS[params.get('tab')] ? params.get('tab') : 'legal'
   const data = SOLUTIONS[tab]
 
+  // Sliding tab indicator — tracks the active pill's box and animates between tabs
+  const tabsRef = useRef(null)
+  const [pill, setPill] = useState({ left: 0, top: 0, width: 0, height: 0 })
+  useLayoutEffect(() => {
+    const measure = () => {
+      const el = tabsRef.current?.querySelector('[data-active="true"]')
+      if (el)
+        setPill({ left: el.offsetLeft, top: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight })
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [tab])
+
   return (
     <div className="bg-grayscale-10">
       {/* ───────── Hero ───────── */}
       <section className="flex flex-col items-center px-[100px] pb-[140px] pt-[150px] max-lg:px-8 max-lg:pb-[100px] max-lg:pt-[120px] max-sm:px-5 max-sm:pb-[72px] max-sm:pt-[96px]">
         <div className="flex w-full max-w-[1240px] flex-col items-center gap-[120px] max-lg:gap-16 max-sm:gap-12">
           {/* Tab pills */}
-          <div className="flex items-center gap-1 rounded-full bg-white p-1 shadow-card max-sm:w-[300px]">
+          <div
+            ref={tabsRef}
+            className="relative flex items-center gap-1 rounded-full bg-white p-1 shadow-card max-sm:w-[300px]"
+          >
+            {/* sliding highlight */}
+            <span
+              aria-hidden
+              className="absolute rounded-full bg-softblue-50 transition-all duration-300 ease-out"
+              style={{ left: pill.left, top: pill.top, width: pill.width, height: pill.height }}
+            />
             {TABS.map((t) => {
               const active = t.id === tab
               return (
                 <button
                   key={t.id}
+                  data-active={active}
                   onClick={() => setParams({ tab: t.id })}
-                  className={`flex w-[133px] items-center justify-center rounded-full px-4 py-[10px] text-lg font-semibold leading-[1.4] tracking-[-0.45px] transition-colors max-sm:w-auto max-sm:flex-1 max-sm:px-1 max-sm:text-sm ${
-                    active
-                      ? 'bg-softblue-50 text-navy-500'
-                      : 'text-neutral-300 hover:text-grayscale-500'
+                  className={`relative z-10 flex w-[133px] items-center justify-center rounded-full px-4 py-[10px] text-lg font-semibold leading-[1.4] tracking-[-0.45px] transition-colors max-sm:w-auto max-sm:flex-1 max-sm:px-1 max-sm:text-sm ${
+                    active ? 'text-navy-500' : 'text-neutral-300 hover:text-grayscale-500'
                   }`}
                 >
                   {t.label}

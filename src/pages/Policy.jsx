@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { PRIVACY } from '../data/privacy.js'
 import { TERMS } from '../data/terms.js'
@@ -14,19 +15,43 @@ export default function Policy() {
   const tab = DOCS[params.get('tab')] ? params.get('tab') : 'terms'
   const doc = DOCS[tab]
 
+  // Sliding tab indicator
+  const tabsRef = useRef(null)
+  const [pill, setPill] = useState({ left: 0, top: 0, width: 0, height: 0 })
+  useLayoutEffect(() => {
+    const measure = () => {
+      const el = tabsRef.current?.querySelector('[data-active="true"]')
+      if (el)
+        setPill({ left: el.offsetLeft, top: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight })
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [tab])
+
   return (
     <div className="bg-grayscale-10">
       <section className="mx-auto flex max-w-[920px] flex-col items-center px-[60px] pb-[120px] pt-[140px] max-lg:px-8 max-lg:pb-[100px] max-lg:pt-[120px] max-sm:px-5 max-sm:pb-[72px] max-sm:pt-[96px]">
         {/* Tab switcher */}
-        <div className="flex flex-wrap items-center justify-center gap-1 rounded-full bg-white p-1 shadow-card max-sm:w-[300px]">
+        <div
+          ref={tabsRef}
+          className="relative flex items-center justify-center gap-1 rounded-full bg-white p-1 shadow-card max-sm:w-[300px]"
+        >
+          {/* sliding highlight */}
+          <span
+            aria-hidden
+            className="absolute rounded-full bg-softblue-50 transition-all duration-300 ease-out"
+            style={{ left: pill.left, top: pill.top, width: pill.width, height: pill.height }}
+          />
           {TABS.map((t) => {
             const active = t.id === tab
             return (
               <button
                 key={t.id}
+                data-active={active}
                 onClick={() => setParams({ tab: t.id })}
-                className={`rounded-full px-4 py-[10px] text-sm font-semibold tracking-[-0.35px] transition-colors max-sm:flex-1 ${
-                  active ? 'bg-softblue-50 text-navy-500' : 'text-neutral-300 hover:text-grayscale-500'
+                className={`relative z-10 rounded-full px-4 py-[10px] text-sm font-semibold tracking-[-0.35px] transition-colors max-sm:flex-1 ${
+                  active ? 'text-navy-500' : 'text-neutral-300 hover:text-grayscale-500'
                 }`}
               >
                 {t.label}
