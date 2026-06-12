@@ -228,22 +228,20 @@ function FluidMockup({ children }) {
   )
 }
 
-// Dot matrix where dots light up near the cursor and slowly fade afterwards,
-// leaving a glowing trail. Each dot keeps its own intensity that decays per
-// frame; the cursor boosts nearby dots back to full.
-function DotFieldTrail() {
+// Drifting network graph — nodes float slowly and link to nearby nodes, like an
+// embedding/index graph. Nodes near the cursor light up and connect to it.
+function NetworkGraph() {
   const canvasRef = useRef(null)
   useEffect(() => {
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
-    const S = 26 // dot spacing (matches the static base grid)
-    const OFF = 13 // center within each tile, aligning with the CSS dot grid
-    const R = 135 // cursor influence radius
-    let w = 0, h = 0, cols = 0, rows = 0
-    let inten = new Float32Array(0)
+    const LINK = 150 // node-to-node connection distance
+    const CURSOR = 190 // cursor connection radius
+    let w = 0, h = 0
+    let nodes = []
     const mouse = { x: -9999, y: -9999, active: false }
 
-    const resize = () => {
+    const build = () => {
       const rect = canvas.getBoundingClientRect()
       w = rect.width
       h = rect.height
@@ -251,9 +249,14 @@ function DotFieldTrail() {
       canvas.width = Math.round(w * dpr)
       canvas.height = Math.round(h * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      cols = Math.ceil(w / S) + 1
-      rows = Math.ceil(h / S) + 1
-      inten = new Float32Array(cols * rows)
+      const count = Math.max(24, Math.min(90, Math.round((w * h) / 16000)))
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28,
+        r: 1 + Math.random() * 1.3,
+      }))
     }
 
     const onMove = (e) => {
@@ -272,33 +275,63 @@ function DotFieldTrail() {
     let raf
     const tick = () => {
       ctx.clearRect(0, 0, w, h)
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const i = r * cols + c
-          let v = inten[i] * 0.94 // slow decay → lingering trail
-          if (mouse.active) {
-            const dx = c * S + OFF - mouse.x
-            const dy = r * S + OFF - mouse.y
-            const dist = Math.sqrt(dx * dx + dy * dy)
-            if (dist < R) {
-              const boost = 1 - dist / R
-              if (boost > v) v = boost
-            }
-          }
-          inten[i] = v
-          if (v > 0.015) {
+
+      // Drift + edge bounce
+      for (const n of nodes) {
+        n.x += n.vx
+        n.y += n.vy
+        if (n.x < 0 || n.x > w) n.vx *= -1
+        if (n.y < 0 || n.y > h) n.vy *= -1
+      }
+
+      // Node-to-node links
+      ctx.lineWidth = 1
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i]
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j]
+          const dx = a.x - b.x
+          const dy = a.y - b.y
+          const d = Math.sqrt(dx * dx + dy * dy)
+          if (d < LINK) {
+            ctx.strokeStyle = `rgba(150,180,225,${(1 - d / LINK) * 0.22})`
             ctx.beginPath()
-            ctx.fillStyle = `rgba(173,205,255,${v * 0.85})`
-            ctx.arc(c * S + OFF, r * S + OFF, 1.3, 0, 6.2832)
-            ctx.fill()
+            ctx.moveTo(a.x, a.y)
+            ctx.lineTo(b.x, b.y)
+            ctx.stroke()
           }
         }
       }
+
+      // Cursor links — brighter, ties the graph to the pointer
+      if (mouse.active) {
+        for (const n of nodes) {
+          const dx = n.x - mouse.x
+          const dy = n.y - mouse.y
+          const d = Math.sqrt(dx * dx + dy * dy)
+          if (d < CURSOR) {
+            ctx.strokeStyle = `rgba(185,212,255,${(1 - d / CURSOR) * 0.55})`
+            ctx.beginPath()
+            ctx.moveTo(n.x, n.y)
+            ctx.lineTo(mouse.x, mouse.y)
+            ctx.stroke()
+          }
+        }
+      }
+
+      // Nodes
+      for (const n of nodes) {
+        ctx.beginPath()
+        ctx.fillStyle = 'rgba(188,212,255,0.85)'
+        ctx.arc(n.x, n.y, n.r, 0, 6.2832)
+        ctx.fill()
+      }
+
       raf = requestAnimationFrame(tick)
     }
 
-    resize()
-    const ro = new ResizeObserver(resize)
+    build()
+    const ro = new ResizeObserver(build)
     ro.observe(canvas)
     window.addEventListener('pointermove', onMove)
     raf = requestAnimationFrame(tick)
@@ -316,9 +349,9 @@ function DotFieldTrail() {
       className="pointer-events-none absolute inset-0 h-full w-full"
       style={{
         maskImage:
-          'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 72%)',
+          'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 48%, rgba(0,0,0,0) 74%)',
         WebkitMaskImage:
-          'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 72%)',
+          'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 48%, rgba(0,0,0,0) 74%)',
       }}
     />
   )
@@ -334,27 +367,11 @@ export default function Home() {
           // Predawn night sky in the navy palette: deepest navy up top (night),
           // a softblue dawn glow rising from the horizon, faint nebula up-left.
           background:
-            'linear-gradient(180deg, #050d1c 0%, #081429 26%, #0c2245 52%, #123257 74%, #1c4577 100%)',
+            'linear-gradient(180deg, #02060f 0%, #050d1e 28%, #081a34 54%, #0c2344 76%, #133255 100%)',
         }}
       >
-        {/* Dot matrix — faint tech grid, fades out toward the dawn-lit horizon */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle, rgba(180,205,255,0.16) 1px, transparent 1.6px)',
-            backgroundSize: '26px 26px',
-            maskImage:
-              'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 72%)',
-            WebkitMaskImage:
-              'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 72%)',
-          }}
-        />
-        {/* Glowing trail — dots near the cursor light up and fade slowly */}
-        <DotFieldTrail />
-        {/* Film grain — analog texture flickering over the night sky */}
-        <div aria-hidden className="film-grain" />
+        {/* Network graph — drifting nodes link to each other and to the cursor */}
+        <NetworkGraph />
         <div className="relative mx-auto flex w-full max-w-page flex-col items-center px-[60px] max-lg:px-8 max-sm:px-5 pb-0 pt-[160px] max-lg:pt-[120px] max-sm:pt-[100px] text-center">
           {/* Centered copy */}
           <Reveal className="flex max-w-[760px] flex-col items-center gap-4">
@@ -393,13 +410,6 @@ export default function Home() {
           {/* Product screen — the real 동영상 검색 dashboard, scaled to fit and
               bottom-clipped so it reads as embedded in the hero. */}
           <div className="relative mt-[72px] max-sm:mt-12 w-full max-w-[1040px]">
-            {/* Attention glow — brand-color halo that draws the eye to the screen */}
-            <div aria-hidden className="pointer-events-none absolute inset-0">
-              <div className="absolute left-1/2 top-[46%] h-[118%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-[48px] bg-softblue-500/30 blur-[130px] max-md:blur-[70px] animate-pulse [animation-duration:5s]" />
-              <div className="absolute left-1/2 top-1/2 h-[85%] w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#68b2ff]/30 blur-[100px] max-md:blur-[60px]" />
-              <div className="absolute -top-10 left-1/2 h-40 w-[55%] -translate-x-1/2 rounded-full bg-white/25 blur-[90px]" />
-            </div>
-
             {/* Glassmorphism bezel — frosted glass that peeks out behind the screen */}
             <div
               aria-hidden
