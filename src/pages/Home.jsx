@@ -228,6 +228,102 @@ function FluidMockup({ children }) {
   )
 }
 
+// Dot matrix where dots light up near the cursor and slowly fade afterwards,
+// leaving a glowing trail. Each dot keeps its own intensity that decays per
+// frame; the cursor boosts nearby dots back to full.
+function DotFieldTrail() {
+  const canvasRef = useRef(null)
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+    const S = 26 // dot spacing (matches the static base grid)
+    const OFF = 13 // center within each tile, aligning with the CSS dot grid
+    const R = 135 // cursor influence radius
+    let w = 0, h = 0, cols = 0, rows = 0
+    let inten = new Float32Array(0)
+    const mouse = { x: -9999, y: -9999, active: false }
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect()
+      w = rect.width
+      h = rect.height
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      canvas.width = Math.round(w * dpr)
+      canvas.height = Math.round(h * dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      cols = Math.ceil(w / S) + 1
+      rows = Math.ceil(h / S) + 1
+      inten = new Float32Array(cols * rows)
+    }
+
+    const onMove = (e) => {
+      const rect = canvas.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      if (x < 0 || y < 0 || x > w || y > h) {
+        mouse.active = false
+        return
+      }
+      mouse.x = x
+      mouse.y = y
+      mouse.active = true
+    }
+
+    let raf
+    const tick = () => {
+      ctx.clearRect(0, 0, w, h)
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const i = r * cols + c
+          let v = inten[i] * 0.94 // slow decay → lingering trail
+          if (mouse.active) {
+            const dx = c * S + OFF - mouse.x
+            const dy = r * S + OFF - mouse.y
+            const dist = Math.sqrt(dx * dx + dy * dy)
+            if (dist < R) {
+              const boost = 1 - dist / R
+              if (boost > v) v = boost
+            }
+          }
+          inten[i] = v
+          if (v > 0.015) {
+            ctx.beginPath()
+            ctx.fillStyle = `rgba(173,205,255,${v * 0.85})`
+            ctx.arc(c * S + OFF, r * S + OFF, 1.3, 0, 6.2832)
+            ctx.fill()
+          }
+        }
+      }
+      raf = requestAnimationFrame(tick)
+    }
+
+    resize()
+    const ro = new ResizeObserver(resize)
+    ro.observe(canvas)
+    window.addEventListener('pointermove', onMove)
+    raf = requestAnimationFrame(tick)
+    return () => {
+      cancelAnimationFrame(raf)
+      ro.disconnect()
+      window.removeEventListener('pointermove', onMove)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden
+      className="pointer-events-none absolute inset-0 h-full w-full"
+      style={{
+        maskImage:
+          'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 72%)',
+        WebkitMaskImage:
+          'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 72%)',
+      }}
+    />
+  )
+}
+
 export default function Home() {
   return (
     <div>
@@ -241,24 +337,24 @@ export default function Home() {
             'linear-gradient(180deg, #050d1c 0%, #081429 26%, #0c2245 52%, #123257 74%, #1c4577 100%)',
         }}
       >
-        {/* Star field — sparse, fades out toward the dawn-lit horizon */}
+        {/* Dot matrix — faint tech grid, fades out toward the dawn-lit horizon */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              'radial-gradient(1.5px 1.5px at 25px 35px, rgba(255,255,255,0.9), transparent),' +
-              'radial-gradient(1px 1px at 90px 80px, rgba(200,220,255,0.7), transparent),' +
-              'radial-gradient(1.2px 1.2px at 150px 140px, rgba(255,255,255,0.6), transparent),' +
-              'radial-gradient(1px 1px at 60px 175px, rgba(180,205,255,0.6), transparent),' +
-              'radial-gradient(1.4px 1.4px at 195px 55px, rgba(255,255,255,0.5), transparent)',
-            backgroundSize: '230px 230px',
+              'radial-gradient(circle, rgba(180,205,255,0.16) 1px, transparent 1.6px)',
+            backgroundSize: '26px 26px',
             maskImage:
-              'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.45) 38%, rgba(0,0,0,0) 62%)',
+              'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 72%)',
             WebkitMaskImage:
-              'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.45) 38%, rgba(0,0,0,0) 62%)',
+              'linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 72%)',
           }}
         />
+        {/* Glowing trail — dots near the cursor light up and fade slowly */}
+        <DotFieldTrail />
+        {/* Film grain — analog texture flickering over the night sky */}
+        <div aria-hidden className="film-grain" />
         <div className="relative mx-auto flex w-full max-w-page flex-col items-center px-[60px] max-lg:px-8 max-sm:px-5 pb-0 pt-[160px] max-lg:pt-[120px] max-sm:pt-[100px] text-center">
           {/* Centered copy */}
           <Reveal className="flex max-w-[760px] flex-col items-center gap-4">

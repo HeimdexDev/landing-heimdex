@@ -354,10 +354,15 @@ export default function HeroAppMockup() {
                     </span>
                   ))}
                 </div>
-                <div className="flex flex-1 items-center gap-[10px] rounded-[10px] border border-grayscale-500 bg-white p-[16px]">
+                <div
+                  className={`flex flex-1 items-center gap-[10px] rounded-[10px] p-[16px] ${
+                    zoom > 1 ? 'search-spin' : ''
+                  }`}
+                  style={zoom > 1 ? undefined : { border: '1.6px solid #7c7d8b', background: '#fff' }}
+                >
                   <Search
                     size={24}
-                    className={typed ? 'text-grayscale-500' : 'text-neutral-300'}
+                    className={typed ? 'text-navy-500' : 'text-neutral-300'}
                   />
                   {typed ? (
                     <span className="flex items-center text-[16px] font-medium tracking-[-0.4px] text-grayscale-800">
