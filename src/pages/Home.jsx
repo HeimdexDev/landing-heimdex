@@ -217,8 +217,9 @@ function FluidMockup({ children }) {
     <div
       ref={frameRef}
       className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40 max-md:h-[320px] max-sm:h-[230px]"
-      // own compositing layer so the rounded clip survives the child zoom transform
-      style={{ transform: 'translateZ(0)' }}
+      // clip-path enforces the rounded clip even while the child zoom transform
+      // animates (overflow-hidden + border-radius alone breaks during transforms)
+      style={{ transform: 'translateZ(0)', clipPath: 'inset(0 round 16px 16px 0 0)' }}
     >
       <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
         {children}
@@ -237,8 +238,6 @@ export default function Home() {
           // Predawn night sky in the navy palette: deepest navy up top (night),
           // a softblue dawn glow rising from the horizon, faint nebula up-left.
           background:
-            'radial-gradient(46% 42% at 12% 6%, rgba(35,76,119,0.55) 0%, rgba(35,76,119,0) 62%),' +
-            'radial-gradient(40% 38% at 88% 10%, rgba(57,145,255,0.22) 0%, rgba(57,145,255,0) 58%),' +
             'linear-gradient(180deg, #050d1c 0%, #081429 26%, #0c2245 52%, #123257 74%, #1c4577 100%)',
         }}
       >
@@ -305,10 +304,10 @@ export default function Home() {
               <div className="absolute -top-10 left-1/2 h-40 w-[55%] -translate-x-1/2 rounded-full bg-white/25 blur-[90px]" />
             </div>
 
-            {/* Translucent glass bezel — peeks out a touch behind the screen */}
+            {/* Glassmorphism bezel — frosted glass that peeks out behind the screen */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-x-5 -top-5 bottom-0 rounded-t-[24px] bg-white/[0.07] ring-1 ring-white/[0.06] backdrop-blur-[2px] max-sm:-inset-x-3 max-sm:-top-3"
+              className="pointer-events-none absolute -inset-x-5 -top-5 bottom-0 rounded-t-[24px] bg-gradient-to-b from-white/20 to-white/[0.04] ring-1 ring-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_10px_40px_-12px_rgba(0,0,0,0.55)] backdrop-blur-md max-sm:-inset-x-3 max-sm:-top-3"
             />
 
             {/* Fluid JS-measured scale fits the 1440-wide app to the frame width */}
