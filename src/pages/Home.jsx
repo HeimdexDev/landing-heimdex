@@ -202,11 +202,17 @@ function FeatureShowcase() {
 function FluidMockup({ children }) {
   const frameRef = useRef(null)
   const [scale, setScale] = useState(0.7222)
+  const [radius, setRadius] = useState(16)
 
   useEffect(() => {
     const el = frameRef.current
     if (!el) return
-    const update = () => setScale(el.clientWidth / 1440)
+    const update = () => {
+      const w = el.clientWidth
+      setScale(w / 1440)
+      // Shrink the corner radius alongside the frame on tablet/mobile
+      setRadius(w >= 720 ? 16 : w >= 480 ? 12 : 10)
+    }
     update()
     const ro = new ResizeObserver(update)
     ro.observe(el)
@@ -216,10 +222,13 @@ function FluidMockup({ children }) {
   return (
     <div
       ref={frameRef}
-      className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40 max-md:h-[320px] max-sm:h-[230px]"
+      className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40 lg:h-auto lg:aspect-[1040/470] max-md:h-[320px] max-md:rounded-t-xl max-sm:h-[230px] max-sm:rounded-t-[10px]"
       // clip-path enforces the rounded clip even while the child zoom transform
       // animates (overflow-hidden + border-radius alone breaks during transforms)
-      style={{ transform: 'translateZ(0)', clipPath: 'inset(0 round 16px 16px 0 0)' }}
+      style={{
+        transform: 'translateZ(0)',
+        clipPath: `inset(0 round ${radius}px ${radius}px 0 0)`,
+      }}
     >
       <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
         {children}
@@ -416,7 +425,10 @@ export default function Home() {
       >
         {/* Network graph — drifting nodes link to each other and to the cursor */}
         <NetworkGraph />
-        <div className="relative mx-auto flex w-full max-w-page flex-col items-center px-[60px] max-lg:px-8 max-sm:px-5 pb-0 pt-[160px] max-lg:pt-[120px] max-sm:pt-[100px] text-center">
+        <div className="relative mx-auto flex w-full max-w-page flex-col items-center px-[60px] max-lg:px-8 max-sm:px-5 pb-0 pt-[160px] max-lg:pt-[120px] max-sm:pt-[100px] text-center min-h-screen">
+          {/* Mobile: absorbs the slack above so the copy sits a fixed 150px
+              over the screen, which is bottom-anchored to fill the viewport. */}
+          <div aria-hidden className="w-full flex-1 sm:hidden" />
           {/* Centered copy */}
           <Reveal className="flex max-w-[760px] flex-col items-center gap-4">
             <h1 className="font-product text-[58px] max-md:text-[34px] max-sm:text-[28px] font-bold leading-[1.3] text-white">
@@ -427,37 +439,46 @@ export default function Home() {
             <p className="font-noto text-lg leading-[1.5] tracking-[-0.45px] text-[#cdd9ec] max-sm:text-[15px]">
               업로드 없이, 시청 없이.
               <br />
-              검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로 만들어 드립니다.
+              검색 한 줄로 필요한 장면을 찾고 숏폼까지{' '}
+              <br className="hidden max-sm:block" />
+              자동으로 만들어 드립니다.
             </p>
           </Reveal>
 
           {/* Centered actions */}
-          <Reveal className="mt-10 flex justify-center gap-5 max-sm:flex-col max-sm:w-full" delay={120}>
+          <Reveal className="mt-10 flex w-full justify-center gap-5 max-sm:gap-3" delay={120}>
             <a
               href="https://playground.heimdex.co/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1 rounded-lg bg-white px-6 py-5 max-sm:w-full max-sm:px-5 max-sm:py-4 text-base font-semibold text-navy-500 transition-colors hover:bg-grayscale-10"
+              className="group inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-white px-6 py-5 max-lg:max-w-[200px] max-lg:flex-1 max-sm:gap-0.5 max-sm:px-3 max-sm:py-4 text-base font-semibold text-navy-500 transition-all duration-200 hover:-translate-y-0.5 hover:bg-grayscale-10 hover:shadow-[0_12px_28px_-8px_rgba(0,0,0,0.45)] max-sm:text-[13px]"
             >
               웹에서 체험하기
-              <ArrowUpRight size={20} strokeWidth={2} />
+              <ArrowUpRight
+                size={20}
+                strokeWidth={2}
+                className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 max-sm:h-4 max-sm:w-4"
+              />
             </a>
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center gap-1 rounded-lg border border-white px-6 py-5 max-sm:w-full max-sm:px-5 max-sm:py-4 text-base font-semibold text-white transition-colors hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-white px-6 py-5 max-lg:max-w-[200px] max-lg:flex-1 max-sm:gap-0.5 max-sm:px-3 max-sm:py-4 text-base font-semibold text-white transition-colors hover:bg-white/10 max-sm:text-[13px]"
             >
               한 달 무료신청
-              <ArrowUpRight size={20} strokeWidth={2} />
+              <ArrowUpRight size={20} strokeWidth={2} className="max-sm:h-4 max-sm:w-4" />
             </Link>
           </Reveal>
 
           {/* Product screen — the real 동영상 검색 dashboard, scaled to fit and
               bottom-clipped so it reads as embedded in the hero. */}
-          <div className="relative mt-[72px] max-sm:mt-12 w-full max-w-[1040px]">
+          {/* Tablet/desktop: grows to push the screen to the bottom edge,
+              filling the viewport while keeping a minimum gap above it. */}
+          <div aria-hidden className="hidden w-full flex-1 sm:block" />
+          <div className="relative mt-[72px] max-sm:mt-[200px] w-full max-w-[1040px] lg:max-w-[1320px]">
             {/* Glassmorphism bezel — frosted glass that peeks out behind the screen */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-x-5 -top-5 bottom-0 rounded-t-[24px] bg-gradient-to-b from-white/20 to-white/[0.04] ring-1 ring-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_10px_40px_-12px_rgba(0,0,0,0.55)] backdrop-blur-md max-sm:-inset-x-3 max-sm:-top-3"
+              className="pointer-events-none absolute -inset-x-5 -top-5 bottom-0 rounded-t-[24px] bg-gradient-to-b from-white/20 to-white/[0.04] ring-1 ring-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_10px_40px_-12px_rgba(0,0,0,0.55)] backdrop-blur-md max-md:rounded-t-[18px] max-sm:-inset-x-3 max-sm:-top-3 max-sm:rounded-t-[14px]"
             />
 
             {/* Fluid JS-measured scale fits the 1440-wide app to the frame width */}
