@@ -25,32 +25,42 @@ const top8 = (paths) =>
 
 // Legal detail screen content for the 3rd card (교차로 신호위반 접촉사고).
 const LEGAL_DETAIL = {
-  // 행동 요약 — a plain sentence summary of the video content.
-  summary:
-    '교차로를 직진하던 차량 앞으로 맞은편에서 좌회전하던 차량이 진입하면서 두 차량이 충돌하는 장면입니다. 충돌 직후 양측 운전자가 차에서 내려 사고 상황을 확인하고, 보험사 연락을 논의합니다.',
-  // 스크립트 — transcribed audio (speakers A: 본인 차량 운전자, B: 상대 차량 운전자).
-  script: [
-    { time: '00:00:06', speaker: 'A', text: '어어, 잠깐—!' },
-    { time: '00:00:08', speaker: 'A', text: '아, 뭐야 이거… 갑자기 왜 들어와.' },
-    { time: '00:00:12', speaker: 'A', text: '(창문을 내리며) 저기요, 괜찮으세요?' },
-    { time: '00:00:14', speaker: 'B', text: '아니, 신호 바뀌었는데 왜 그냥 들어와요?' },
-    { time: '00:00:17', speaker: 'A', text: '저 직진 신호였어요. 블랙박스 같이 확인하시죠.' },
-    { time: '00:00:20', speaker: 'B', text: '일단 차부터 빼고 보험사 부릅시다.' },
-    { time: '00:00:23', speaker: 'A', text: '네, 지금 보험사 연결할게요.' },
+  // 행동 요약 — one objective sentence describing what is visible in the video.
+  summary: '야간 빗길 도로를 주행하던 중 노면이 미끄러워 차량이 미끄러지며 사고가 발생한다.',
+  // 스크립트 — none for this dashcam clip (no usable audio).
+  script: [],
+  // 장면 분석 — the clip split roughly in half into two segments.
+  scenes: [
+    {
+      range: '00:00:00 - 00:00:09',
+      dur: '9초',
+      summary: '야간 빗길 시내 도로에서 차량들이 서행하며 주행한다.',
+    },
+    {
+      range: '00:00:09 - 00:00:18',
+      dur: '9초',
+      summary: '야간 빗길 고속도로에서 선행 차량이 미끄러지며 차로를 벗어난다.',
+      img: '/assets/dashcam/dashcam-4b.jpg',
+    },
   ],
 }
 
 const LEGAL_DETAIL_EN = {
   summary:
-    'A vehicle going straight through an intersection collides with an oncoming car that turns left in front of it. Right after the impact, both drivers get out to check the situation and discuss contacting their insurers.',
-  script: [
-    { time: '00:00:06', speaker: 'A', text: 'Whoa, wait—!' },
-    { time: '00:00:08', speaker: 'A', text: 'Ah, what is this… why pull out like that.' },
-    { time: '00:00:12', speaker: 'A', text: '(rolling down the window) Hey, are you okay?' },
-    { time: '00:00:14', speaker: 'B', text: 'You drove right in even though the light changed?' },
-    { time: '00:00:17', speaker: 'A', text: 'I had a green light. Let’s check both dashcams.' },
-    { time: '00:00:20', speaker: 'B', text: 'Let’s move the cars first and call the insurers.' },
-    { time: '00:00:23', speaker: 'A', text: 'Okay, I’ll call my insurer now.' },
+    'While driving on a wet road at night, the slippery surface causes the vehicle to skid and crash.',
+  script: [],
+  scenes: [
+    {
+      range: '00:00:00 - 00:00:09',
+      dur: '9s',
+      summary: 'Vehicles drive slowly along a wet city road at night.',
+    },
+    {
+      range: '00:00:09 - 00:00:18',
+      dur: '9s',
+      summary: 'On the wet night highway, the vehicle ahead skids and veers out of its lane.',
+      img: '/assets/dashcam/dashcam-4b.jpg',
+    },
   ],
 }
 
@@ -60,18 +70,19 @@ const DEMOS = {
     queryEn: 'Scene of a vehicle rear-end collision',
     placeholder: '장면을 설명해 검색해보세요 - "추돌 사고"',
     placeholderEn: 'Describe a scene to search — "rear-end collision"',
+    cardSource: 'Drive',
     images: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/dashcam/dashcam-${n}.jpg`)),
     detail: LEGAL_DETAIL,
     detailEn: LEGAL_DETAIL_EN,
     titles: [
-      '블랙박스_전방_추돌사고_원본',
-      '측면_접촉사고_블랙박스_HD',
-      '교차로_신호위반_접촉사고_블랙박스_원본_증거자료',
-      '빗길_미끄러짐_사고_야간',
-      '고속도로_2차사고_블랙박스',
-      '끼어들기_접촉사고_전방',
-      '주차장_접촉사고_블랙박스',
-      '횡단보도_보행자_위험상황_블랙박스',
+      '2024가단38201_갑제1호증_전방추돌_블랙박스_원본_20240312',
+      '2024가단38201_갑제2호증_측면접촉_블랙박스_20240312',
+      '2024고단1789_증제3호_교차로_신호위반_블랙박스_20240228',
+      '2024가단41552_갑제1호증_빗길미끄러짐_야간_20240115',
+      '2024가단39870_갑제3호증_고속도로_2차사고_블랙박스_20240320',
+      '2024가단40233_갑제2호증_끼어들기_접촉_전방_20240305',
+      '2024가단42117_갑제4호증_주차장_접촉사고_20240218',
+      '2024고단2034_증제2호_횡단보도_보행자_블랙박스_20240301',
       '후방_블랙박스_추돌_연속',
       '교차로_좌회전_사고_카메라2',
       '터널_내부_추돌사고_야간',
@@ -82,14 +93,14 @@ const DEMOS = {
       '교차로_정면충돌_블랙박스_01',
     ],
     titlesEn: [
-      'dashcam_front_rearend_original',
-      'side_impact_dashcam_HD',
-      'intersection_signal_violation_collision_dashcam_evidence',
-      'wet_road_skid_accident_night',
-      'highway_secondary_crash_dashcam',
-      'cut_in_sideswipe_front',
-      'parking_lot_contact_dashcam',
-      'crosswalk_pedestrian_hazard_dashcam',
+      'CASE-2024-38201_EXH-A1_FrontCollision_Dashcam_20240312',
+      'CASE-2024-38201_EXH-A2_SideImpact_Dashcam_20240312',
+      'CASE-2024-01789_EVID-3_Intersection_SignalViolation_Dashcam_20240228',
+      'CASE-2024-41552_EXH-A1_WetRoadSkid_Night_20240115',
+      'CASE-2024-39870_EXH-A3_Highway_SecondaryCrash_Dashcam_20240320',
+      'CASE-2024-40233_EXH-A2_CutIn_Sideswipe_Front_20240305',
+      'CASE-2024-42117_EXH-A4_ParkingLot_Contact_20240218',
+      'CASE-2024-02034_EVID-2_Crosswalk_Pedestrian_Dashcam_20240301',
       'rear_dashcam_rearend_seq',
       'intersection_left_turn_crash_cam2',
       'tunnel_rearend_accident_night',
@@ -215,8 +226,8 @@ function SolutionDemo({ tab }) {
   return (
     <div
       ref={frameRef}
-      className="relative aspect-[16/9] w-full overflow-hidden rounded-[20px] bg-white shadow-card ring-1 ring-grayscale-100 max-md:aspect-[4/3] max-sm:rounded-[14px]"
-      style={{ transform: 'translateZ(0)', clipPath: `inset(0 round ${radius}px)` }}
+      className="relative aspect-[1040/470] w-full overflow-hidden rounded-t-[20px] bg-white shadow-card ring-1 ring-grayscale-100 max-sm:rounded-t-[14px]"
+      style={{ transform: 'translateZ(0)', clipPath: `inset(0 round ${radius}px ${radius}px 0 0)` }}
     >
       <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
         {/* key={tab + lang} remounts the mockup on tab/language change so its
@@ -230,6 +241,7 @@ function SolutionDemo({ tab }) {
           sweep={false}
           orientation={cfg.orientation || 'horizontal'}
           detail={en ? cfg.detailEn || null : cfg.detail || null}
+          cardSource={cfg.cardSource || null}
         />
       </div>
     </div>
@@ -323,7 +335,7 @@ export default function Solution() {
       {/* ───────── Hero ───────── */}
       {isNew ? (
         <section
-          className="relative flex min-h-screen w-full flex-col items-center px-[60px] pb-[90px] pt-[170px] max-lg:px-8 max-lg:pb-[70px] max-lg:pt-[130px] max-sm:px-5 max-sm:pb-14 max-sm:pt-[110px]"
+          className="relative flex min-h-screen w-full flex-col items-center px-[60px] pb-0 pt-[170px] max-lg:px-8 max-lg:pt-[130px] max-sm:px-5 max-sm:pt-[110px]"
           style={{
             // Light, airy gradient — same hero footprint as home, no interaction.
             background: 'linear-gradient(180deg, #f4f8fe 0%, #e7f0fb 55%, #d8e7f8 100%)',
