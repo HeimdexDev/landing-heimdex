@@ -36,7 +36,7 @@ const inputCls =
   'w-full rounded-[10px] border border-grayscale-500 px-4 py-3 text-sm font-medium tracking-[-0.35px] text-grayscale-800 placeholder:text-neutral-300 focus:border-navy-500 focus:outline-none'
 
 export default function Contact() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const [form, setForm] = useState({ name: '', phone: '', email: '', company: '', message: '' })
   const [agreeRequired, setAgreeRequired] = useState(false)
   const [agreeMarketing, setAgreeMarketing] = useState(false)
@@ -72,10 +72,19 @@ export default function Contact() {
             <span className="block text-navy-500">{t('데모 상담 신청', 'Request a Demo')}</span>
             <span className="block text-grayscale-800">{t('찾지 말고, 검색하세요', 'Don’t search by hand. Just search.')}</span>
           </h1>
-          <p className="text-base leading-[1.4] tracking-[0.32px] text-grayscale-500">
-            {t(
-              '15분 상담으로 지금 영상 관리에서 어디서 시간이 새는지 진단하고, 하임덱스가 줄여줄 작업 시간을 함께 계산해드립니다.',
-              'In a 15-minute consultation, we’ll diagnose where time leaks in your current video workflow and calculate the hours Heimdex can save you.',
+          <p className="text-base leading-[1.5] tracking-[0.32px] text-grayscale-500">
+            {lang === 'en' ? (
+              <>
+                In a 15-minute consultation, we’ll diagnose where time leaks in your
+                <br />
+                current video workflow and the hours Heimdex can save you.
+              </>
+            ) : (
+              <>
+                15분 상담으로 지금 영상 관리에서 어디서 시간이 새는지 진단하고,
+                <br />
+                하임덱스가 줄여줄 작업 시간을 함께 계산해드립니다.
+              </>
             )}
           </p>
         </Reveal>
@@ -84,7 +93,7 @@ export default function Contact() {
         <Reveal className="shrink-0 max-lg:w-full max-lg:max-w-[671px] max-lg:shrink" delay={120}>
         <form
           onSubmit={onSubmit}
-          className="flex w-[671px] shrink-0 -translate-y-[20px] translate-x-[100px] flex-col gap-6 rounded-[10px] bg-white p-[30px] shadow-card max-lg:w-full max-lg:translate-x-0 max-lg:translate-y-0 max-lg:shrink max-sm:p-5"
+          className="flex w-[671px] shrink-0 -translate-y-[20px] translate-x-[40px] flex-col gap-6 rounded-[10px] bg-white p-[30px] shadow-card max-lg:w-full max-lg:translate-x-0 max-lg:translate-y-0 max-lg:shrink max-sm:p-5"
         >
           <div className="flex flex-col gap-[20px]">
             <div className="flex gap-[10px] max-sm:flex-col">
