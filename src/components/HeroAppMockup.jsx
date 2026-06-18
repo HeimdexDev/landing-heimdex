@@ -25,12 +25,14 @@ import {
   SkipForward,
   Volume2,
 } from 'lucide-react'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 // Faithful code build of the Figma "동영상 검색(세로)" screen (node 2289:60619),
 // using lucide-react + project design tokens, with a looping demo interaction:
 // type a query → results appear → a fake cursor sweeps/scrolls the cards.
 
 const QUERY = '무대 위에서 공연하는 장면'
+const QUERY_EN = 'Scene of a performance on stage'
 const COLS = 4
 
 const SOURCES = {
@@ -62,9 +64,28 @@ const TITLES = [
   '아레나_공연_드론샷',
   '무대_조명_리허설_테스트',
 ]
+const TITLES_EN = [
+  '2024_solo_concert_encore_4K',
+  'title_track_fancam_original',
+  'rehearsal_fullshot_cam2',
+  'fanmeeting_opening_performance_highlight_final',
+  'music_show_no1_encore_stage',
+  'showcase_highlight',
+  'world_tour_seoul_day2_ending',
+  'backstage_behind_interview',
+  'yearend_awards_special_stage_vertical',
+  'unit_stage_choreo_dryrun',
+  'debut_showcase_title_stage_4K_original_final',
+  'live_clip_for_shorts_vertical',
+  'concert_opening_intro_VCR',
+  'encore_singalong_crowd_reaction',
+  'arena_show_drone_shot',
+  'stage_lighting_rehearsal_test',
+]
 
 const STAGE_IMAGES = Array.from({ length: 16 }, (_, i) => `/assets/stage/stage-${i + 1}.jpg`)
 const DEFAULT_PLACEHOLDER = '파일명이나 폴더명으로 찾아보세요 - "마케팅_쇼츠_01"'
+const DEFAULT_PLACEHOLDER_EN = 'Search by file or folder name — "marketing_short_01"'
 
 function SourceChip({ source }) {
   return (
@@ -216,6 +237,7 @@ function ScriptRow({ speaker, time, text }) {
 // Video detail (개요) screen — two white shadowed cards: left player + metadata,
 // right 개요 tabs + 행동 요약 + 스크립트. Matches Figma 2548:215297 / 2548:215324.
 function DetailView({ card, detail, date }) {
+  const { t } = useLang()
   return (
     <div className="flex w-[1058px] items-start gap-[24px] text-left">
       {/* Left card — player + metadata */}
@@ -253,14 +275,14 @@ function DetailView({ card, detail, date }) {
         <div className="flex h-[274px] flex-col items-end justify-between p-[20px]">
           <div className="flex w-full gap-[32px] text-[14px] font-medium leading-[1.4] tracking-[-0.35px]">
             <div className="flex flex-col gap-[20px] text-[#7b7b7b]">
-              <span>파일 위치</span>
-              <span>폴더 제목</span>
-              <span>재생 시간</span>
-              <span>업로드 일자</span>
+              <span>{t('파일 위치', 'Location')}</span>
+              <span>{t('폴더 제목', 'Folder')}</span>
+              <span>{t('재생 시간', 'Duration')}</span>
+              <span>{t('업로드 일자', 'Uploaded')}</span>
             </div>
             <div className="flex flex-col gap-[20px] text-grayscale-800">
               <span>Google Drive</span>
-              <span>블랙박스</span>
+              <span>{t('블랙박스', 'Dashcam')}</span>
               <span>00:00:18</span>
               <span>{date} 09:46:28</span>
             </div>
@@ -270,7 +292,7 @@ function DetailView({ card, detail, date }) {
             className="flex items-center gap-[6px] text-[14px] font-semibold tracking-[-0.35px] text-[#7b7b7b]"
           >
             <RotateCcw size={20} />
-            장면 재분석
+            {t('장면 재분석', 'Re-analyze')}
           </button>
         </div>
       </div>
@@ -279,16 +301,22 @@ function DetailView({ card, detail, date }) {
       <div className="relative flex h-[880px] flex-1 flex-col gap-[24px] overflow-hidden rounded-[10px] bg-white p-[20px] shadow-[0_4px_20px_0_#e8e9f8,10px_10px_20px_0_rgba(185,185,185,0.1)]">
         <div className="flex h-[42px] shrink-0 items-stretch gap-[20px] border-b border-neutral-100 text-[16px] font-semibold tracking-[-0.4px]">
           <span className="flex items-center justify-center border-b-2 border-navy-500 px-[8px] pb-[8px] text-navy-500">
-            개요
+            {t('개요', 'Overview')}
           </span>
-          <span className="flex items-center justify-center px-[8px] pb-[8px] text-[#9d9d9d]">장면 분석</span>
-          <span className="flex items-center justify-center px-[8px] pb-[8px] text-[#9d9d9d]">인물 관리</span>
+          <span className="flex items-center justify-center px-[8px] pb-[8px] text-[#9d9d9d]">
+            {t('장면 분석', 'Scene Analysis')}
+          </span>
+          <span className="flex items-center justify-center px-[8px] pb-[8px] text-[#9d9d9d]">
+            {t('인물 관리', 'People')}
+          </span>
         </div>
 
         <div className="flex flex-col gap-[32px]">
           <div className="flex flex-col gap-[20px]">
             <div className="flex items-center gap-[10px]">
-              <p className="text-[18px] font-semibold tracking-[-0.45px] text-black">행동 요약</p>
+              <p className="text-[18px] font-semibold tracking-[-0.45px] text-black">
+                {t('행동 요약', 'Action Summary')}
+              </p>
               <Copy size={16} className="text-grayscale-500" />
             </div>
             <p className="text-[14px] font-semibold leading-[1.6] tracking-[-0.35px] text-[#555]">
@@ -298,7 +326,9 @@ function DetailView({ card, detail, date }) {
 
           <div className="flex flex-col gap-[20px]">
             <div className="flex items-center gap-[10px]">
-              <p className="text-[18px] font-semibold tracking-[-0.45px] text-black">스크립트</p>
+              <p className="text-[18px] font-semibold tracking-[-0.45px] text-black">
+                {t('스크립트', 'Transcript')}
+              </p>
               <Copy size={16} className="text-grayscale-500" />
             </div>
             <div className="flex flex-col gap-[16px]">
@@ -314,18 +344,23 @@ function DetailView({ card, detail, date }) {
 }
 
 export default function HeroAppMockup({
-  query = QUERY,
-  titles = TITLES,
+  query = null,
+  titles = null,
   images = STAGE_IMAGES,
-  placeholder = DEFAULT_PLACEHOLDER,
+  placeholder = null,
   sweep = true,
   orientation = 'vertical',
   detail = null,
 }) {
+  const { t, lang } = useLang()
   const horizontal = orientation === 'horizontal'
+  // Fall back to the (lang-aware) stage defaults when no content is passed (home hero).
+  const q = query ?? (lang === 'en' ? QUERY_EN : QUERY)
+  const ts = titles ?? (lang === 'en' ? TITLES_EN : TITLES)
+  const ph = placeholder ?? (lang === 'en' ? DEFAULT_PLACEHOLDER_EN : DEFAULT_PLACEHOLDER)
   const cards = Array.from({ length: 16 }, (_, i) => ({
     source: SOURCE_CYCLE[i % SOURCE_CYCLE.length],
-    title: titles[i % titles.length],
+    title: ts[i % ts.length],
     img: images ? images[i % images.length] : null,
   }))
 
@@ -374,9 +409,9 @@ export default function HeroAppMockup({
         if (cancelled) return
 
         // 1. type the query (zoomed in)
-        for (let i = 1; i <= query.length; i++) {
+        for (let i = 1; i <= q.length; i++) {
           if (cancelled) return
-          setTyped(query.slice(0, i))
+          setTyped(q.slice(0, i))
           await wait(85)
         }
         await wait(550)
@@ -473,17 +508,19 @@ export default function HeroAppMockup({
 
             <div className="flex flex-col gap-[32px]">
               <div className="flex flex-col gap-[6px]">
-                <p className="text-[16px] font-semibold tracking-[-0.4px] text-[#9d9d9d]">메인</p>
-                <NavItem icon={Video} label="동영상 검색" active />
-                <NavItem icon={ImageIcon} label="이미지 검색" />
+                <p className="text-[16px] font-semibold tracking-[-0.4px] text-[#9d9d9d]">
+                  {t('메인', 'Main')}
+                </p>
+                <NavItem icon={Video} label={t('동영상 검색', 'Video Search')} active />
+                <NavItem icon={ImageIcon} label={t('이미지 검색', 'Image Search')} />
               </div>
               <div className="flex flex-col gap-[6px]">
                 <p className="text-[16px] font-semibold tracking-[-0.4px] text-[#9d9d9d]">
-                  라이브러리
+                  {t('라이브러리', 'Library')}
                 </p>
-                <NavItem icon={UserRound} label="인물 라벨 관리" />
-                <NavItem icon={Scissors} label="교차 편집" />
-                <NavItem icon={Save} label="내 쇼츠" />
+                <NavItem icon={UserRound} label={t('인물 라벨 관리', 'People & Labels')} />
+                <NavItem icon={Scissors} label={t('교차 편집', 'Cross Editing')} />
+                <NavItem icon={Save} label={t('내 쇼츠', 'My Shorts')} />
               </div>
             </div>
           </div>
@@ -491,7 +528,7 @@ export default function HeroAppMockup({
           <div className="flex items-center gap-[4px]">
             <Bolt size={20} className="text-grayscale-800" />
             <span className="text-[14px] font-semibold tracking-[-0.35px] text-grayscale-800">
-              설정
+              {t('설정', 'Settings')}
             </span>
           </div>
         </aside>
@@ -506,7 +543,7 @@ export default function HeroAppMockup({
                 <>
                   <span className="flex items-center gap-[8px] text-grayscale-500">
                     <ChevronLeft size={20} className="text-grayscale-800" />
-                    동영상 검색
+                    {t('동영상 검색', 'Video Search')}
                   </span>
                   <span className="max-w-[560px] truncate font-semibold text-grayscale-800">
                     {cards[2]?.title}.mp4
@@ -517,7 +554,7 @@ export default function HeroAppMockup({
             <div className="flex items-center gap-[12px]">
               <div className="flex flex-col items-end">
                 <p className="text-[16px] font-medium tracking-[-0.4px] text-grayscale-800">
-                  하임덱스
+                  {t('하임덱스', 'Heimdex')}
                 </p>
                 <p className="text-[12px] tracking-[-0.3px] text-grayscale-500">
                   heimdex@heimdex.co
@@ -552,17 +589,23 @@ export default function HeroAppMockup({
             >
             {/* Search card */}
             <div className="flex flex-col gap-[20px] rounded-[10px] bg-white p-[20px] shadow-[0_4px_10px_0_#e8e9f8]">
-              <p className="text-[18px] font-semibold tracking-[-0.45px] text-black">동영상 검색</p>
+              <p className="text-[18px] font-semibold tracking-[-0.45px] text-black">
+                {t('동영상 검색', 'Video Search')}
+              </p>
               <div className="flex items-stretch gap-[10px]">
                 <div className="flex items-stretch gap-[4px] rounded-[10px] bg-[#f5f5f5] p-[4px]">
-                  {['파일', '내용', '의미'].map((t) => (
+                  {[
+                    ['파일', 'File'],
+                    ['내용', 'Content'],
+                    ['의미', 'Meaning'],
+                  ].map(([ko, en]) => (
                     <span
-                      key={t}
+                      key={ko}
                       className={`flex items-center justify-center rounded-[8px] px-[10px] py-[2px] text-[16px] font-medium tracking-[-0.4px] transition-colors ${
-                        t === activeTab ? 'bg-white text-grayscale-800' : 'text-[#9d9d9d]'
+                        ko === activeTab ? 'bg-white text-grayscale-800' : 'text-[#9d9d9d]'
                       }`}
                     >
-                      {t}
+                      {lang === 'en' ? en : ko}
                     </span>
                   ))}
                 </div>
@@ -583,7 +626,7 @@ export default function HeroAppMockup({
                     </span>
                   ) : (
                     <span className="text-[16px] font-medium tracking-[-0.4px] text-neutral-300">
-                      {placeholder}
+                      {ph}
                     </span>
                   )}
                 </div>
@@ -597,14 +640,14 @@ export default function HeroAppMockup({
                 <div className="flex items-center gap-[16px]">
                   <div className="flex flex-1 items-center gap-[16px]">
                     <p className="whitespace-nowrap text-[18px] font-semibold tracking-[-0.45px] text-black">
-                      검색 결과
+                      {t('검색 결과', 'Search Results')}
                     </p>
                     <div className="flex items-center gap-[4px] text-[14px] font-medium tracking-[-0.35px] text-[#7b7b7b]">
-                      <span>동영상 125개</span>
+                      <span>{t('동영상 125개', '125 videos')}</span>
                       <span className="text-navy-500">·</span>
-                      <span>폴더 125개</span>
+                      <span>{t('폴더 125개', '125 folders')}</span>
                       <span className="text-navy-500">·</span>
-                      <span>업데이트 {updatedAt}</span>
+                      <span>{t('업데이트', 'Updated')} {updatedAt}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-[16px]">
@@ -613,7 +656,7 @@ export default function HeroAppMockup({
                       {dateRange}
                     </div>
                     <div className="flex items-center gap-[4px] text-[16px] font-medium tracking-[-0.4px] text-[#7b7b7b]">
-                      생성 일자 순
+                      {t('생성 일자 순', 'By date created')}
                       <ChevronDown size={20} />
                     </div>
                   </div>
@@ -621,7 +664,7 @@ export default function HeroAppMockup({
                 {/* filter row */}
                 <div className="flex items-center gap-[10px]">
                   <div className="flex flex-1 items-center gap-[8px]">
-                    <FilterChip label="전체" />
+                    <FilterChip label={t('전체', 'All')} />
                     <span className="h-[26px] w-[2px] bg-neutral-100" />
                     <FilterChip label="Drive" dot={SOURCES.Drive} />
                     <FilterChip label="Youtube" dot={SOURCES.Youtube} />
@@ -630,14 +673,17 @@ export default function HeroAppMockup({
                   </div>
                   <div className="flex items-center gap-[10px]">
                     <div className="flex items-center gap-[4px] rounded-[6px] bg-[#f5f5f5] p-[3px]">
-                      {['동영상', '장면'].map((t, i) => (
+                      {[
+                        ['동영상', 'Video'],
+                        ['장면', 'Scene'],
+                      ].map(([ko, en], i) => (
                         <span
-                          key={t}
+                          key={ko}
                           className={`rounded-[4px] px-[6px] py-[2px] text-[12px] font-medium tracking-[-0.3px] ${
                             i === 0 ? 'bg-white text-grayscale-800' : 'text-[#9d9d9d]'
                           }`}
                         >
-                          {t}
+                          {lang === 'en' ? en : ko}
                         </span>
                       ))}
                     </div>
@@ -648,7 +694,7 @@ export default function HeroAppMockup({
                         }`}
                       >
                         <RectangleHorizontal size={16} />
-                        가로
+                        {t('가로', 'Landscape')}
                       </span>
                       <span
                         className={`flex items-center gap-[4px] rounded-[4px] px-[4px] py-[2px] text-[12px] font-medium ${
@@ -656,7 +702,7 @@ export default function HeroAppMockup({
                         }`}
                       >
                         <RectangleVertical size={16} />
-                        세로
+                        {t('세로', 'Portrait')}
                       </span>
                     </div>
                   </div>

@@ -40,12 +40,29 @@ const LEGAL_DETAIL = {
   ],
 }
 
+const LEGAL_DETAIL_EN = {
+  summary:
+    'A vehicle going straight through an intersection collides with an oncoming car that turns left in front of it. Right after the impact, both drivers get out to check the situation and discuss contacting their insurers.',
+  script: [
+    { time: '00:00:06', speaker: 'A', text: 'Whoa, wait—!' },
+    { time: '00:00:08', speaker: 'A', text: 'Ah, what is this… why pull out like that.' },
+    { time: '00:00:12', speaker: 'A', text: '(rolling down the window) Hey, are you okay?' },
+    { time: '00:00:14', speaker: 'B', text: 'You drove right in even though the light changed?' },
+    { time: '00:00:17', speaker: 'A', text: 'I had a green light. Let’s check both dashcams.' },
+    { time: '00:00:20', speaker: 'B', text: 'Let’s move the cars first and call the insurers.' },
+    { time: '00:00:23', speaker: 'A', text: 'Okay, I’ll call my insurer now.' },
+  ],
+}
+
 const DEMOS = {
   legal: {
     query: '차량이 추돌하는 사고 장면',
+    queryEn: 'Scene of a vehicle rear-end collision',
     placeholder: '장면을 설명해 검색해보세요 - "추돌 사고"',
+    placeholderEn: 'Describe a scene to search — "rear-end collision"',
     images: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/dashcam/dashcam-${n}.jpg`)),
     detail: LEGAL_DETAIL,
+    detailEn: LEGAL_DETAIL_EN,
     titles: [
       '블랙박스_전방_추돌사고_원본',
       '측면_접촉사고_블랙박스_HD',
@@ -64,16 +81,36 @@ const DEMOS = {
       '주차_접촉_뺑소니_증거_백업본',
       '교차로_정면충돌_블랙박스_01',
     ],
+    titlesEn: [
+      'dashcam_front_rearend_original',
+      'side_impact_dashcam_HD',
+      'intersection_signal_violation_collision_dashcam_evidence',
+      'wet_road_skid_accident_night',
+      'highway_secondary_crash_dashcam',
+      'cut_in_sideswipe_front',
+      'parking_lot_contact_dashcam',
+      'crosswalk_pedestrian_hazard_dashcam',
+      'rear_dashcam_rearend_seq',
+      'intersection_left_turn_crash_cam2',
+      'tunnel_rearend_accident_night',
+      'backstreet_contact_front',
+      'highway_sudden_stop_original',
+      'falling_object_impact_dashcam',
+      'parking_hit_and_run_evidence_backup',
+      'intersection_head_on_dashcam_01',
+    ],
   },
   creative: {
     query: '제품을 들고 웃는 장면',
+    queryEn: 'Scene of someone smiling while holding a product',
     placeholder: '장면을 설명해 검색해보세요 - "제품을 든 장면"',
+    placeholderEn: 'Describe a scene to search — "holding a product"',
     orientation: 'vertical',
     images: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/creative/creative-${n}.jpg`)),
     titles: [
       '신제품_언박싱_숏폼_원본',
-      '패션_룩북_세로_4K',
-      '무대_직캠_앙코르_하이라이트',
+      '신제품_모델_제품컷_세로_4K',
+      '제품_핸즈온_언박싱_숏폼_원본',
       '푸드_광고_촬영본_B컷',
       '댄스_챌린지_릴스_최종_납품용',
       '뷰티_튜토리얼_클로즈업',
@@ -88,10 +125,30 @@ const DEMOS = {
       'SNS_릴스_편집본_final',
       '협찬_제품컷_모음',
     ],
+    titlesEn: [
+      'new_product_unboxing_short_original',
+      'new_product_model_shot_vertical_4K',
+      'product_handson_unboxing_short_original',
+      'food_ad_footage_Bcut',
+      'dance_challenge_reels_final',
+      'beauty_tutorial_closeup',
+      'travel_vlog_drone_original',
+      'interview_product_intro_fullshot_studio',
+      'live_commerce_broadcast_recording',
+      'making_behind_vertical',
+      'ad_30s_final_delivery',
+      'lookbook_shoot_cam2',
+      'review_short_caption_original',
+      'brand_film_highlight',
+      'SNS_reels_edit_final',
+      'sponsored_product_cuts_set',
+    ],
   },
   research: {
     query: '로봇이 물체를 집다 놓치는 구간',
+    queryEn: 'Moment a robot drops the object it was gripping',
     placeholder: '장면을 설명해 검색해보세요 - "이상 동작"',
+    placeholderEn: 'Describe a scene to search — "anomalous motion"',
     images: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/research/research-${n}.jpg`)),
     titles: [
       '로봇팔_파지_테스트_고속카메라_01',
@@ -111,12 +168,31 @@ const DEMOS = {
       '엔드이펙터_정밀도_시험_4K',
       '로봇_이상진동_검출_구간_원본',
     ],
+    titlesEn: [
+      'robot_arm_grasp_test_highspeed_01',
+      'legged_robot_balance_test_original',
+      'manipulator_actuation_repeat_test',
+      'industrial_robot_assembly_line_cam2',
+      'joint_torque_measurement_backup',
+      'automation_cell_operation_recording',
+      'drone_swarm_stability_test',
+      'humanoid_joint_actuation_log',
+      'quadruped_gait_test_night',
+      'gripper_grip_force_highspeed',
+      'robot_collision_avoidance_sim_log',
+      'servo_motor_overheat_check_original',
+      'vision_recognition_error_segment',
+      'impact_absorption_joint_test_backup',
+      'end_effector_precision_test_4K',
+      'robot_abnormal_vibration_segment_original',
+    ],
   },
 }
 
 // Scales the fixed 1440-wide mockup to fit the demo box and clips it to a fully
 // rounded frame; the box aspect crops the bottom so the search + results show.
 function SolutionDemo({ tab }) {
+  const { lang } = useLang()
   const cfg = DEMOS[tab]
   const frameRef = useRef(null)
   const [scale, setScale] = useState(0.8)
@@ -135,6 +211,7 @@ function SolutionDemo({ tab }) {
     return () => ro.disconnect()
   }, [])
   if (!cfg) return null
+  const en = lang === 'en'
   return (
     <div
       ref={frameRef}
@@ -142,17 +219,17 @@ function SolutionDemo({ tab }) {
       style={{ transform: 'translateZ(0)', clipPath: `inset(0 round ${radius}px)` }}
     >
       <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
-        {/* key={tab} remounts the mockup on tab change so its animation timeline
-            restarts with the new content instead of replaying the previous tab. */}
+        {/* key={tab + lang} remounts the mockup on tab/language change so its
+            animation timeline restarts with the new content. */}
         <HeroAppMockup
-          key={tab}
-          query={cfg.query}
-          titles={cfg.titles}
+          key={tab + lang}
+          query={en ? cfg.queryEn : cfg.query}
+          titles={en ? cfg.titlesEn : cfg.titles}
           images={cfg.images}
-          placeholder={cfg.placeholder}
+          placeholder={en ? cfg.placeholderEn : cfg.placeholder}
           sweep={false}
           orientation={cfg.orientation || 'horizontal'}
-          detail={cfg.detail || null}
+          detail={en ? cfg.detailEn || null : cfg.detail || null}
         />
       </div>
     </div>

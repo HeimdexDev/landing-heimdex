@@ -620,7 +620,7 @@ export default function Home() {
 
             {/* Fluid JS-measured scale fits the 1440-wide app to the frame width */}
             <FluidMockup>
-              <HeroAppMockup />
+              <HeroAppMockup key={lang} />
             </FluidMockup>
           </div>
         </div>
