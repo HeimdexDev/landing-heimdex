@@ -2,8 +2,10 @@ import { useEffect } from 'react'
 import { X } from 'lucide-react'
 import { PRIVACY } from '../data/privacy.js'
 import { Blocks } from './PolicyBlocks.jsx'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 export default function PrivacyModal({ open, onClose }) {
+  const { t } = useLang()
   useEffect(() => {
     if (!open) return
     const onKey = (e) => e.key === 'Escape' && onClose()
@@ -31,7 +33,7 @@ export default function PrivacyModal({ open, onClose }) {
           <h2 className="text-xl font-bold tracking-[-0.5px] text-grayscale-800">
             {PRIVACY.title}
           </h2>
-          <button onClick={onClose} aria-label="닫기" className="text-grayscale-500 hover:text-grayscale-800">
+          <button onClick={onClose} aria-label={t('닫기', 'Close')} className="text-grayscale-500 hover:text-grayscale-800">
             <X size={24} />
           </button>
         </div>

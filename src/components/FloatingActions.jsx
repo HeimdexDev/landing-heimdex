@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowUp, MessageSquareText } from 'lucide-react'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 /**
  * Floating scroll-to-top + 문의하기 widget (Figma 1540:46922).
@@ -8,6 +9,7 @@ import { ArrowUp, MessageSquareText } from 'lucide-react'
  * Mounted globally so it shows on every page.
  */
 export default function FloatingActions() {
+  const { t } = useLang()
   const [show, setShow] = useState(false)
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function FloatingActions() {
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        aria-label="맨 위로"
+        aria-label={t('맨 위로', 'Back to top')}
         className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-white shadow-[2px_2px_20px_0_rgba(0,0,0,0.25)] transition-transform hover:-translate-y-0.5"
       >
         <ArrowUp size={24} className="text-grayscale-800" />
@@ -41,12 +43,12 @@ export default function FloatingActions() {
       <div className="flex flex-col items-center gap-1">
         <Link
           to="/contact"
-          aria-label="문의하기"
+          aria-label={t('문의하기', 'Contact us')}
           className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-navy-500 shadow-[2px_2px_20px_0_rgba(0,0,0,0.25)] transition-transform hover:-translate-y-0.5"
         >
           <MessageSquareText size={24} className="text-white" />
         </Link>
-        <span className="text-xs font-semibold tracking-[-0.3px] text-navy-500 max-lg:hidden">문의하기</span>
+        <span className="text-xs font-semibold tracking-[-0.3px] text-navy-500 max-lg:hidden">{t('문의하기', 'Contact')}</span>
       </div>
     </div>
   )

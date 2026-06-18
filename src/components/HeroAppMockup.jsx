@@ -18,6 +18,12 @@ import {
   RectangleVertical,
   EllipsisVertical,
   SquareArrowOutUpRight,
+  Play,
+  Copy,
+  RotateCcw,
+  SkipBack,
+  SkipForward,
+  Volume2,
 } from 'lucide-react'
 
 // Faithful code build of the Figma "동영상 검색(세로)" screen (node 2289:60619),
@@ -57,11 +63,8 @@ const TITLES = [
   '무대_조명_리허설_테스트',
 ]
 
-const CARDS = Array.from({ length: 16 }, (_, i) => ({
-  source: SOURCE_CYCLE[i % SOURCE_CYCLE.length],
-  title: TITLES[i % TITLES.length],
-  img: `/assets/stage/stage-${i + 1}.jpg`,
-}))
+const STAGE_IMAGES = Array.from({ length: 16 }, (_, i) => `/assets/stage/stage-${i + 1}.jpg`)
+const DEFAULT_PLACEHOLDER = '파일명이나 폴더명으로 찾아보세요 - "마케팅_쇼츠_01"'
 
 function SourceChip({ source }) {
   return (
@@ -101,11 +104,14 @@ function FilterChip({ label, dot }) {
   )
 }
 
-function VideoCard({ source, img, title, hovered, shown, index, cardRef }) {
+function VideoCard({ source, img, title, hovered, shown, index, cardRef, horizontal }) {
+  // Vertical (9:16) cards, 4 per row · horizontal (16:9) cards, 3 per row.
+  const w = horizontal ? 'w-[296px]' : 'w-[200px]'
+  const box = horizontal ? 'h-[167px] w-[296px]' : 'h-[337px] w-[200px]'
   return (
     <div
       ref={cardRef}
-      className="flex w-[200px] flex-col gap-[10px] transition-all duration-500 ease-out"
+      className={`flex ${w} flex-col gap-[10px] transition-all duration-500 ease-out`}
       style={{
         opacity: shown ? 1 : 0,
         transform: shown ? 'translateY(0)' : 'translateY(12px)',
@@ -113,11 +119,19 @@ function VideoCard({ source, img, title, hovered, shown, index, cardRef }) {
       }}
     >
       <div
-        className={`relative h-[337px] w-[200px] overflow-hidden rounded-[10px] border border-neutral-100 bg-neutral-300 transition-shadow duration-300 ${
+        className={`relative ${box} overflow-hidden rounded-[10px] border border-neutral-100 bg-neutral-300 transition-shadow duration-300 ${
           hovered ? 'shadow-[2px_2px_20px_0_rgba(0,0,0,0.25)]' : ''
         }`}
       >
-        <img src={img} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        {img ? (
+          <img src={img} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        ) : (
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{ backgroundImage: 'linear-gradient(135deg, #2b313d 0%, #12161e 100%)' }}
+          />
+        )}
         <div className="relative flex h-full items-start justify-between p-[10px]">
           <SourceChip source={source} />
           {hovered && (
@@ -131,7 +145,7 @@ function VideoCard({ source, img, title, hovered, shown, index, cardRef }) {
         </div>
       </div>
       <div
-        className={`flex w-[200px] items-start gap-px text-[14px] font-medium tracking-[-0.35px] transition-colors ${
+        className={`flex ${w} items-start gap-px text-[14px] font-medium tracking-[-0.35px] transition-colors ${
           hovered ? 'text-navy-500' : 'text-grayscale-800'
         }`}
       >
@@ -175,7 +189,146 @@ function FakeCursor({ x, y, visible, dur }) {
   )
 }
 
-export default function HeroAppMockup() {
+// Speaker badge colors (A red, B green) — matches Figma 화자 component.
+const SPEAKER_COLOR = { A: '#d53b49', B: '#3fb675' }
+
+function ScriptRow({ speaker, time, text }) {
+  return (
+    <div className="flex w-full items-start gap-[8px]">
+      <div className="flex shrink-0 items-center gap-[6px]">
+        <span
+          className="flex h-[16px] w-[16px] shrink-0 items-center justify-center rounded-full text-[10px] font-medium leading-none text-white"
+          style={{ backgroundColor: SPEAKER_COLOR[speaker] || '#7c7d8b' }}
+        >
+          {speaker}
+        </span>
+        <span className="text-[12px] font-medium tabular-nums tracking-[-0.3px] text-[#7c7d8b]">
+          {time}
+        </span>
+      </div>
+      <p className="flex-1 text-[14px] font-medium leading-[1.6] tracking-[-0.35px] text-grayscale-800">
+        {text}
+      </p>
+    </div>
+  )
+}
+
+// Video detail (개요) screen — two white shadowed cards: left player + metadata,
+// right 개요 tabs + 행동 요약 + 스크립트. Matches Figma 2548:215297 / 2548:215324.
+function DetailView({ card, detail, date }) {
+  return (
+    <div className="flex w-[1058px] items-start gap-[24px] text-left">
+      {/* Left card — player + metadata */}
+      <div className="flex w-[341px] shrink-0 flex-col overflow-hidden rounded-[10px] bg-white shadow-[0_4px_20px_0_#e8e9f8]">
+        {/* Player — portrait 341×606, black backdrop */}
+        <div className="relative flex h-[606px] w-[341px] items-end overflow-hidden bg-black">
+          {card?.img && (
+            <img src={card.img} alt="" className="absolute inset-0 h-full w-full object-contain" />
+          )}
+          <div className="relative flex w-full flex-col gap-[12px] p-[10px]">
+            {/* progress */}
+            <div className="relative h-[4px] w-full bg-white">
+              <div className="absolute left-0 top-0 h-full w-[42%] bg-navy-500" />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-[10px]">
+                <span className="flex h-[32px] w-[32px] items-center justify-center rounded-full bg-[#262626]/50">
+                  <Play size={20} className="ml-[1px] text-white" fill="white" />
+                </span>
+                <span className="flex h-[32px] w-[72px] items-center justify-between rounded-full bg-[#262626]/50 px-[8px]">
+                  <SkipBack size={20} className="text-white" fill="white" />
+                  <SkipForward size={20} className="text-white" fill="white" />
+                </span>
+                <span className="flex h-[32px] items-center rounded-full bg-[#262626]/50 px-[10px] text-[14px] font-medium tabular-nums tracking-[-0.35px] text-white">
+                  00:00:07 / 00:00:18
+                </span>
+              </div>
+              <span className="flex h-[32px] w-[32px] items-center justify-center rounded-full bg-[#262626]/50">
+                <Volume2 size={20} className="text-white" />
+              </span>
+            </div>
+          </div>
+        </div>
+        {/* Metadata */}
+        <div className="flex h-[274px] flex-col items-end justify-between p-[20px]">
+          <div className="flex w-full gap-[32px] text-[14px] font-medium leading-[1.4] tracking-[-0.35px]">
+            <div className="flex flex-col gap-[20px] text-[#7b7b7b]">
+              <span>파일 위치</span>
+              <span>폴더 제목</span>
+              <span>재생 시간</span>
+              <span>업로드 일자</span>
+            </div>
+            <div className="flex flex-col gap-[20px] text-grayscale-800">
+              <span>Google Drive</span>
+              <span>블랙박스</span>
+              <span>00:00:18</span>
+              <span>{date} 09:46:28</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="flex items-center gap-[6px] text-[14px] font-semibold tracking-[-0.35px] text-[#7b7b7b]"
+          >
+            <RotateCcw size={20} />
+            장면 재분석
+          </button>
+        </div>
+      </div>
+
+      {/* Right card — tabs + 행동 요약 + 스크립트 (same height as the left card) */}
+      <div className="relative flex h-[880px] flex-1 flex-col gap-[24px] overflow-hidden rounded-[10px] bg-white p-[20px] shadow-[0_4px_20px_0_#e8e9f8,10px_10px_20px_0_rgba(185,185,185,0.1)]">
+        <div className="flex h-[42px] shrink-0 items-stretch gap-[20px] border-b border-neutral-100 text-[16px] font-semibold tracking-[-0.4px]">
+          <span className="flex items-center justify-center border-b-2 border-navy-500 px-[8px] pb-[8px] text-navy-500">
+            개요
+          </span>
+          <span className="flex items-center justify-center px-[8px] pb-[8px] text-[#9d9d9d]">장면 분석</span>
+          <span className="flex items-center justify-center px-[8px] pb-[8px] text-[#9d9d9d]">인물 관리</span>
+        </div>
+
+        <div className="flex flex-col gap-[32px]">
+          <div className="flex flex-col gap-[20px]">
+            <div className="flex items-center gap-[10px]">
+              <p className="text-[18px] font-semibold tracking-[-0.45px] text-black">행동 요약</p>
+              <Copy size={16} className="text-grayscale-500" />
+            </div>
+            <p className="text-[14px] font-semibold leading-[1.6] tracking-[-0.35px] text-[#555]">
+              {detail.summary}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-[20px]">
+            <div className="flex items-center gap-[10px]">
+              <p className="text-[18px] font-semibold tracking-[-0.45px] text-black">스크립트</p>
+              <Copy size={16} className="text-grayscale-500" />
+            </div>
+            <div className="flex flex-col gap-[16px]">
+              {detail.script.map((s, i) => (
+                <ScriptRow key={i} speaker={s.speaker} time={s.time} text={s.text} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function HeroAppMockup({
+  query = QUERY,
+  titles = TITLES,
+  images = STAGE_IMAGES,
+  placeholder = DEFAULT_PLACEHOLDER,
+  sweep = true,
+  orientation = 'vertical',
+  detail = null,
+}) {
+  const horizontal = orientation === 'horizontal'
+  const cards = Array.from({ length: 16 }, (_, i) => ({
+    source: SOURCE_CYCLE[i % SOURCE_CYCLE.length],
+    title: titles[i % titles.length],
+    img: images ? images[i % images.length] : null,
+  }))
+
   // Dates reflect the current date so the mockup never looks stale.
   const pad = (n) => String(n).padStart(2, '0')
   const today = new Date()
@@ -194,6 +347,8 @@ export default function HeroAppMockup() {
   const [cursor, setCursor] = useState({ x: 380, y: 360, visible: false, dur: 400 })
   // Intro zoom: start magnified on the search bar, then zoom out to full screen.
   const [zoom, setZoom] = useState(1.7)
+  // 'results' search grid ↔ 'detail' video-detail screen (legal demo only).
+  const [view, setView] = useState('results')
 
   const scrollerRef = useRef(null)
   const cardRefs = useRef([])
@@ -214,13 +369,14 @@ export default function HeroAppMockup() {
         setScroll(0)
         setCursor((c) => ({ ...c, visible: false }))
         setZoom(1.7)
+        setView('results')
         await wait(850)
         if (cancelled) return
 
         // 1. type the query (zoomed in)
-        for (let i = 1; i <= QUERY.length; i++) {
+        for (let i = 1; i <= query.length; i++) {
           if (cancelled) return
-          setTyped(QUERY.slice(0, i))
+          setTyped(query.slice(0, i))
           await wait(85)
         }
         await wait(550)
@@ -230,9 +386,36 @@ export default function HeroAppMockup() {
         setZoom(1)
         await wait(950)
 
+        if (detail) {
+          // Hold the results, then the cursor moves to the 3rd card and "clicks"
+          // it → navigate to the video-detail screen, hold, then loop.
+          await wait(750)
+          const idx = 2
+          const card = cardRefs.current[idx]
+          if (card) {
+            setCursor({ x: card.offsetLeft + 148, y: card.offsetTop + 96, visible: true, dur: 600 })
+          }
+          setHoverIndex(idx)
+          await wait(1050)
+          if (cancelled) return
+          setView('detail')
+          setHoverIndex(-1)
+          setCursor((c) => ({ ...c, visible: false }))
+          await wait(4000)
+          setView('results')
+          await wait(550)
+          continue
+        }
+
+        if (!sweep) {
+          // Stop after the zoom-out reveal — just hold the full view, then loop.
+          await wait(2600)
+          continue
+        }
+
         // 3. cursor sweeps the cards left→right while the view scrolls to follow
         setCursor((c) => ({ ...c, visible: true }))
-        for (let i = 0; i < CARDS.length; i++) {
+        for (let i = 0; i < cards.length; i++) {
           if (cancelled) return
           setHoverIndex(i)
           const card = cardRefs.current[i]
@@ -316,7 +499,21 @@ export default function HeroAppMockup() {
         {/* ───── Content ───── */}
         <div className="flex w-[1190px] flex-col items-center gap-[24px]">
           {/* GNB — fixed + translucent glass; scrolled results blur through it */}
-          <div className="relative z-10 flex h-[80px] w-full items-center justify-end bg-grayscale-10/70 px-[32px] backdrop-blur-[6px]">
+          <div className="relative z-10 flex h-[80px] w-full items-center justify-between bg-grayscale-10/70 px-[32px] backdrop-blur-[6px]">
+            {/* breadcrumb — only on the detail screen */}
+            <div className="flex min-w-0 items-center gap-[16px] text-[16px] tracking-[-0.4px]">
+              {view === 'detail' && (
+                <>
+                  <span className="flex items-center gap-[8px] text-grayscale-500">
+                    <ChevronLeft size={20} className="text-grayscale-800" />
+                    동영상 검색
+                  </span>
+                  <span className="max-w-[560px] truncate font-semibold text-grayscale-800">
+                    {cards[2]?.title}.mp4
+                  </span>
+                </>
+              )}
+            </div>
             <div className="flex items-center gap-[12px]">
               <div className="flex flex-col items-end">
                 <p className="text-[16px] font-medium tracking-[-0.4px] text-grayscale-800">
@@ -332,12 +529,27 @@ export default function HeroAppMockup() {
             </div>
           </div>
 
-          {/* Scroll region — only this translates; LNB + GNB stay fixed */}
-          <div
-            ref={scrollerRef}
-            className="relative z-0 flex w-[943px] flex-col gap-[20px] transition-transform duration-500 ease-out"
-            style={{ transform: `translateY(${-scroll}px)` }}
-          >
+          {/* Results ↔ detail crossfade */}
+          <div className="relative flex w-full flex-col items-center">
+            {/* Detail screen — fades in over the results when a card is clicked */}
+            {detail && (
+              <div
+                className={`absolute inset-x-0 top-0 z-10 flex justify-center px-[16px] transition-opacity duration-500 ease-out ${
+                  view === 'detail' ? 'opacity-100' : 'pointer-events-none opacity-0'
+                }`}
+              >
+                <DetailView card={cards[2]} detail={detail} date={updatedAt} />
+              </div>
+            )}
+
+            {/* Scroll region — only this translates; LNB + GNB stay fixed */}
+            <div
+              ref={scrollerRef}
+              className={`relative z-0 flex w-[943px] flex-col gap-[20px] transition-[transform,opacity] duration-500 ease-out ${
+                view === 'detail' ? 'pointer-events-none opacity-0' : 'opacity-100'
+              }`}
+              style={{ transform: `translateY(${-scroll}px)` }}
+            >
             {/* Search card */}
             <div className="flex flex-col gap-[20px] rounded-[10px] bg-white p-[20px] shadow-[0_4px_10px_0_#e8e9f8]">
               <p className="text-[18px] font-semibold tracking-[-0.45px] text-black">동영상 검색</p>
@@ -371,7 +583,7 @@ export default function HeroAppMockup() {
                     </span>
                   ) : (
                     <span className="text-[16px] font-medium tracking-[-0.4px] text-neutral-300">
-                      파일명이나 폴더명으로 찾아보세요 - "마케팅_쇼츠_01"
+                      {placeholder}
                     </span>
                   )}
                 </div>
@@ -430,11 +642,19 @@ export default function HeroAppMockup() {
                       ))}
                     </div>
                     <div className="flex items-center gap-[4px] rounded-[6px] bg-[#f5f5f5] p-[3px]">
-                      <span className="flex items-center gap-[4px] rounded-[6px] px-[4px] py-[2px] text-[12px] font-medium text-[#9d9d9d]">
+                      <span
+                        className={`flex items-center gap-[4px] rounded-[4px] px-[4px] py-[2px] text-[12px] font-medium ${
+                          horizontal ? 'bg-white text-grayscale-800' : 'text-[#9d9d9d]'
+                        }`}
+                      >
                         <RectangleHorizontal size={16} />
                         가로
                       </span>
-                      <span className="flex items-center gap-[4px] rounded-[4px] bg-white px-[4px] py-[2px] text-[12px] font-medium text-grayscale-800">
+                      <span
+                        className={`flex items-center gap-[4px] rounded-[4px] px-[4px] py-[2px] text-[12px] font-medium ${
+                          horizontal ? 'text-[#9d9d9d]' : 'bg-white text-grayscale-800'
+                        }`}
+                      >
                         <RectangleVertical size={16} />
                         세로
                       </span>
@@ -445,13 +665,14 @@ export default function HeroAppMockup() {
 
               {/* grid */}
               <div className="flex flex-wrap justify-between gap-y-[24px]">
-                {CARDS.map((c, i) => (
+                {cards.map((c, i) => (
                   <VideoCard
                     key={i}
                     index={i}
                     cardRef={(el) => (cardRefs.current[i] = el)}
                     shown={searched}
                     hovered={hoverIndex === i}
+                    horizontal={horizontal}
                     {...c}
                   />
                 ))}
@@ -485,6 +706,7 @@ export default function HeroAppMockup() {
 
             {/* fake cursor — inside the scroll region, glued to the cards */}
             <FakeCursor x={cursor.x} y={cursor.y} visible={cursor.visible} />
+            </div>
           </div>
         </div>
       </div>

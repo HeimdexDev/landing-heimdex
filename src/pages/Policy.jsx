@@ -3,14 +3,16 @@ import { useSearchParams } from 'react-router-dom'
 import { PRIVACY } from '../data/privacy.js'
 import { TERMS } from '../data/terms.js'
 import { Blocks } from '../components/PolicyBlocks.jsx'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 const DOCS = { terms: TERMS, privacy: PRIVACY }
 const TABS = [
-  { id: 'terms', label: '서비스 이용약관' },
-  { id: 'privacy', label: '개인정보 처리방침' },
+  { id: 'terms', label: '서비스 이용약관', en: 'Terms of Service' },
+  { id: 'privacy', label: '개인정보 처리방침', en: 'Privacy Policy' },
 ]
 
 export default function Policy() {
+  const { lang } = useLang()
   const [params, setParams] = useSearchParams()
   const tab = DOCS[params.get('tab')] ? params.get('tab') : 'terms'
   const doc = DOCS[tab]
@@ -54,7 +56,7 @@ export default function Policy() {
                   active ? 'text-navy-500' : 'text-neutral-300 hover:text-grayscale-500'
                 }`}
               >
-                {t.label}
+                {lang === 'en' ? t.en : t.label}
               </button>
             )
           })}

@@ -7,6 +7,7 @@ import Home from './pages/Home.jsx'
 import Solution from './pages/Solution.jsx'
 import Contact from './pages/Contact.jsx'
 import Policy from './pages/Policy.jsx'
+import { LanguageProvider } from './i18n/LanguageContext.jsx'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -28,23 +29,25 @@ function NotFoundRedirect() {
 
 export default function App() {
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden bg-grayscale-10">
-      <ScrollToTop />
-      <Navbar />
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/product" element={<Solution />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/policy" element={<Policy />} />
-          {/* Placeholder so the blog nav link doesn't 404 (also opens externally) */}
-          <Route path="/blog" element={<Home />} />
-          {/* Catch-all: redirect old/unknown URLs to the closest current page */}
-          <Route path="*" element={<NotFoundRedirect />} />
-        </Routes>
-      </main>
-      <FloatingActions />
-      <Footer />
-    </div>
+    <LanguageProvider>
+      <div className="flex min-h-screen flex-col overflow-x-clip bg-grayscale-10">
+        <ScrollToTop />
+        <Navbar />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/product" element={<Solution />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/policy" element={<Policy />} />
+            {/* Placeholder so the blog nav link doesn't 404 (also opens externally) */}
+            <Route path="/blog" element={<Home />} />
+            {/* Catch-all: redirect old/unknown URLs to the closest current page */}
+            <Route path="*" element={<NotFoundRedirect />} />
+          </Routes>
+        </main>
+        <FloatingActions />
+        <Footer />
+      </div>
+    </LanguageProvider>
   )
 }

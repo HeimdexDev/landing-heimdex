@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Check as CheckIcon, ChevronDown } from 'lucide-react'
 import PrivacyModal from '../components/PrivacyModal.jsx'
 import Reveal from '../components/Reveal.jsx'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 function Checkbox({ checked, onChange }) {
   return (
@@ -35,6 +36,7 @@ const inputCls =
   'w-full rounded-[10px] border border-grayscale-500 px-4 py-3 text-sm font-medium tracking-[-0.35px] text-grayscale-800 placeholder:text-neutral-300 focus:border-navy-500 focus:outline-none'
 
 export default function Contact() {
+  const { t } = useLang()
   const [form, setForm] = useState({ name: '', phone: '', email: '', company: '', message: '' })
   const [agreeRequired, setAgreeRequired] = useState(false)
   const [agreeMarketing, setAgreeMarketing] = useState(false)
@@ -53,7 +55,12 @@ export default function Contact() {
   const onSubmit = (e) => {
     e.preventDefault()
     if (!canSubmit) return
-    alert('상담 신청이 접수되었습니다. 곧 연락드리겠습니다.')
+    alert(
+      t(
+        '상담 신청이 접수되었습니다. 곧 연락드리겠습니다.',
+        'Your request has been received. We’ll be in touch shortly.',
+      ),
+    )
   }
 
   return (
@@ -62,15 +69,14 @@ export default function Contact() {
         {/* Left headline — top-anchored so it stays put when the form card grows */}
         <Reveal className="flex shrink-0 flex-col gap-4 pt-[60px] max-lg:pt-0 max-lg:items-center max-lg:text-center max-lg:w-full max-lg:max-w-[671px] max-lg:shrink">
           <h1 className="font-product text-[48px] font-bold leading-[1.4] tracking-[0.8px] max-md:text-[34px] max-sm:text-[28px]">
-            <span className="block text-navy-500">데모 상담 신청</span>
-            <span className="block text-grayscale-800">찾지 말고, 검색하세요</span>
+            <span className="block text-navy-500">{t('데모 상담 신청', 'Request a Demo')}</span>
+            <span className="block text-grayscale-800">{t('찾지 말고, 검색하세요', 'Don’t search by hand. Just search.')}</span>
           </h1>
           <p className="text-base leading-[1.4] tracking-[0.32px] text-grayscale-500">
-            15분 상담으로 지금 영상 관리에서{' '}
-            <br className="sm:hidden" />
-            어디서 시간이 새는지 진단하고,
-            <br />
-            하임덱스가 줄여줄 작업 시간을 함께 계산해드립니다.
+            {t(
+              '15분 상담으로 지금 영상 관리에서 어디서 시간이 새는지 진단하고, 하임덱스가 줄여줄 작업 시간을 함께 계산해드립니다.',
+              'In a 15-minute consultation, we’ll diagnose where time leaks in your current video workflow and calculate the hours Heimdex can save you.',
+            )}
           </p>
         </Reveal>
 
@@ -82,24 +88,24 @@ export default function Contact() {
         >
           <div className="flex flex-col gap-[20px]">
             <div className="flex gap-[10px] max-sm:flex-col">
-              <Field label="이름" required>
-                <input className={inputCls} placeholder="이름을 입력해주세요." value={form.name} onChange={set('name')} />
+              <Field label={t('이름', 'Name')} required>
+                <input className={inputCls} placeholder={t('이름을 입력해주세요.', 'Enter your name.')} value={form.name} onChange={set('name')} />
               </Field>
-              <Field label="연락처" required>
-                <input className={inputCls} placeholder="대시(-)를 제외한 숫자만 입력해주세요." value={form.phone} onChange={set('phone')} inputMode="numeric" />
+              <Field label={t('연락처', 'Phone')} required>
+                <input className={inputCls} placeholder={t('대시(-)를 제외한 숫자만 입력해주세요.', 'Numbers only, no dashes.')} value={form.phone} onChange={set('phone')} inputMode="numeric" />
               </Field>
             </div>
-            <Field label="이메일주소" required>
-              <input className={inputCls} placeholder="이메일 주소를 입력해주세요." type="email" value={form.email} onChange={set('email')} />
+            <Field label={t('이메일주소', 'Email')} required>
+              <input className={inputCls} placeholder={t('이메일 주소를 입력해주세요.', 'Enter your email address.')} type="email" value={form.email} onChange={set('email')} />
             </Field>
-            <Field label="회사명">
-              <input className={inputCls} placeholder="회사명을 입력해주세요." value={form.company} onChange={set('company')} />
+            <Field label={t('회사명', 'Company')}>
+              <input className={inputCls} placeholder={t('회사명을 입력해주세요.', 'Enter your company name.')} value={form.company} onChange={set('company')} />
             </Field>
-            <Field label="문의내용">
+            <Field label={t('문의내용', 'Message')}>
               <div className="relative">
                 <textarea
                   className={`${inputCls} h-[93px] resize-none`}
-                  placeholder="내용을 입력해주세요."
+                  placeholder={t('내용을 입력해주세요.', 'Enter your message.')}
                   maxLength={300}
                   value={form.message}
                   onChange={set('message')}
@@ -120,7 +126,7 @@ export default function Contact() {
           {/* Consent */}
           <div className="flex flex-col gap-6">
             <h2 className="text-base font-bold tracking-[-0.4px] text-grayscale-800">
-              개인정보 수집 및 이용에 관한 동의
+              {t('개인정보 수집 및 이용에 관한 동의', 'Consent to collection and use of personal information')}
             </h2>
 
             <div className="flex flex-col gap-4">
@@ -129,8 +135,8 @@ export default function Contact() {
                 <div className="flex items-center gap-[10px]">
                   <Checkbox checked={agreeRequired} onChange={() => setAgreeRequired((v) => !v)} />
                   <span className="flex items-center gap-1 text-sm font-semibold tracking-[-0.35px]">
-                    <span className="text-grayscale-800">개인정보 처리방침에 동의합니다.</span>
-                    <span className="text-navy-500">(필수)</span>
+                    <span className="text-grayscale-800">{t('개인정보 처리방침에 동의합니다.', 'I agree to the Privacy Policy.')}</span>
+                    <span className="text-navy-500">{t('(필수)', '(Required)')}</span>
                   </span>
                 </div>
                 <button
@@ -138,7 +144,7 @@ export default function Contact() {
                   onClick={() => setModalOpen(true)}
                   className="text-sm font-medium tracking-[-0.35px] text-grayscale-500 hover:text-grayscale-800"
                 >
-                  전문보기
+                  {t('전문보기', 'View full text')}
                 </button>
               </div>
 
@@ -147,8 +153,8 @@ export default function Contact() {
                 <Checkbox checked={agreeMarketing} onChange={() => setAgreeMarketing((v) => !v)} />
                 <div className="flex flex-1 flex-col">
                   <span className="py-px text-sm font-semibold tracking-[-0.35px] text-grayscale-800">
-                    하임덱스의 마케팅 정보를 수신하는 데 동의합니다.
-                    <span className="text-navy-500"> (선택)</span>
+                    {t('하임덱스의 마케팅 정보를 수신하는 데 동의합니다.', 'I agree to receive marketing information from Heimdex.')}
+                    <span className="text-navy-500"> {t('(선택)', '(Optional)')}</span>
                   </span>
                   {/* expandable detail with a smooth height + fade transition */}
                   <div
@@ -158,14 +164,17 @@ export default function Contact() {
                   >
                     <div className="overflow-hidden">
                       <div className="pt-[10px] text-xs font-medium leading-[1.6] tracking-[-0.3px] text-grayscale-800">
-                        <p>하임덱스의 서비스 업데이트 및 이벤트 정보를 수신하는 데 동의합니다.</p>
+                        <p>{t('하임덱스의 서비스 업데이트 및 이벤트 정보를 수신하는 데 동의합니다.', 'I agree to receive Heimdex service updates and event information.')}</p>
                         <ul className="list-disc pl-[18px]">
-                          <li>수집 항목: 이메일 주소, 휴대전화 번호</li>
-                          <li>수집 목적: 신규 기능 안내, 웨비나/이벤트 초대, 맞춤형 비즈니스 솔루션 제안</li>
-                          <li>보유 기간: 동의 철회 시 또는 회원 탈퇴 시까지</li>
+                          <li>{t('수집 항목: 이메일 주소, 휴대전화 번호', 'Items collected: email address, mobile phone number')}</li>
+                          <li>{t('수집 목적: 신규 기능 안내, 웨비나/이벤트 초대, 맞춤형 비즈니스 솔루션 제안', 'Purpose: new feature announcements, webinar/event invitations, tailored business-solution proposals')}</li>
+                          <li>{t('보유 기간: 동의 철회 시 또는 회원 탈퇴 시까지', 'Retention period: until consent is withdrawn or the account is closed')}</li>
                         </ul>
                         <p className="mt-3">
-                          해당 내용에 대한 동의를 거부할 권리가 있습니다. 다만, 동의를 거부할 경우 주요 업데이트 안내를 받지 못할 수 있습니다.
+                          {t(
+                            '해당 내용에 대한 동의를 거부할 권리가 있습니다. 다만, 동의를 거부할 경우 주요 업데이트 안내를 받지 못할 수 있습니다.',
+                            'You have the right to decline this consent. However, if you decline, you may not receive important update announcements.',
+                          )}
                         </p>
                       </div>
                     </div>
@@ -174,7 +183,7 @@ export default function Contact() {
                 <button
                   type="button"
                   onClick={() => setMarketingOpen((v) => !v)}
-                  aria-label={marketingOpen ? '접기' : '펼치기'}
+                  aria-label={marketingOpen ? t('접기', 'Collapse') : t('펼치기', 'Expand')}
                   className="shrink-0 text-neutral-300 transition-colors hover:text-grayscale-500"
                 >
                   <ChevronDown
@@ -198,7 +207,7 @@ export default function Contact() {
                 : 'cursor-not-allowed bg-neutral-100 text-neutral-300'
             }`}
           >
-            상담 신청하기
+            {t('상담 신청하기', 'Request a Consultation')}
           </button>
         </form>
         </Reveal>

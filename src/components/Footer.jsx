@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
+import { useLang } from '../i18n/LanguageContext.jsx'
 
 const LINKS = [
-  { label: '개인정보 수집 동의', to: '/policy?tab=privacy' },
-  { label: '이용약관', to: '/policy?tab=terms' },
-  { label: '도입문의', to: '/contact' },
+  { label: '개인정보 수집 동의', en: 'Privacy Policy', to: '/policy?tab=privacy' },
+  { label: '이용약관', en: 'Terms of Service', to: '/policy?tab=terms' },
+  { label: '도입문의', en: 'Contact Sales', to: '/contact' },
 ]
 
 export default function Footer() {
+  const { lang } = useLang()
   return (
     <footer className="flex justify-center">
       <div className="flex w-full max-w-page flex-col items-center gap-[120px] p-[60px] max-lg:gap-20 max-lg:px-8 max-lg:py-12 max-sm:gap-14 max-sm:px-5 max-sm:py-10">
@@ -35,7 +37,7 @@ export default function Footer() {
                   to={link.to}
                   className="text-base font-medium tracking-[-0.4px] text-grayscale-800 hover:text-navy-500 max-sm:text-[11px]"
                 >
-                  {link.label}
+                  {lang === 'en' ? link.en : link.label}
                 </Link>
               ))}
             </div>

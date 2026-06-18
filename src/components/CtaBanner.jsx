@@ -35,24 +35,28 @@ export default function CtaBanner({
                   ))
                 : title}
             </h2>
-            <p className="text-xl font-medium leading-[1.4] tracking-[-0.5px] max-sm:text-sm">
-              {subtitle}
-            </p>
+            {subtitle && (
+              <p className="text-xl font-medium leading-[1.4] tracking-[-0.5px] max-sm:text-sm">
+                {subtitle}
+              </p>
+            )}
           </div>
           <div className="flex items-start justify-center gap-5 max-sm:flex-wrap">
-            <Link to="/contact" className="btn-primary w-[200px]">
+            <Link to="/contact" className={`btn-primary ${outlineLabel ? 'w-[200px]' : 'w-[150px]'}`}>
               {primaryLabel}
-              <ArrowUpRight size={20} strokeWidth={2} />
+              {outlineLabel && <ArrowUpRight size={20} strokeWidth={2} />}
             </Link>
-            <a
-              href="https://playground.heimdex.co/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-outline w-[200px]"
-            >
-              {outlineLabel}
-              <ArrowUpRight size={20} strokeWidth={2} />
-            </a>
+            {outlineLabel && (
+              <a
+                href="https://playground.heimdex.co/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-outline w-[200px]"
+              >
+                {outlineLabel}
+                <ArrowUpRight size={20} strokeWidth={2} />
+              </a>
+            )}
           </div>
         </div>
       </div>
