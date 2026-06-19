@@ -64,6 +64,85 @@ const LEGAL_DETAIL_EN = {
   ],
 }
 
+// Marketer (home-shopping vitamin) detail — host narration + 11 AI-split scenes
+// matched in order to the "비타민C 여러컷" cuts.
+const MKT_SCENE_RANGES = [
+  '00:00:00 - 00:00:10', '00:00:10 - 00:00:20', '00:00:20 - 00:00:30',
+  '00:00:30 - 00:00:40', '00:00:40 - 00:00:50', '00:00:50 - 00:01:00',
+  '00:01:00 - 00:01:10', '00:01:10 - 00:01:20', '00:01:20 - 00:01:30',
+  '00:01:30 - 00:01:40', '00:01:40 - 00:01:50',
+]
+// [cut number, KO summary, EN summary, tag] — interleaved (host → product →
+// researcher → product …) so adjacent scene thumbnails stay visually distinct.
+const MKT_CUTS = [
+  [1, '쇼호스트가 등장해 시청자에게 첫인사를 건넨다.', 'The host appears and greets the viewers.', 'notice'],
+  [3, '제품 패키지를 정면에서 보여준다.', 'The product package is shown from the front.', 'insert'],
+  [5, '연구원이 카메라를 정면으로 바라보며 등장한다.', 'A researcher appears, facing the camera.', 'etc'],
+  [8, '제품을 클로즈업으로 비춘다.', 'The product is shown in close-up.', 'insert'],
+  [2, '쇼호스트가 비타민C 제품을 들어 보이며 소개한다.', 'The host holds up the vitamin C product and introduces it.', 'sale'],
+  [4, '제품을 측면에서 비추며 디자인을 보여준다.', 'The product is shown from the side to reveal its design.', 'insert'],
+  [6, '연구원이 제품의 성분과 효능을 설명한다.', 'The researcher explains the ingredients and benefits.', 'sale'],
+  [9, '알약 제형을 가까이서 보여준다.', 'The tablet form is shown up close.', 'insert'],
+  [7, '출연자가 제품을 손에 들고 보여준다.', 'A presenter holds the product in hand to show it.', 'sale'],
+  [10, '1+1 증정 혜택을 자막과 함께 강조한다.', 'The 1+1 gift offer is highlighted with on-screen text.', 'promo'],
+  [11, '품절 임박을 알리며 구매를 유도한다.', 'A “selling out soon” alert prompts viewers to buy.', 'review'],
+]
+const mktScenes = (en) =>
+  MKT_CUTS.map(([n, ko, enT, tag], i) => ({
+    range: MKT_SCENE_RANGES[i],
+    dur: en ? '10s' : '10초',
+    summary: en ? enT : ko,
+    img: `/assets/creative/mkt-scene-${n}.jpg`,
+    tag,
+  }))
+
+const MARKETER_DETAIL = {
+  summary: '라이브커머스 스튜디오에서 쇼호스트가 비타민C 제품을 들어 보이며 효능과 구성을 설명한다.',
+  script: [
+    { speaker: 'A', time: '00:00:02', text: '안녕하세요, 오늘 소개해드릴 제품은 고함량 비타민C입니다.' },
+    { speaker: 'B', time: '00:00:07', text: '네, 이번 제품은 하루 권장량을 한 알에 담은 게 가장 큰 특징이에요.' },
+    { speaker: 'A', time: '00:00:12', text: '한 알로 1000mg을 채울 수 있다는 거죠?' },
+    { speaker: 'B', time: '00:00:16', text: '맞습니다. 거기에 흡수율을 높여주는 성분도 함께 배합했고요.' },
+    { speaker: 'A', time: '00:00:21', text: '맛은 어떤가요? 비타민C 하면 신맛이 강할 것 같은데요.' },
+    { speaker: 'B', time: '00:00:26', text: '새콤하지만 부담스럽지 않게 조정해서, 매일 챙겨 드시기 좋습니다.' },
+    { speaker: 'A', time: '00:00:31', text: '복용 방법은 어떻게 되나요?' },
+    { speaker: 'B', time: '00:00:36', text: '하루 한 알, 식후에 물과 함께 드시면 됩니다.' },
+    { speaker: 'A', time: '00:00:41', text: '꾸준히 챙겨 드셨을 때 어떤 점이 좋을까요?' },
+    { speaker: 'B', time: '00:00:46', text: '피로감 개선과 면역력 유지에 도움을 줄 수 있어요.' },
+    { speaker: 'A', time: '00:00:51', text: '보관은 어떻게 하는 게 좋을까요?' },
+    { speaker: 'B', time: '00:00:56', text: '직사광선을 피해 서늘하고 건조한 곳에 보관해 주세요.' },
+    { speaker: 'A', time: '00:01:01', text: '구성과 가격도 궁금한데요.' },
+    { speaker: 'B', time: '00:01:06', text: '오늘은 방송 한정으로 1+1 구성을 특별가에 준비했습니다.' },
+    { speaker: 'A', time: '00:01:11', text: '정말 알찬 구성이네요. 마지막으로 한 말씀 부탁드려요.' },
+    { speaker: 'B', time: '00:01:16', text: '재고가 많지 않으니 필요하신 분들은 서둘러 주세요!' },
+  ],
+  scenes: mktScenes(false),
+}
+
+const MARKETER_DETAIL_EN = {
+  summary:
+    'In a live-commerce studio, the host holds up a vitamin C product and explains its benefits and bundle.',
+  script: [
+    { speaker: 'A', time: '00:00:02', text: 'Hello! Today’s product is our high-dose vitamin C.' },
+    { speaker: 'B', time: '00:00:07', text: 'Yes — the key point is that one tablet covers your full daily amount.' },
+    { speaker: 'A', time: '00:00:12', text: 'So a single tablet gives you the whole 1000mg?' },
+    { speaker: 'B', time: '00:00:16', text: 'Exactly. We also blended in ingredients that boost absorption.' },
+    { speaker: 'A', time: '00:00:21', text: 'How does it taste? Vitamin C can be quite sour.' },
+    { speaker: 'B', time: '00:00:26', text: 'It’s tangy but balanced, so it’s easy to take every day.' },
+    { speaker: 'A', time: '00:00:31', text: 'How should it be taken?' },
+    { speaker: 'B', time: '00:00:36', text: 'One tablet a day, after a meal, with water.' },
+    { speaker: 'A', time: '00:00:41', text: 'What are the benefits of taking it regularly?' },
+    { speaker: 'B', time: '00:00:46', text: 'It can help reduce fatigue and support your immune system.' },
+    { speaker: 'A', time: '00:00:51', text: 'How should it be stored?' },
+    { speaker: 'B', time: '00:00:56', text: 'Keep it somewhere cool and dry, out of direct sunlight.' },
+    { speaker: 'A', time: '00:01:01', text: 'I’m also curious about the bundle and the price.' },
+    { speaker: 'B', time: '00:01:06', text: 'For this broadcast only, we’ve prepared a 1+1 bundle at a special price.' },
+    { speaker: 'A', time: '00:01:11', text: 'A great deal. Any last words for our viewers?' },
+    { speaker: 'B', time: '00:01:16', text: 'Stock is limited, so please hurry if you need it!' },
+  ],
+  scenes: mktScenes(true),
+}
+
 const DEMOS = {
   legal: {
     query: '차량이 추돌하는 사고 장면',
@@ -71,6 +150,8 @@ const DEMOS = {
     placeholder: '장면을 설명해 검색해보세요 - "추돌 사고"',
     placeholderEn: 'Describe a scene to search — "rear-end collision"',
     cardSource: 'Drive',
+    pickIndex: 3,
+    editor: true,
     images: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/dashcam/dashcam-${n}.jpg`)),
     detail: LEGAL_DETAIL,
     detailEn: LEGAL_DETAIL_EN,
@@ -117,6 +198,10 @@ const DEMOS = {
     placeholder: '장면을 설명해 검색해보세요 - "비타민을 들어 보이는 장면"',
     placeholderEn: 'Describe a scene to search — "holding up a vitamin"',
     orientation: 'vertical',
+    pickIndex: 0,
+    editor: false,
+    detail: MARKETER_DETAIL,
+    detailEn: MARKETER_DETAIL_EN,
     images: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/creative/creative-${n}.jpg`)),
     titles: [
       'HS2024-0312_고함량비타민C_생방송_제품설명_MC컷_20240312',
@@ -242,6 +327,8 @@ function SolutionDemo({ tab }) {
           orientation={cfg.orientation || 'horizontal'}
           detail={en ? cfg.detailEn || null : cfg.detail || null}
           cardSource={cfg.cardSource || null}
+          pickIndex={cfg.pickIndex ?? 3}
+          editor={cfg.editor ?? false}
         />
       </div>
     </div>
