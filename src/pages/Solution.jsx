@@ -152,6 +152,7 @@ const DEMOS = {
     cardSource: 'Drive',
     pickIndex: 3,
     editor: true,
+    durRange: [10, 20],
     images: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/dashcam/dashcam-${n}.jpg`)),
     detail: LEGAL_DETAIL,
     detailEn: LEGAL_DETAIL_EN,
@@ -200,6 +201,7 @@ const DEMOS = {
     orientation: 'vertical',
     pickIndex: 0,
     editor: false,
+    durRange: [3600, 7200],
     detail: MARKETER_DETAIL,
     detailEn: MARKETER_DETAIL_EN,
     images: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/creative/creative-${n}.jpg`)),
@@ -245,7 +247,11 @@ const DEMOS = {
     queryEn: 'Moment a robot drops the object it was gripping',
     placeholder: '장면을 설명해 검색해보세요 - "이상 동작"',
     placeholderEn: 'Describe a scene to search — "anomalous motion"',
-    images: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/research/research-${n}.jpg`)),
+    durRange: [3600, 10800],
+    sceneToggle: true,
+    // 동영상 mode → factory/lab shots; 장면 mode → the original robot cuts
+    images: top8([1, 2, 3, 4, 5, 6, 7].map((n) => `/assets/research/research-vid-${n}.jpg`)),
+    sceneImages: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/research/research-${n}.jpg`)),
     titles: [
       '로봇팔_파지_테스트_고속카메라_01',
       '보행로봇_균형_시험_원본',
@@ -329,6 +335,9 @@ function SolutionDemo({ tab }) {
           cardSource={cfg.cardSource || null}
           pickIndex={cfg.pickIndex ?? 3}
           editor={cfg.editor ?? false}
+          durRange={cfg.durRange || null}
+          sceneToggle={cfg.sceneToggle ?? false}
+          sceneImages={cfg.sceneImages || null}
         />
       </div>
     </div>

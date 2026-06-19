@@ -140,10 +140,27 @@ function FilterChip({ label, dot }) {
   )
 }
 
-function VideoCard({ source, img, title, hovered, shown, index, cardRef, horizontal }) {
+// h:mm:ss when ≥ 1h, otherwise m:ss.
+function fmtDur(s) {
+  const h = Math.floor(s / 3600)
+  const m = Math.floor((s % 3600) / 60)
+  const sec = s % 60
+  return h > 0
+    ? `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
+    : `${m}:${String(sec).padStart(2, '0')}`
+}
+
+function VideoCard({ source, img, sceneImg, title, hovered, shown, index, cardRef, horizontal, durRange, sceneMode, lang }) {
+  const shownImg = sceneMode && sceneImg ? sceneImg : img
   // Both orientations show 4 per row · vertical 9:16, horizontal 16:9.
   const w = horizontal ? 'w-[220px]' : 'w-[200px]'
   const box = horizontal ? 'h-[124px] w-[220px]' : 'h-[337px] w-[200px]'
+  // deterministic, varied per-card runtime (range per demo) shown bottom-right;
+  // in 장면 mode the corner shows a random scene count instead.
+  const [dmin, dmax] = durRange || [30, 600]
+  const dur = fmtDur(dmin + ((index * 2999 + 977) % (dmax - dmin + 1)))
+  const sceneN = 3 + ((index * 5 + 2) % 12)
+  const badge = sceneMode ? (lang === 'en' ? `${sceneN} scenes` : `${sceneN}개 장면`) : dur
   return (
     <div
       ref={cardRef}
@@ -159,8 +176,8 @@ function VideoCard({ source, img, title, hovered, shown, index, cardRef, horizon
           hovered ? 'shadow-[2px_2px_20px_0_rgba(0,0,0,0.25)]' : ''
         }`}
       >
-        {img ? (
-          <img src={img} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        {shownImg ? (
+          <img src={shownImg} alt="" className="absolute inset-0 h-full w-full object-cover" />
         ) : (
           <div
             aria-hidden
@@ -179,6 +196,12 @@ function VideoCard({ source, img, title, hovered, shown, index, cardRef, horizon
             </div>
           )}
         </div>
+        {/* default state: runtime (or scene count in 장면 mode) in the corner */}
+        {!hovered && (
+          <span className="absolute bottom-[8px] right-[8px] rounded-[4px] bg-black/60 px-[6px] py-[1px] text-[12px] font-medium tabular-nums text-white">
+            {badge}
+          </span>
+        )}
       </div>
       <div
         className={`flex ${w} items-start gap-px text-[14px] font-medium tracking-[-0.35px] transition-colors ${
@@ -1525,6 +1548,9 @@ export default function HeroAppMockup({
   cardSource = null,
   pickIndex = 3,
   editor = false,
+  durRange = null,
+  sceneToggle = false,
+  sceneImages = null,
 }) {
   const { t, lang } = useLang()
   const horizontal = orientation === 'horizontal'
@@ -1536,6 +1562,7 @@ export default function HeroAppMockup({
     source: cardSource || SOURCE_CYCLE[i % SOURCE_CYCLE.length],
     title: ts[i % ts.length],
     img: images ? images[i % images.length] : null,
+    sceneImg: sceneImages ? sceneImages[i % sceneImages.length] : null,
   }))
 
   // Dates reflect the current date so the mockup never looks stale.
@@ -1562,6 +1589,9 @@ export default function HeroAppMockup({
   const [cursor, setCursor] = useState({ x: 380, y: 360, visible: false, dur: 400 })
   // Intro zoom: start magnified on the search bar, then zoom out to full screen.
   const [zoom, setZoom] = useState(1.7)
+  const [zoomOrigin, setZoomOrigin] = useState('64% 10%')
+  // Result grid mode: '동영상' ↔ '장면' (research demo toggles to 장면 → scene counts).
+  const [gridMode, setGridMode] = useState('video')
   // 'results' search grid ↔ 'detail' video-detail screen (legal demo only).
   const [view, setView] = useState('results')
   // Detail screen sub-tab: '개요' ↔ '장면 분석'.
@@ -1580,6 +1610,9 @@ export default function HeroAppMockup({
   const editBtnRef = useRef(null)
   const contentRef = useRef(null)
   const aiSplitRef = useRef(null)
+  const scaleWrapRef = useRef(null)
+  const gridToggleRef = useRef(null)
+  const sceneSpanRef = useRef(null)
   const activeTab = typed ? '의미' : '파일'
 
   useEffect(() => {
@@ -1597,7 +1630,10 @@ export default function HeroAppMockup({
         setScroll(0)
         setCursor((c) => ({ ...c, visible: false }))
         setTabCursor((c) => ({ ...c, visible: false }))
+        setAiCursor((c) => ({ ...c, visible: false }))
         setZoom(1.7)
+        setZoomOrigin('64% 10%')
+        setGridMode('video')
         setView('results')
         setDetailTab('overview')
         setSelectedScene(null)
@@ -1722,6 +1758,50 @@ export default function HeroAppMockup({
           continue
         }
 
+        if (sceneToggle) {
+          // research: zoom into the 동영상/장면 tab, click 장면, then zoom back out
+          await wait(900)
+          if (cancelled) return
+          const tog = gridToggleRef.current
+          const wrap = scaleWrapRef.current
+          if (tog && wrap) {
+            const r = tog.getBoundingClientRect()
+            const w = wrap.getBoundingClientRect()
+            setZoomOrigin(
+              `${((r.left + r.width / 2 - w.left) / w.width) * 100}% ${((r.top + r.height / 2 - w.top) / w.height) * 100}%`,
+            )
+          }
+          await wait(60)
+          setZoom(2.2)
+          await wait(1150)
+          if (cancelled) return
+          // cursor (content space) to the 장면 tab, then switch
+          const sp = sceneSpanRef.current
+          const cEl = contentRef.current
+          if (sp && cEl) {
+            const r = sp.getBoundingClientRect()
+            const c = cEl.getBoundingClientRect()
+            const s = c.width / 1190 || 1
+            setAiCursor({
+              x: (r.left - c.left) / s + r.width / (2 * s),
+              y: (r.top - c.top) / s + r.height / (2 * s),
+              visible: true,
+              dur: 600,
+            })
+          }
+          await wait(800)
+          if (cancelled) return
+          setGridMode('scene')
+          await wait(950)
+          if (cancelled) return
+          setAiCursor((c) => ({ ...c, visible: false }))
+          setZoom(1)
+          await wait(900)
+          setZoomOrigin('64% 10%')
+          await wait(1900)
+          continue
+        }
+
         if (!sweep) {
           // Stop after the zoom-out reveal — just hold the full view, then loop.
           await wait(2600)
@@ -1762,10 +1842,11 @@ export default function HeroAppMockup({
 
   return (
     <div
+      ref={scaleWrapRef}
       className="relative bg-grayscale-10"
       style={{
         transform: `scale(${zoom})`,
-        transformOrigin: '64% 10%', // centered on the search bar
+        transformOrigin: zoomOrigin, // search bar by default; the 동영상/장면 tab when toggling
         transition: 'transform 750ms cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
@@ -1992,20 +2073,25 @@ export default function HeroAppMockup({
                     <FilterChip label="Disk" dot={SOURCES.Disk} />
                   </div>
                   <div className="flex items-center gap-[10px]">
-                    <div className="flex items-center gap-[4px] rounded-[6px] bg-[#f5f5f5] p-[3px]">
+                    <div ref={gridToggleRef} className="flex items-center gap-[4px] rounded-[6px] bg-[#f5f5f5] p-[3px]">
                       {[
-                        ['동영상', 'Video'],
-                        ['장면', 'Scene'],
-                      ].map(([ko, en], i) => (
-                        <span
-                          key={ko}
-                          className={`rounded-[4px] px-[6px] py-[2px] text-[12px] font-medium tracking-[-0.3px] ${
-                            i === 0 ? 'bg-white text-grayscale-800' : 'text-[#9d9d9d]'
-                          }`}
-                        >
-                          {lang === 'en' ? en : ko}
-                        </span>
-                      ))}
+                        ['동영상', 'Video', 'video'],
+                        ['장면', 'Scene', 'scene'],
+                      ].map(([ko, en, mode]) => {
+                        const on = gridMode === mode
+                        return (
+                          <span
+                            key={mode}
+                            ref={mode === 'scene' ? sceneSpanRef : null}
+                            onClick={() => setGridMode(mode)}
+                            className={`cursor-pointer rounded-[4px] px-[6px] py-[2px] text-[12px] font-medium tracking-[-0.3px] ${
+                              on ? 'bg-white text-grayscale-800' : 'text-[#9d9d9d]'
+                            }`}
+                          >
+                            {lang === 'en' ? en : ko}
+                          </span>
+                        )
+                      })}
                     </div>
                     <div className="flex items-center gap-[4px] rounded-[6px] bg-[#f5f5f5] p-[3px]">
                       <span
@@ -2039,6 +2125,9 @@ export default function HeroAppMockup({
                     shown={searched}
                     hovered={hoverIndex === i}
                     horizontal={horizontal}
+                    durRange={durRange}
+                    sceneMode={gridMode === 'scene'}
+                    lang={lang}
                     {...c}
                   />
                 ))}

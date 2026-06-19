@@ -292,22 +292,14 @@ function FeatureShowcase() {
             })}
           </div>
 
-          {/* Right — 3D icon on a radial glow; hidden once the layout stacks vertically */}
+          {/* Right — Heimdex-navy blueprint card (dashed frame + thin white line
+              icon); reflects the active feature. Hidden when stacked. */}
           <div className="relative flex h-[440px] items-center justify-center max-lg:hidden">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,145,255,0.20)_0%,_rgba(57,145,255,0.06)_42%,_transparent_72%)]" />
-            <div className="relative flex h-[240px] w-[240px] items-center justify-center rounded-full bg-gradient-to-b from-white to-[#e9f0fb] shadow-[0_34px_70px_-22px_rgba(35,76,119,0.45),inset_0_3px_6px_rgba(255,255,255,0.95),inset_0_-10px_18px_rgba(35,76,119,0.1)] ring-1 ring-white/70">
-              <div key={active} className="icon-pop relative">
-                {/* extruded shadow copy for depth */}
-                <ActiveIcon
-                  size={104}
-                  strokeWidth={1.6}
-                  className="absolute left-0 top-0 translate-y-[6px] text-navy-500/30 blur-[3px]"
-                />
-                <ActiveIcon
-                  size={104}
-                  strokeWidth={1.6}
-                  className="relative text-navy-500 drop-shadow-[0_8px_10px_rgba(35,76,119,0.3)]"
-                />
+            <div className="flex h-[400px] w-[540px] items-center justify-center border border-grayscale-200 px-[44px]">
+              <div className="flex h-[260px] w-full items-center justify-center border border-dashed border-navy-500/35">
+                <div key={active} className="icon-pop">
+                  <ActiveIcon size={104} strokeWidth={1.3} className="text-navy-500" />
+                </div>
               </div>
             </div>
           </div>
