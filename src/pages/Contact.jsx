@@ -42,6 +42,7 @@ export default function Contact() {
   const [agreeMarketing, setAgreeMarketing] = useState(false)
   const [marketingOpen, setMarketingOpen] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
 
@@ -50,17 +51,41 @@ export default function Contact() {
     form.phone.trim() &&
     form.email.trim() &&
     form.message.trim() &&
-    agreeRequired
+    agreeRequired &&
+    !submitting
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     if (!canSubmit) return
-    alert(
-      t(
-        '상담 신청이 접수되었습니다. 곧 연락드리겠습니다.',
-        'Your request has been received. We’ll be in touch shortly.',
-      ),
-    )
+
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, marketingAgreed: agreeMarketing }),
+      })
+      if (!res.ok) throw new Error('전송 실패')
+
+      alert(
+        t(
+          '상담 신청이 접수되었습니다. 곧 연락드리겠습니다.',
+          'Your request has been received. We’ll be in touch shortly.',
+        ),
+      )
+      setForm({ name: '', phone: '', email: '', company: '', message: '' })
+      setAgreeRequired(false)
+      setAgreeMarketing(false)
+    } catch {
+      alert(
+        t(
+          '전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
+          'Submission failed. Please try again in a moment.',
+        ),
+      )
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -216,7 +241,9 @@ export default function Contact() {
                 : 'cursor-not-allowed bg-neutral-100 text-neutral-300'
             }`}
           >
-            {t('상담 신청하기', 'Request a Consultation')}
+            {submitting
+              ? t('전송 중...', 'Sending...')
+              : t('상담 신청하기', 'Request a Consultation')}
           </button>
         </form>
         </Reveal>
