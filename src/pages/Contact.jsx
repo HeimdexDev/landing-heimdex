@@ -50,7 +50,6 @@ export default function Contact() {
     form.name.trim() &&
     form.phone.trim() &&
     form.email.trim() &&
-    form.message.trim() &&
     agreeRequired &&
     !submitting
 
