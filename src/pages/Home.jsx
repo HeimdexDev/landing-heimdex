@@ -334,7 +334,7 @@ function FluidMockup({ children }) {
   return (
     <div
       ref={frameRef}
-      className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40 lg:h-auto lg:aspect-[1040/470] max-md:h-[320px] max-md:rounded-t-xl max-sm:h-[230px] max-sm:rounded-t-[10px]"
+      className="relative h-[470px] overflow-hidden rounded-t-2xl bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.65),0_0_90px_-15px_rgba(57,145,255,0.6)] ring-1 ring-softblue-500/40 lg:h-auto lg:aspect-[1040/470] max-md:h-[320px] max-md:rounded-t-xl max-sm:aspect-[1040/600] max-sm:h-auto max-sm:rounded-t-[10px] max-sm:shadow-none max-sm:ring-0"
       // clip-path enforces the rounded clip even while the child zoom transform
       // animates (overflow-hidden + border-radius alone breaks during transforms)
       style={{
@@ -378,15 +378,26 @@ function NetworkGraph() {
       canvas.width = Math.round(w * dpr)
       canvas.height = Math.round(h * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      const count = Math.max(24, Math.min(90, Math.round((w * h) / 16000)))
-      nodes = Array.from({ length: count }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.28,
-        vy: (Math.random() - 0.5) * 0.28,
-        r: 1 + Math.random() * 1.3,
-        glow: 0,
-      }))
+      const count = Math.max(26, Math.min(84, Math.round((w * h) / 18000)))
+      // jittered grid → even spread across the whole canvas (incl. bottom),
+      // avoiding the random clustering/overlap of pure Math.random placement
+      const cols = Math.max(2, Math.round(Math.sqrt(count * (w / h))))
+      const rows = Math.max(2, Math.ceil(count / cols))
+      const cw = w / cols
+      const ch = h / rows
+      nodes = []
+      for (let r = 0; r < rows && nodes.length < count; r++) {
+        for (let c = 0; c < cols && nodes.length < count; c++) {
+          nodes.push({
+            x: (c + 0.2 + Math.random() * 0.6) * cw,
+            y: (r + 0.2 + Math.random() * 0.6) * ch,
+            vx: (Math.random() - 0.5) * 0.28,
+            vy: (Math.random() - 0.5) * 0.28,
+            r: 1 + Math.random() * 1.3,
+            glow: 0,
+          })
+        }
+      }
       pings = []
     }
 
@@ -514,9 +525,9 @@ function NetworkGraph() {
       className="pointer-events-none absolute inset-0 h-full w-full"
       style={{
         maskImage:
-          'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 48%, rgba(0,0,0,0) 74%)',
+          'linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 30%, rgba(0,0,0,0.06) 52%, rgba(0,0,0,0.06) 80%, rgba(0,0,0,0.5) 91%, rgba(0,0,0,0.85) 100%)',
         WebkitMaskImage:
-          'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 48%, rgba(0,0,0,0) 74%)',
+          'linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 30%, rgba(0,0,0,0.06) 52%, rgba(0,0,0,0.06) 80%, rgba(0,0,0,0.5) 91%, rgba(0,0,0,0.85) 100%)',
       }}
     />
   )
@@ -533,15 +544,12 @@ export default function Home() {
           // Predawn night sky in the navy palette: deepest navy up top (night),
           // a softblue dawn glow rising from the horizon, faint nebula up-left.
           background:
-            'linear-gradient(180deg, #02060f 0%, #050d1e 28%, #081a34 54%, #0c2344 76%, #133255 100%)',
+            'linear-gradient(180deg, #02060f 0%, #050d1e 28%, #0a1f3c 52%, #07142b 78%, #03081a 100%)',
         }}
       >
         {/* Network graph — drifting nodes link to each other and to the cursor */}
         <NetworkGraph />
-        <div className="relative mx-auto flex w-full max-w-page flex-col items-center px-[60px] max-lg:px-8 max-sm:px-5 pb-0 pt-[160px] max-lg:pt-[120px] max-sm:pt-[100px] text-center min-h-screen">
-          {/* Mobile: absorbs the slack above so the copy sits a fixed 150px
-              over the screen, which is bottom-anchored to fill the viewport. */}
-          <div aria-hidden className="w-full flex-1 sm:hidden" />
+        <div className="relative z-10 mx-auto flex w-full max-w-page flex-col items-center px-[60px] max-lg:px-8 max-sm:px-5 pb-0 pt-[160px] max-lg:pt-[120px] max-sm:pt-[100px] text-center min-h-screen">
           {/* Centered copy */}
           <Reveal className="flex max-w-[760px] flex-col items-center gap-4">
             <h1 className="font-product text-[58px] max-md:text-[34px] max-sm:text-[28px] font-bold leading-[1.3] text-white">
@@ -603,11 +611,11 @@ export default function Home() {
           {/* Tablet/desktop: grows to push the screen to the bottom edge,
               filling the viewport while keeping a minimum gap above it. */}
           <div aria-hidden className="hidden w-full flex-1 sm:block" />
-          <div className="relative mt-[72px] max-sm:mt-[200px] w-full max-w-[1040px] lg:max-w-[1320px]">
+          <div className="relative mt-[72px] w-full max-w-[1040px] lg:max-w-[1320px] max-sm:mt-[100px] max-sm:[-webkit-mask-image:radial-gradient(ellipse_155%_118%_at_50%_-18%,#000_42%,#000000d8_60%,#000000a0_72%,#0000005a_84%,#00000022_93%,#0000_100%)] max-sm:[mask-image:radial-gradient(ellipse_155%_118%_at_50%_-18%,#000_42%,#000000d8_60%,#000000a0_72%,#0000005a_84%,#00000022_93%,#0000_100%)]">
             {/* Glassmorphism bezel — frosted glass that peeks out behind the screen */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-x-5 -top-5 bottom-0 rounded-t-[24px] bg-gradient-to-b from-white/20 to-white/[0.04] ring-1 ring-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_10px_40px_-12px_rgba(0,0,0,0.55)] backdrop-blur-md max-md:rounded-t-[18px] max-sm:-inset-x-3 max-sm:-top-3 max-sm:rounded-t-[14px]"
+              className="pointer-events-none absolute -inset-x-5 -top-5 bottom-0 rounded-t-[24px] bg-gradient-to-b from-white/20 to-white/[0.04] ring-1 ring-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_10px_40px_-12px_rgba(0,0,0,0.55)] backdrop-blur-md max-md:rounded-t-[18px] max-sm:hidden"
             />
 
             {/* Fluid JS-measured scale fits the 1440-wide app to the frame width */}

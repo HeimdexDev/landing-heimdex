@@ -346,7 +346,7 @@ function SolutionDemo({ tab }) {
 
 // FAQ accordion — mirrors the home page "4가지 특징" numbered accordion.
 function FaqAccordion({ items }) {
-  const [open, setOpen] = useState(0)
+  const [open, setOpen] = useState(-1)
   return (
     <div className="w-full max-w-[880px] border-t border-grayscale-100">
       {items.map((f, i) => {
@@ -431,7 +431,7 @@ export default function Solution() {
       {/* ───────── Hero ───────── */}
       {isNew ? (
         <section
-          className="relative flex min-h-screen w-full flex-col items-center px-[60px] pb-0 pt-[170px] max-lg:px-8 max-lg:pt-[130px] max-sm:px-5 max-sm:pt-[110px]"
+          className="relative flex min-h-screen w-full flex-col items-center px-[60px] pb-0 pt-[150px] max-lg:px-8 max-lg:pt-[110px] max-sm:min-h-0 max-sm:px-5 max-sm:pt-[90px]"
           style={{
             // Light, airy gradient — same hero footprint as home, no interaction.
             background: 'linear-gradient(180deg, #f4f8fe 0%, #e7f0fb 55%, #d8e7f8 100%)',
@@ -441,9 +441,33 @@ export default function Solution() {
           <Reveal className="flex w-full max-w-[860px] flex-col items-center gap-9 text-center">
             <div className="flex flex-col items-center gap-5">
               <div className="flex flex-col items-center gap-2">
-                <p className="font-product text-2xl font-bold leading-[1.4] text-navy-500 max-sm:text-xl">
-                  {data.label}
-                </p>
+                {/* in-page switcher across the three solution pages —
+                    same pill style as the 약관/개인정보 (Policy) page tabs */}
+                <div
+                  ref={tabsRef}
+                  className="relative mb-6 inline-grid grid-cols-3 gap-1 rounded-full bg-white p-1 shadow-card"
+                >
+                  <span
+                    aria-hidden
+                    className="absolute rounded-full bg-softblue-50 transition-all duration-300 ease-out"
+                    style={{ left: pill.left, top: pill.top, width: pill.width, height: pill.height }}
+                  />
+                  {TABS.map((tb) => {
+                    const active = tb.id === tab
+                    return (
+                      <button
+                        key={tb.id}
+                        data-active={active}
+                        onClick={() => setParams({ tab: tb.id })}
+                        className={`relative z-10 rounded-full px-[16px] py-[10px] text-center text-sm font-semibold tracking-[-0.35px] transition-colors ${
+                          active ? 'text-navy-500' : 'text-neutral-300 hover:text-grayscale-500'
+                        }`}
+                      >
+                        {tb.label}
+                      </button>
+                    )
+                  })}
+                </div>
                 <h1 className="font-product text-[54px] font-bold leading-[1.3] text-grayscale-800 max-md:text-[40px] max-sm:text-[30px]">
                   {data.title.map((line) => (
                     <span key={line} className="block">
@@ -463,10 +487,13 @@ export default function Solution() {
           </Reveal>
 
           {/* Grows to push the demo to the bottom, filling the viewport like home */}
-          <div aria-hidden className="w-full flex-1" />
+          <div aria-hidden className="w-full flex-1 max-sm:hidden" />
 
           {/* Demo — interactive search → zoom-out mockup, themed per tab */}
-          <Reveal className="mt-[72px] w-full max-w-[1240px] max-sm:mt-12" delay={120}>
+          <Reveal
+            className="mt-[72px] w-full max-w-[1240px] max-sm:mt-[100px] max-sm:w-screen max-sm:max-w-none"
+            delay={120}
+          >
             <SolutionDemo tab={tab} />
           </Reveal>
         </section>
@@ -553,38 +580,40 @@ export default function Solution() {
 
       {isNew ? (
         <>
-          {/* ───────── Reasons (5) ───────── */}
+          {/* ───────── Reasons (5) — title left, 2-col outlined cards right ───────── */}
           <Reveal
             as="section"
-            className="flex flex-col items-center gap-16 px-[100px] pb-[120px] pt-[120px] max-lg:px-8 max-lg:gap-12 max-sm:px-5 max-sm:gap-10 max-sm:pb-[80px] max-sm:pt-[80px]"
+            className="flex justify-center px-[100px] pb-[120px] pt-[120px] max-lg:px-8 max-sm:px-5 max-sm:pb-[80px] max-sm:pt-[80px]"
           >
-            <h2 className="text-center text-[40px] font-bold leading-[1.4] tracking-[-1px] text-grayscale-800 max-md:text-[28px] max-sm:text-[24px]">
-              {data.reasonsTitle.split('\n').map((line, i) => (
-                <span key={line} className={`block ${i === 1 ? 'text-navy-500' : ''}`}>
-                  {line}
-                </span>
-              ))}
-            </h2>
-            <div className="grid w-full max-w-[1180px] grid-cols-6 gap-5 max-lg:grid-cols-2 max-sm:grid-cols-1">
-              {data.reasonsList.map((r, i) => (
-                <div
-                  key={i}
-                  className={`flex flex-col gap-4 rounded-[20px] bg-white p-9 shadow-card max-sm:p-6 max-lg:col-span-1 ${
-                    i < 3 ? 'col-span-2' : 'col-span-3'
-                  }`}
-                >
-                  <h3 className="text-xl font-bold leading-[1.4] tracking-[-0.5px] text-grayscale-800 max-sm:text-lg">
-                    {r.title.split('\n').map((line) => (
-                      <span key={line} className="block">
-                        {line}
-                      </span>
-                    ))}
-                  </h3>
-                  <p className="font-noto text-base leading-[1.7] tracking-[-0.4px] text-grayscale-500 [word-break:keep-all]">
-                    {r.desc}
-                  </p>
-                </div>
-              ))}
+            <div className="flex w-full max-w-[1180px] items-start gap-16 max-lg:flex-col max-lg:gap-10">
+              <h2 className="w-[500px] shrink-0 break-keep text-[40px] font-bold leading-[1.4] tracking-[-1px] text-grayscale-800 max-lg:w-full max-md:text-[28px] max-sm:text-[24px]">
+                {data.reasonsTitle.split('\n').map((line, i) => (
+                  <span key={line} className={`block ${i === 1 ? 'text-navy-500' : ''}`}>
+                    {line}
+                  </span>
+                ))}
+              </h2>
+              <div className="grid flex-1 grid-cols-2 max-sm:grid-cols-1">
+                {data.reasonsList.map((r, i) => (
+                  <div
+                    key={i}
+                    className={`flex flex-col gap-4 border-grayscale-200 p-7 max-sm:border-r-0 max-sm:p-6 ${
+                      i >= 2 ? 'border-t' : ''
+                    } ${i % 2 === 0 ? 'border-r' : ''} ${i === 1 ? 'max-sm:border-t' : ''}`}
+                  >
+                    <h3 className="text-xl font-bold leading-[1.4] tracking-[-0.5px] text-grayscale-800 max-sm:text-lg">
+                      {r.title.split('\n').map((line) => (
+                        <span key={line} className="block">
+                          {line}
+                        </span>
+                      ))}
+                    </h3>
+                    <p className="font-noto text-base leading-[1.7] tracking-[-0.4px] text-grayscale-500 [word-break:keep-all]">
+                      {r.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </Reveal>
 

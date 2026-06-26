@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../i18n/LanguageContext.jsx'
 
 const LINKS = [
-  { label: '개인정보 수집 동의', en: 'Privacy Policy', to: '/policy?tab=privacy' },
+  { label: '개인정보', en: 'Privacy Policy', to: '/policy?tab=privacy' },
   { label: '이용약관', en: 'Terms of Service', to: '/policy?tab=terms' },
   { label: '도입문의', en: 'Contact Sales', to: '/contact' },
 ]
@@ -30,7 +30,7 @@ export default function Footer() {
 
           {/* Links + email */}
           <div className="flex flex-col items-end gap-1">
-            <div className="flex items-center gap-[10px] max-sm:gap-2">
+            <div className="flex items-center gap-[24px] max-sm:gap-[14px]">
               {LINKS.map((link) => (
                 <Link
                   key={link.label}

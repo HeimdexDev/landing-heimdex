@@ -370,15 +370,16 @@ export default function Navbar() {
           <div className="w-[300px] shrink-0">
             <p className={`text-sm leading-[1.6] ${heroLook ? 'text-[#e6eefb]' : 'text-navy-500'}`}>
               {t(
-                '하임덱스는 다양한 산업의 영상 가치를 극대화하는 솔루션을 보유하고 있습니다.',
+                <>
+                  하임덱스는 다양한 산업의 영상 가치를 극대화하는
+                  <br />
+                  솔루션을 보유하고 있습니다.
+                </>,
                 'Heimdex offers solutions that maximize the value of video across industries.',
               )}
-              <br />
-              <br />
-              {t(
-                '각 산업별 사례를 통해 자세히 알아보세요.',
-                'Explore how it works for each industry.',
-              )}
+            </p>
+            <p className={`mt-3 text-sm leading-[1.6] ${heroLook ? 'text-[#e6eefb]' : 'text-navy-500'}`}>
+              {t('각 산업별 사례를 통해 자세히 알아보세요.', 'Explore how it works for each industry.')}
             </p>
           </div>
           {/* Right — 3 industry cards */}
@@ -388,15 +389,13 @@ export default function Navbar() {
                 key={m.label}
                 to={m.to}
                 onClick={closeNow}
-                className={`group rounded-xl border p-5 transition-colors ${
-                  heroLook
-                    ? 'border-white/10 hover:bg-white/[0.06]'
-                    : 'border-grayscale-100 hover:bg-softblue-50/30'
+                className={`group rounded-lg p-5 transition-colors ${
+                  heroLook ? 'hover:bg-white/[0.06]' : 'hover:bg-softblue-50/40'
                 }`}
               >
                 <p
-                  className={`text-base font-semibold transition-colors ${
-                    heroLook ? 'text-white' : 'text-grayscale-800 group-hover:text-navy-500'
+                  className={`text-base font-semibold ${
+                    heroLook ? 'text-white' : 'text-grayscale-800'
                   }`}
                 >
                   {lang === 'en' ? m.en : m.label}
@@ -414,14 +413,12 @@ export default function Navbar() {
         </div>
         </div>
 
-        {/* Dim — fills the space below the panel only, so it never tints the panel */}
+        {/* Click-catcher below the panel (no dim) — closes the menu on outside click */}
         <div
           aria-hidden
           onMouseEnter={closeNow}
           onClick={closeNow}
-          className={`flex-1 bg-black/40 transition-opacity duration-300 ${
-            productOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
-          }`}
+          className={`flex-1 ${productOpen ? '' : 'pointer-events-none'}`}
         />
       </div>
     </>
