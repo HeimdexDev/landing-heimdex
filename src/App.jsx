@@ -7,6 +7,7 @@ import Home from './pages/Home.jsx'
 import Solution from './pages/Solution.jsx'
 import Contact from './pages/Contact.jsx'
 import Policy from './pages/Policy.jsx'
+import NotFound from './pages/NotFound.jsx'
 import { LanguageProvider } from './i18n/LanguageContext.jsx'
 
 function ScrollToTop() {
@@ -20,11 +21,34 @@ function ScrollToTop() {
 function NotFoundRedirect() {
   const { pathname } = useLocation()
   const path = pathname.replace(/^\/(ko|en)(?=\/|$)/, '') || '/'
-  let dest = '/'
-  if (path.startsWith('/contact')) dest = '/contact'
-  else if (path.startsWith('/product')) dest = '/product'
-  else if (path.startsWith('/policy')) dest = '/policy'
-  return <Navigate to={dest} replace />
+  // Legacy deep links (old locale-prefixed / sub-paths) → nearest real page;
+  // anything else that truly doesn't exist → the 404 page
+  if (path.startsWith('/contact')) return <Navigate to="/contact" replace />
+  if (path.startsWith('/product')) return <Navigate to="/product" replace />
+  if (path.startsWith('/policy')) return <Navigate to="/policy" replace />
+  return <NotFound />
+}
+
+// True for any path that renders the full-screen 404 page (unknown route).
+function isNotFoundPath(pathname) {
+  const p = pathname.replace(/^\/(ko|en)(?=\/|$)/, '') || '/'
+  return (
+    p !== '/' &&
+    p !== '/blog' &&
+    !p.startsWith('/product') &&
+    !p.startsWith('/contact') &&
+    !p.startsWith('/policy')
+  )
+}
+
+// Header and footer are hidden on the 404 page so the space fills the viewport.
+function NavbarArea() {
+  const { pathname } = useLocation()
+  return isNotFoundPath(pathname) ? null : <Navbar />
+}
+function FooterArea() {
+  const { pathname } = useLocation()
+  return isNotFoundPath(pathname) ? null : <Footer />
 }
 
 export default function App() {
@@ -32,7 +56,7 @@ export default function App() {
     <LanguageProvider>
       <div className="flex min-h-screen flex-col overflow-x-clip bg-grayscale-10">
         <ScrollToTop />
-        <Navbar />
+        <NavbarArea />
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -46,7 +70,7 @@ export default function App() {
           </Routes>
         </main>
         <FloatingActions />
-        <Footer />
+        <FooterArea />
       </div>
     </LanguageProvider>
   )

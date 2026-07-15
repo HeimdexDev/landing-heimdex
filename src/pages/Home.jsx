@@ -353,7 +353,9 @@ function FluidMockup({ children }) {
 // embedding/index graph. A slow vertical beam sweeps across (Heimdall's
 // ever-watching gaze); nodes it lights up occasionally emit a signal ping
 // (Gjallarhorn's call) — i.e. "watch → detect". Cursor also links the graph.
-function NetworkGraph() {
+export function NetworkGraph({
+  mask = 'linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 30%, rgba(0,0,0,0.06) 52%, rgba(0,0,0,0.06) 80%, rgba(0,0,0,0.5) 91%, rgba(0,0,0,0.85) 100%)',
+} = {}) {
   const canvasRef = useRef(null)
   useEffect(() => {
     const canvas = canvasRef.current
@@ -523,12 +525,7 @@ function NetworkGraph() {
       ref={canvasRef}
       aria-hidden
       className="pointer-events-none absolute inset-0 h-full w-full"
-      style={{
-        maskImage:
-          'linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 30%, rgba(0,0,0,0.06) 52%, rgba(0,0,0,0.06) 80%, rgba(0,0,0,0.5) 91%, rgba(0,0,0,0.85) 100%)',
-        WebkitMaskImage:
-          'linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 30%, rgba(0,0,0,0.06) 52%, rgba(0,0,0,0.06) 80%, rgba(0,0,0,0.5) 91%, rgba(0,0,0,0.85) 100%)',
-      }}
+      style={{ maskImage: mask, WebkitMaskImage: mask }}
     />
   )
 }

@@ -48,15 +48,24 @@ export default function Navbar() {
   // the user scrolls, then turns solid white. Home's hero is dark so its text
   // goes white (heroLook); the product hero is light so text stays dark.
   const atTop = !scrolled
+  // The 404 page (any unknown path) uses the same dark hero as home, so the
+  // header should behave exactly like it does on '/'.
+  const isNotFound =
+    pathname !== '/' &&
+    pathname !== '/blog' &&
+    !pathname.startsWith('/product') &&
+    !pathname.startsWith('/contact') &&
+    !pathname.startsWith('/policy')
+  const isDarkHero = pathname === '/' || isNotFound
   const onHeroBg =
-    pathname === '/' || pathname.startsWith('/product') || pathname.startsWith('/contact')
+    isDarkHero || pathname.startsWith('/product') || pathname.startsWith('/contact')
   // Transparent over heroes, but go solid when the (light) product menu opens on a
   // non-home page so the header and the white dropdown read as one continuous surface.
-  const transparent = atTop && onHeroBg && !(productOpen && pathname !== '/')
-  const heroLook = atTop && pathname === '/'
+  const transparent = atTop && onHeroBg && !(productOpen && !isDarkHero)
+  const heroLook = atTop && isDarkHero
   // Mobile full-screen menu uses each page's topmost hero color, independent of
-  // scroll position: home = deep navy, other pages = the light hero top.
-  const menuDark = pathname === '/'
+  // scroll position: dark hero (home + 404) = deep navy, other pages = light hero top.
+  const menuDark = isDarkHero
   // While the menu is open the header row matches the menu's theme.
   const headerWhite = open ? menuDark : heroLook
 
