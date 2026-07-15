@@ -6,7 +6,7 @@ import SpaceField from '../components/SpaceField.jsx'
 
 // 404 — 홈 히어로와 같은 다크 네이비 배경 + 별자리 인터랙션 재사용
 export default function NotFound() {
-  const { t } = useLang()
+  const { lang, setLang, t } = useLang()
   return (
     <section
       className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-[60px] pb-[120px] pt-[120px] text-center max-lg:px-8 max-sm:px-5"
@@ -36,6 +36,25 @@ export default function NotFound() {
       <SpaceField />
       {/* 별자리 — 기존 스타일 유지(상·하단 은은하게, 중앙은 옅게) */}
       <NetworkGraph mask="linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.2) 58%, rgba(0,0,0,0.55) 82%, rgba(0,0,0,0.85) 100%)" />
+
+      {/* 한/영 전환 — 헤더가 없어 우측 상단에 단독 배치(헤더와 동일 스타일) */}
+      <div className="absolute right-[60px] top-[34px] z-20 flex items-center gap-2.5 text-[14px] font-semibold text-white max-lg:right-8 max-sm:right-5 max-sm:top-[24px]">
+        <button
+          type="button"
+          onClick={() => setLang('ko')}
+          className={`transition-opacity ${lang === 'ko' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+        >
+          KOR
+        </button>
+        <span className="text-white/30">|</span>
+        <button
+          type="button"
+          onClick={() => setLang('en')}
+          className={`transition-opacity ${lang === 'en' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
+        >
+          ENG
+        </button>
+      </div>
 
       <div className="relative z-10 flex flex-col items-center gap-8 text-center max-sm:gap-6">
         {/* 404 — 가운데 0 자리는 하임덱스 로고, 숫자·로고 모두 같은 성운 채움 */}
@@ -81,7 +100,9 @@ export default function NotFound() {
               에서 최신 소식을 확인해보세요.
             </>,
             <>
-              We couldn’t find that page. Instead, try Heimdex on the{' '}
+              We couldn’t find that page.
+              <br />
+              Instead, try Heimdex on the{' '}
               <a
                 href="https://playground.heimdex.co/"
                 target="_blank"
@@ -90,7 +111,9 @@ export default function NotFound() {
               >
                 Playground
               </a>
-              , or catch up on the{' '}
+              ,
+              <br />
+              or catch up on the{' '}
               <a
                 href="https://blog.heimdex.co/"
                 target="_blank"
