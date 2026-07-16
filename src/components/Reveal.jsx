@@ -10,7 +10,18 @@ export default function Reveal({ children, className = '', delay = 0, as: Tag = 
     const el = ref.current
     if (!el) return
 
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+    if (
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ||
+      typeof IntersectionObserver === 'undefined'
+    ) {
+      setShown(true)
+      return
+    }
+
+    // Already on screen at mount (the usual case right after a route change) —
+    // reveal now instead of waiting on the observer's first async measurement.
+    const rect = el.getBoundingClientRect()
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
       setShown(true)
       return
     }
@@ -22,7 +33,9 @@ export default function Reveal({ children, className = '', delay = 0, as: Tag = 
           observer.disconnect()
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -10% 0px' },
+      // threshold 0: any sliver counts. With a ratio threshold, an element taller
+      // than ~8x the viewport can never reach it and stays invisible forever.
+      { threshold: 0, rootMargin: '0px 0px -10% 0px' },
     )
     observer.observe(el)
     return () => observer.disconnect()

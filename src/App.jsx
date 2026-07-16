@@ -12,7 +12,12 @@ import { LanguageProvider } from './i18n/LanguageContext.jsx'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => window.scrollTo(0, 0), [pathname])
+  // 'instant' overrides the global `scroll-behavior: smooth`. A smooth scroll here
+  // animates for hundreds of ms while the new page's reveal observers are already
+  // measuring, which left sections stuck at opacity-0 until a manual refresh.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
   return null
 }
 
