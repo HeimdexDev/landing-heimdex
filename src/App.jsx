@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
@@ -8,7 +8,14 @@ import Solution from './pages/Solution.jsx'
 import Contact from './pages/Contact.jsx'
 import Policy from './pages/Policy.jsx'
 import NotFound from './pages/NotFound.jsx'
-import { LanguageProvider } from './i18n/LanguageContext.jsx'
+import SeoLinks from './i18n/SeoLinks.jsx'
+import LanguageSuggestion from './i18n/LanguageSuggestion.jsx'
+import {
+  LanguageProvider,
+  langFromPath,
+  localizePath,
+  stripLangPrefix,
+} from './i18n/LanguageContext.jsx'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -21,22 +28,23 @@ function ScrollToTop() {
   return null
 }
 
-// Any unknown URL (e.g. old /ko/* , /en/* , /pricing, /company links still in
-// Google) maps to the closest current page instead of rendering blank.
+// Any unknown URL (old /ko/* links, /pricing, /company still in Google) maps to
+// the closest current page — staying in the language the visitor is browsing.
 function NotFoundRedirect() {
   const { pathname } = useLocation()
-  const path = pathname.replace(/^\/(ko|en)(?=\/|$)/, '') || '/'
-  // Legacy deep links (old locale-prefixed / sub-paths) → nearest real page;
-  // anything else that truly doesn't exist → the 404 page
-  if (path.startsWith('/contact')) return <Navigate to="/contact" replace />
-  if (path.startsWith('/product')) return <Navigate to="/product" replace />
-  if (path.startsWith('/policy')) return <Navigate to="/policy" replace />
+  const lang = langFromPath(pathname)
+  // Strip the /en prefix, then any leftover legacy /ko so old links still land.
+  const path = stripLangPrefix(pathname).replace(/^\/ko(?=\/|$)/, '') || '/'
+  const go = (to) => <Navigate to={localizePath(to, lang)} replace />
+  if (path.startsWith('/contact')) return go('/contact')
+  if (path.startsWith('/product')) return go('/product')
+  if (path.startsWith('/policy')) return go('/policy')
   return <NotFound />
 }
 
 // True for any path that renders the full-screen 404 page (unknown route).
 function isNotFoundPath(pathname) {
-  const p = pathname.replace(/^\/(ko|en)(?=\/|$)/, '') || '/'
+  const p = stripLangPrefix(pathname).replace(/^\/ko(?=\/|$)/, '') || '/'
   return (
     p !== '/' &&
     p !== '/blog' &&
@@ -61,20 +69,28 @@ export default function App() {
     <LanguageProvider>
       <div className="flex min-h-screen flex-col overflow-x-clip bg-grayscale-10">
         <ScrollToTop />
+        <SeoLinks />
         <NavbarArea />
         <main className="flex-1">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/product" element={<Solution />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/policy" element={<Policy />} />
-            {/* Placeholder so the blog nav link doesn't 404 (also opens externally) */}
-            <Route path="/blog" element={<Home />} />
+            {/* Korean at the root, English under /en — same components, the
+                language comes from the URL (see LanguageContext). */}
+            {['', '/en'].map((p) => (
+              <Fragment key={p || 'ko'}>
+                <Route path={p || '/'} element={<Home />} />
+                <Route path={`${p}/product`} element={<Solution />} />
+                <Route path={`${p}/contact`} element={<Contact />} />
+                <Route path={`${p}/policy`} element={<Policy />} />
+                {/* Placeholder so the blog nav link doesn't 404 (also opens externally) */}
+                <Route path={`${p}/blog`} element={<Home />} />
+              </Fragment>
+            ))}
             {/* Catch-all: redirect old/unknown URLs to the closest current page */}
             <Route path="*" element={<NotFoundRedirect />} />
           </Routes>
         </main>
         <FloatingActions />
+        <LanguageSuggestion />
         <FooterArea />
       </div>
     </LanguageProvider>

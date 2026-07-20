@@ -1,22 +1,48 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const LanguageContext = createContext(null)
 
-// Lightweight i18n: components call t('한국어', 'English') and get the string for
-// the current language. Choice persists to localStorage. Default Korean.
+// Korean lives at the root (/product), English under a prefix (/en/product).
+// The URL is the single source of truth so every language version is linkable,
+// shareable and crawlable — no localStorage, no auto-redirect.
+export function stripLangPrefix(pathname) {
+  if (pathname === '/en') return '/'
+  if (pathname.startsWith('/en/')) return pathname.slice(3)
+  return pathname
+}
+
+export function langFromPath(pathname) {
+  return pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'ko'
+}
+
+// Turn a canonical (Korean) path into the path for `lang`.
+export function localizePath(to, lang) {
+  if (lang !== 'en' || typeof to !== 'string' || !to.startsWith('/')) return to
+  return to === '/' ? '/en' : `/en${to}`
+}
+
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState(() => {
-    if (typeof localStorage !== 'undefined') {
-      const saved = localStorage.getItem('lang')
-      if (saved === 'ko' || saved === 'en') return saved
-    }
-    return 'ko'
-  })
+  const { pathname, search, hash } = useLocation()
+  const navigate = useNavigate()
+  const lang = langFromPath(pathname)
 
   useEffect(() => {
-    if (typeof localStorage !== 'undefined') localStorage.setItem('lang', lang)
     if (typeof document !== 'undefined') document.documentElement.lang = lang
   }, [lang])
+
+  // Switching language keeps you on the same page, just under the other prefix.
+  // The choice is remembered so the auto-redirect above never overrides it.
+  const setLang = (next) => {
+    if (next === lang) return
+    try {
+      localStorage.setItem('lang', next)
+    } catch {
+      /* ignore */
+    }
+    const bare = stripLangPrefix(pathname)
+    navigate(localizePath(bare, next) + search + hash)
+  }
 
   const t = (ko, en) => (lang === 'en' ? en : ko)
 

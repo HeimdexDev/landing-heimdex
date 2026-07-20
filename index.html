@@ -1,7 +1,11 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" translate="no">
   <head>
     <meta charset="UTF-8" />
+    <!-- Chrome's auto-translate rewrites text nodes React still owns, which throws
+         `removeChild` and blanks the whole app. We ship a real English version at
+         /en (offered by a banner), so machine translation is opt-out here. -->
+    <meta name="google" content="notranslate" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
@@ -18,13 +22,13 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="HEIMDEX" />
     <meta property="og:locale" content="ko_KR" />
-    <meta property="og:url" content="https://heimdex.co/" />
+    <meta property="og:url" content="https://www.heimdex.co/" />
     <meta property="og:title" content="HEIMDEX — 영상 속 원하는 장면, 검색 한 줄로" />
     <meta
       property="og:description"
       content="업로드 없이, 시청 없이. 검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로 만들어 드립니다."
     />
-    <meta property="og:image" content="https://heimdex.co/og-image.png" />
+    <meta property="og:image" content="https://www.heimdex.co/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="HEIMDEX — Data Stays, Insight Moves" />
@@ -36,7 +40,7 @@
       name="twitter:description"
       content="업로드 없이, 시청 없이. 검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로 만들어 드립니다."
     />
-    <meta name="twitter:image" content="https://heimdex.co/og-image.png" />
+    <meta name="twitter:image" content="https://www.heimdex.co/og-image.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

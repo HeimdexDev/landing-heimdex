@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from '../i18n/Link.jsx'
 import { ArrowUpRight } from 'lucide-react'
 
 /**

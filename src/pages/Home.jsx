@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import Link from '../i18n/Link.jsx'
 import {
   ArrowUp,
   ArrowUpRight,

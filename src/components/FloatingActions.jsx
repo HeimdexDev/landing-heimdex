@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from '../i18n/Link.jsx'
 import { ArrowUp, MessageSquareText } from 'lucide-react'
 import { useLang } from '../i18n/LanguageContext.jsx'
 

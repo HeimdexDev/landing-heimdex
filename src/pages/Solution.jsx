@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
+import Link from '../i18n/Link.jsx'
 import {
   ArrowUpRight,
   ChevronDown,

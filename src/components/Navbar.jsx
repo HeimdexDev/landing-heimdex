@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import Link from '../i18n/Link.jsx'
 import { Menu, X, ArrowUpRight, ChevronDown } from 'lucide-react'
 import { useLang } from '../i18n/LanguageContext.jsx'
 
