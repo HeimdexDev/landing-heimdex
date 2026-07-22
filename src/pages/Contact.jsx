@@ -46,10 +46,12 @@ export default function Contact() {
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
 
+  const emailOk = /^\S+@\S+\.\S+$/.test(form.email.trim())
+  const phoneOk = /^[\d\s+()-]{7,}$/.test(form.phone.trim())
   const canSubmit =
     form.name.trim() &&
-    form.phone.trim() &&
-    form.email.trim() &&
+    phoneOk &&
+    emailOk &&
     agreeRequired &&
     !submitting
 
