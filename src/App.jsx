@@ -16,6 +16,7 @@ import {
   localizePath,
   stripLangPrefix,
 } from './i18n/LanguageContext.jsx'
+import GaPageViews from './lib/analytics/useGaPageViews.js'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -69,6 +70,7 @@ export default function App() {
     <LanguageProvider>
       <div className="flex min-h-screen flex-col overflow-x-clip bg-grayscale-10">
         <ScrollToTop />
+        <GaPageViews />
         <SeoLinks />
         <NavbarArea />
         <main className="flex-1">
