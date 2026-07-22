@@ -41,66 +41,16 @@ import {
   X,
 } from 'lucide-react'
 import { useLang } from '../i18n/LanguageContext.jsx'
+import {
+  QUERY, QUERY_EN, SOURCES, SOURCE_CYCLE, TITLES, TITLES_EN,
+  STAGE_IMAGES, DEFAULT_PLACEHOLDER, DEFAULT_PLACEHOLDER_EN,
+  SPEAKER_COLOR, INITIAL_SCENES, SPLIT_TAG, SPLIT_TAG_ORDER,
+} from './hero/constants.js'
 
 // Faithful code build of the Figma "동영상 검색(세로)" screen (node 2289:60619),
 // using lucide-react + project design tokens, with a looping demo interaction:
 // type a query → results appear → a fake cursor sweeps/scrolls the cards.
 
-const QUERY = '무대 위에서 공연하는 장면'
-const QUERY_EN = 'Scene of a performance on stage'
-const COLS = 4
-
-const SOURCES = {
-  Drive: '#68b2ff', // softblue/300
-  Youtube: '#cd626a', // red/300
-  Local: '#66c28d', // green/300
-  Disk: '#c4c5d4', // grayscale/300
-}
-
-// Thumbnails themed to the query (stage/concert), served locally so nothing
-// renders from an external host at runtime.
-const SOURCE_CYCLE = ['Drive', 'Youtube', 'Local', 'Disk']
-// Varied per-card titles — a few long enough to trigger the ellipsis.
-const TITLES = [
-  '2024_단독콘서트_앙코르무대_4K',
-  '신곡_타이틀곡_직캠_원본',
-  '리허설_풀샷_카메라2',
-  '팬미팅_오프닝_퍼포먼스_하이라이트_편집본_납품용_최종',
-  '음악방송_1위_앵콜무대',
-  '쇼케이스_하이라이트',
-  '월드투어_서울_2일차_엔딩무대',
-  '백스테이지_비하인드_인터뷰',
-  '연말시상식_축하공연_세로형',
-  '유닛무대_안무연습_드라이런',
-  '데뷔_쇼케이스_타이틀무대_고화질_원본_최종_real_final',
-  '라이브클립_쇼츠용_세로',
-  '콘서트_오프닝_인트로_VCR',
-  '앵콜무대_떼창_관객반응',
-  '아레나_공연_드론샷',
-  '무대_조명_리허설_테스트',
-]
-const TITLES_EN = [
-  '2024_solo_concert_encore_4K',
-  'title_track_fancam_original',
-  'rehearsal_fullshot_cam2',
-  'fanmeeting_opening_performance_highlight_final',
-  'music_show_no1_encore_stage',
-  'showcase_highlight',
-  'world_tour_seoul_day2_ending',
-  'backstage_behind_interview',
-  'yearend_awards_special_stage_vertical',
-  'unit_stage_choreo_dryrun',
-  'debut_showcase_title_stage_4K_original_final',
-  'live_clip_for_shorts_vertical',
-  'concert_opening_intro_VCR',
-  'encore_singalong_crowd_reaction',
-  'arena_show_drone_shot',
-  'stage_lighting_rehearsal_test',
-]
-
-const STAGE_IMAGES = Array.from({ length: 16 }, (_, i) => `/assets/stage/stage-${i + 1}.jpg`)
-const DEFAULT_PLACEHOLDER = '파일명이나 폴더명으로 찾아보세요 - "마케팅_쇼츠_01"'
-const DEFAULT_PLACEHOLDER_EN = 'Search by file or folder name — "marketing_short_01"'
 
 function SourceChip({ source }) {
   return (
@@ -249,7 +199,6 @@ function FakeCursor({ x, y, visible, dur }) {
 }
 
 // Speaker badge colors (A red, B green) — matches Figma 화자 component.
-const SPEAKER_COLOR = { A: '#d53b49', B: '#3fb675' }
 
 function ScriptRow({ speaker, time, text }) {
   return (
@@ -544,7 +493,6 @@ function PanelSlider({ value, percent = 0 }) {
 
 // Shorts editor screen (Figma 2376:205568) — collapsed LNB, header save buttons,
 // left subtitle (empty), center 9:16 preview, right text panel, bottom timeline.
-const INITIAL_SCENES = [{ w: 179 }, { w: 315 }, { w: 469 }, { w: 198 }, { w: 206 }]
 
 function EditorView({ card, img }) {
   const { t } = useLang()
@@ -1017,15 +965,6 @@ function SavePopup() {
 }
 
 // 구간 분할 결과 — tag palette (Figma 2454:211994 dropdown).
-const SPLIT_TAG = {
-  sale: { ko: '판매', en: 'Sales', bg: '#aee2ff', fg: '#173d5a' },
-  insert: { ko: '인서트', en: 'Insert', bg: '#ffd4b4', fg: '#603814' },
-  notice: { ko: '방송안내', en: 'Notice', bg: '#beffbe', fg: '#1c3829' },
-  promo: { ko: '프로모션', en: 'Promo', bg: '#e4c1ff', fg: '#3b1d4d' },
-  review: { ko: '반응리뷰', en: 'Review', bg: '#ffcee3', fg: '#4e2936' },
-  etc: { ko: '기타', en: 'Etc', bg: '#e4e4e3', fg: '#373530' },
-}
-const SPLIT_TAG_ORDER = ['sale', 'insert', 'notice', 'promo', 'review', 'etc']
 
 function TagChip({ tag, t, onRemove }) {
   const tg = SPLIT_TAG[tag] || SPLIT_TAG.etc
