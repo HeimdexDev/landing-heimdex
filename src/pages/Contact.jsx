@@ -44,7 +44,7 @@ export default function Contact() {
   const [modalOpen, setModalOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [touched, setTouched] = useState({ email: false, phone: false })
-  const [website, setWebsite] = useState('') // 봇 트랩(허니팟): 사람에겐 숨겨진 필드
+  const [website, setWebsite] = useState('') // bot trap (honeypot): a field hidden from humans
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
   const markTouched = (k) => () => setTouched((s) => ({ ...s, [k]: true }))
@@ -126,7 +126,7 @@ export default function Contact() {
           onSubmit={onSubmit}
           className="flex w-[671px] shrink-0 -translate-y-[20px] translate-x-[40px] flex-col gap-6 rounded-[10px] bg-white p-[30px] shadow-card max-lg:w-full max-lg:translate-x-0 max-lg:translate-y-0 max-lg:shrink max-sm:p-5"
         >
-          {/* 봇 트랩(허니팟): 사람 눈엔 숨겨진 필드. 채워지면 서버가 제출을 무시한다. */}
+          {/* bot trap (honeypot): hidden from humans; if filled, the server ignores the submission */}
           <input
             type="text"
             name="website"
