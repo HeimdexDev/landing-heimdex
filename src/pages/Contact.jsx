@@ -43,11 +43,15 @@ export default function Contact() {
   const [marketingOpen, setMarketingOpen] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [touched, setTouched] = useState({ email: false, phone: false })
+  const [website, setWebsite] = useState('') // 봇 트랩(허니팟): 사람에겐 숨겨진 필드
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
+  const markTouched = (k) => () => setTouched((s) => ({ ...s, [k]: true }))
 
-  const emailOk = /^\S+@\S+\.\S+$/.test(form.email.trim())
-  const phoneOk = /^[\d\s+()-]{7,}$/.test(form.phone.trim())
+  const emailOk = /^\S+@\S+\.\S{2,}$/.test(form.email.trim())
+  const phoneDigits = form.phone.replace(/\D/g, '')
+  const phoneOk = phoneDigits.length >= 7 && phoneDigits.length <= 15
   const canSubmit =
     form.name.trim() &&
     phoneOk &&
@@ -64,7 +68,7 @@ export default function Contact() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, marketingAgreed: agreeMarketing }),
+        body: JSON.stringify({ ...form, marketingAgreed: agreeMarketing, website }),
       })
       if (!res.ok) throw new Error('전송 실패')
 
@@ -77,6 +81,7 @@ export default function Contact() {
       setForm({ name: '', phone: '', email: '', company: '', message: '' })
       setAgreeRequired(false)
       setAgreeMarketing(false)
+      setTouched({ email: false, phone: false })
     } catch {
       alert(
         t(
@@ -121,20 +126,37 @@ export default function Contact() {
           onSubmit={onSubmit}
           className="flex w-[671px] shrink-0 -translate-y-[20px] translate-x-[40px] flex-col gap-6 rounded-[10px] bg-white p-[30px] shadow-card max-lg:w-full max-lg:translate-x-0 max-lg:translate-y-0 max-lg:shrink max-sm:p-5"
         >
+          {/* 봇 트랩(허니팟): 사람 눈엔 숨겨진 필드. 채워지면 서버가 제출을 무시한다. */}
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+            className="pointer-events-none absolute left-[-9999px] h-0 w-0 opacity-0"
+          />
           <div className="flex flex-col gap-[20px]">
             <div className="flex gap-[10px] max-sm:flex-col">
               <Field label={t('이름', 'Name')} required>
-                <input className={inputCls} placeholder={t('이름을 입력해주세요.', 'Enter your name.')} value={form.name} onChange={set('name')} />
+                <input className={inputCls} placeholder={t('이름을 입력해주세요.', 'Enter your name.')} value={form.name} onChange={set('name')} maxLength={100} />
               </Field>
               <Field label={t('연락처', 'Phone')} required>
-                <input className={inputCls} placeholder={t('대시(-)를 제외한 숫자만 입력해주세요.', 'Numbers only, no dashes.')} value={form.phone} onChange={set('phone')} inputMode="numeric" />
+                <input className={inputCls} placeholder={t('대시(-)를 제외한 숫자만 입력해주세요.', 'Numbers only, no dashes.')} value={form.phone} onChange={set('phone')} onBlur={markTouched('phone')} inputMode="numeric" maxLength={30} />
+                {touched.phone && form.phone.trim() && !phoneOk && (
+                  <span className="text-xs font-medium tracking-[-0.3px] text-[#fa5252]">{t('숫자 7자리 이상 입력해주세요.', 'Enter at least 7 digits.')}</span>
+                )}
               </Field>
             </div>
             <Field label={t('이메일주소', 'Email')} required>
-              <input className={inputCls} placeholder={t('이메일 주소를 입력해주세요.', 'Enter your email address.')} type="email" value={form.email} onChange={set('email')} />
+              <input className={inputCls} placeholder={t('이메일 주소를 입력해주세요.', 'Enter your email address.')} type="email" value={form.email} onChange={set('email')} onBlur={markTouched('email')} maxLength={254} />
+              {touched.email && form.email.trim() && !emailOk && (
+                <span className="text-xs font-medium tracking-[-0.3px] text-[#fa5252]">{t('유효한 이메일 형식이 아닙니다.', 'Enter a valid email address.')}</span>
+              )}
             </Field>
             <Field label={t('회사명', 'Company')}>
-              <input className={inputCls} placeholder={t('회사명을 입력해주세요.', 'Enter your company name.')} value={form.company} onChange={set('company')} />
+              <input className={inputCls} placeholder={t('회사명을 입력해주세요.', 'Enter your company name.')} value={form.company} onChange={set('company')} maxLength={200} />
             </Field>
             <Field label={t('문의내용', 'Message')}>
               <div className="relative">
