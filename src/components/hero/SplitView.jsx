@@ -8,7 +8,7 @@ import { useLang } from '../../i18n/LanguageContext.jsx'
 import { SPLIT_TAG, SPLIT_TAG_ORDER } from './constants.js'
 import { NavItem, FakeCursor } from './atoms.jsx'
 
-// 구간 분할 결과 — tag palette (Figma 2454:211994 dropdown).
+// Segment split results — tag palette (Figma 2454:211994 dropdown).
 
 export function TagChip({ tag, t, onRemove }) {
   const tg = SPLIT_TAG[tag] || SPLIT_TAG.etc
@@ -27,7 +27,7 @@ export function TagChip({ tag, t, onRemove }) {
   )
 }
 
-// One 분할 영상 카드 (Figma 2454:211966).
+// One split-segment video card (Figma 2454:211966).
 export function SplitCard({ n, img, tag, product, desc, range, t, selected, onSelect, selectRef }) {
   return (
     <div
@@ -74,7 +74,7 @@ export function SplitCard({ n, img, tag, product, desc, range, t, selected, onSe
   )
 }
 
-// 미리보기 섹션 (Figma 2454:212733) — video + 선택 구간 + scrollable script.
+// Preview section (Figma 2454:212733) — video + selected range + scrollable script.
 export function PreviewSection({ card, product, t, script, scriptRef, onClose }) {
   const lines = (script || []).map((s) => ({ sp: s.speaker, time: s.time, text: s.text }))
   return (
@@ -120,7 +120,7 @@ export function PreviewSection({ card, product, t, script, scriptRef, onClose })
             </div>
           </div>
         </div>
-        {/* 선택 구간 */}
+        {/* Selected Range */}
         <div className="flex shrink-0 flex-col gap-[7px] rounded-[10px] border border-neutral-100 p-[10px]">
           <div className="flex items-center justify-between">
             <span className="text-[12px] font-semibold tracking-[-0.3px] text-neutral-800">
@@ -168,7 +168,7 @@ export function PreviewSection({ card, product, t, script, scriptRef, onClose })
   )
 }
 
-// 구간 분할 결과 화면 (Figma 2454:211946 헤더 + 211947 섹션 + 211966 카드).
+// Segment split results screen (Figma 2454:211946 header + 211947 section + 211966 card).
 export function SplitView({ detail, title }) {
   const { t, lang } = useLang()
   const en = lang === 'en'
@@ -185,7 +185,7 @@ export function SplitView({ detail, title }) {
   const cardSelectRef = useRef(null)
   const scriptScrollRef = useRef(null)
 
-  // Demo: cursor clicks 태그 → opens the dropdown → checks 판매, then 인서트.
+  // Demo: cursor clicks Tags → opens the dropdown → checks sale, then insert.
   useEffect(() => {
     let cancelled = false
     const wait = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -432,13 +432,13 @@ export function SplitView({ detail, title }) {
                 )}
               </div>
               <div className="flex items-center gap-[20px]">
-                {/* 시간순 (Figma 2454:211952) */}
+                {/* By time (Figma 2454:211952) */}
                 <div className="flex items-center gap-[4px] rounded-[8px] border border-[#7b7b7b] p-[6px] text-[16px] font-medium tracking-[-0.4px] text-[#7b7b7b]">
                   <ArrowUpDown size={20} />
                   {t('시간순', 'By Time')}
                   <ChevronDown size={24} />
                 </div>
-                {/* 태그 (Figma 2454:211957) + dropdown (hidden until clicked) */}
+                {/* Tags (Figma 2454:211957) + dropdown (hidden until clicked) */}
                 <div className="relative">
                   <button
                     ref={tagBtnRef}

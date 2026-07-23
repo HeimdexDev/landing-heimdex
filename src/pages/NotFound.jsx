@@ -4,7 +4,7 @@ import { useLang } from '../i18n/LanguageContext.jsx'
 import { NetworkGraph } from './Home.jsx'
 import SpaceField from '../components/SpaceField.jsx'
 
-// 404 — 홈 히어로와 같은 다크 네이비 배경 + 별자리 인터랙션 재사용
+// 404 — same dark-navy background as the home hero + reusing the constellation interaction
 export default function NotFound() {
   const { lang, setLang, t } = useLang()
   return (
@@ -15,7 +15,7 @@ export default function NotFound() {
           'linear-gradient(180deg, #02060f 0%, #050d1e 28%, #0a1f3c 52%, #07142b 78%, #03081a 100%)',
       }}
     >
-      {/* 딥스페이스 네뷸라 글로우 — 소실점 부근에 은은한 푸른 빛으로 깊이감 */}
+      {/* Deep-space nebula glow — subtle blue light near the vanishing point for depth */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -24,7 +24,7 @@ export default function NotFound() {
             'radial-gradient(ellipse 70% 55% at 50% 40%, rgba(46,96,180,0.22) 0%, rgba(24,54,110,0.12) 38%, transparent 68%)',
         }}
       />
-      {/* 로고를 흰색 단색으로 채우기 위한 mask */}
+      {/* mask to fill the logo with solid white */}
       <style>{`
         .logo-mark {
           display: inline-block;
@@ -32,12 +32,12 @@ export default function NotFound() {
           mask: url(/assets/logo-mark-white.svg) center / contain no-repeat;
         }
       `}</style>
-      {/* 원근 스타필드 — 별이 소실점에서 다가오며 커지는 우주 원근감 */}
+      {/* Perspective star field — stars grow as they approach from the vanishing point */}
       <SpaceField />
-      {/* 별자리 — 기존 스타일 유지(상·하단 은은하게, 중앙은 옅게) */}
+      {/* Constellation — preserve existing style (subtle top/bottom, faint center) */}
       <NetworkGraph mask="linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.2) 58%, rgba(0,0,0,0.55) 82%, rgba(0,0,0,0.85) 100%)" />
 
-      {/* 한/영 전환 — 헤더가 없어 우측 상단에 단독 배치(헤더와 동일 스타일) */}
+      {/* KOR/ENG toggle — placed alone in the top right since there is no header (same style as the header) */}
       <div className="absolute right-[60px] top-[34px] z-20 flex items-center gap-2.5 text-[14px] font-semibold text-white max-lg:right-8 max-sm:right-5 max-sm:top-[24px]">
         <button
           type="button"
@@ -57,7 +57,7 @@ export default function NotFound() {
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-8 text-center max-sm:gap-6">
-        {/* 404 — 가운데 0 자리는 하임덱스 로고, 숫자·로고 모두 같은 성운 채움 */}
+        {/* 404 — the center 0 is replaced by the Heimdex logo; both digits and logo share the same nebula fill */}
         <span
           aria-label="404"
           className="inline-flex -translate-x-[14px] select-none items-center font-product text-[clamp(96px,17vw,220px)] font-bold leading-none tracking-[-0.04em] text-white max-sm:translate-x-0"
@@ -72,7 +72,7 @@ export default function NotFound() {
           <span>4</span>
         </span>
 
-        {/* 안내 문구 — 플레이그라운드/블로그 인라인 링크 */}
+        {/* Guidance text — inline links to the playground and blog */}
         <p className="max-w-[600px] font-noto text-lg leading-[1.7] tracking-[-0.45px] text-[#cdd9ec] max-sm:text-[15px]">
           {t(
             <>
@@ -127,7 +127,7 @@ export default function NotFound() {
           )}
         </p>
 
-        {/* 문의하기 버튼 */}
+        {/* Contact button */}
         <Link
           to="/contact"
           className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-white px-6 py-4 text-base font-semibold text-white transition-colors hover:bg-white/10 max-sm:px-5 max-sm:text-sm"

@@ -1,4 +1,4 @@
-// 하임덱스(HEIMDEX) 서비스 이용약관 — Figma 1520:31732 전문
+// HEIMDEX Terms of Service — Figma 1520:31732 full text
 // block types: { p } · { ol } · { ul } ; list item may be string or { t, sub: [...] }
 
 export const TERMS = {

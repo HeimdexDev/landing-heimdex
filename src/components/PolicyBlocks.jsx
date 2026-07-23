@@ -1,5 +1,5 @@
 // Renders policy document blocks (paragraphs / numbered / bullet lists with one nesting level).
-// Shared by the Policy page and the 전문보기 modal.
+// Shared by the Policy page and the full-text-view modal.
 export function Blocks({ blocks }) {
   return blocks.map((b, i) => {
     if (b.p) return <p key={i} className="leading-[1.7]">{b.p}</p>

@@ -67,16 +67,16 @@ export default function HeroAppMockup({
   // Intro zoom: start magnified on the search bar, then zoom out to full screen.
   const [zoom, setZoom] = useState(1.7)
   const [zoomOrigin, setZoomOrigin] = useState('64% 10%')
-  // Result grid mode: '동영상' ↔ '장면' (research demo toggles to 장면 → scene counts).
+  // Result grid mode: 'video' ↔ 'scene' (research demo toggles to scene → scene counts).
   const [gridMode, setGridMode] = useState('video')
   // 'results' search grid ↔ 'detail' video-detail screen (legal demo only).
   const [view, setView] = useState('results')
-  // Detail screen sub-tab: '개요' ↔ '장면 분석'.
+  // Detail screen sub-tab: 'overview' ↔ 'scene analysis'.
   const [detailTab, setDetailTab] = useState('overview')
   const [tabCursor, setTabCursor] = useState({ x: 0, y: 0, visible: false, dur: 500 })
-  // Which scene card is selected on the 장면 분석 tab (null = none).
+  // Which scene card is selected on the scene-analysis tab (null = none).
   const [selectedScene, setSelectedScene] = useState(null)
-  // Marketer flow: clicking the "AI 구간 분할" button (in the GNB) instead of selecting a scene.
+  // Marketer flow: clicking the "AI Segment Split" button (in the GNB) instead of selecting a scene.
   const [aiCursor, setAiCursor] = useState({ x: 0, y: 0, visible: false, dur: 600 })
   const [aiPressed, setAiPressed] = useState(false)
 
@@ -149,7 +149,7 @@ export default function HeroAppMockup({
           await wait(2600)
           if (cancelled) return
           if (editor) {
-            // legal: tabCursor clicks 장면 분석 tab → selects 2nd scene → opens editor
+            // legal: tabCursor clicks scene-analysis tab → selects 2nd scene → opens editor
             const tabEl = sceneTabRef.current
             if (tabEl) {
               setTabCursor({
@@ -193,8 +193,8 @@ export default function HeroAppMockup({
             setView('editor')
             await wait(12800)
           } else {
-            // marketer: ONE cursor (content space) glides from the 장면 분석 tab
-            // straight to "AI 구간 분할" — no jump between coordinate systems.
+            // marketer: ONE cursor (content space) glides from the scene-analysis tab
+            // straight to "AI Segment Split" — no jump between coordinate systems.
             const aiAim = (el) => {
               if (!el || !contentRef.current) return null
               const r = el.getBoundingClientRect()
@@ -221,7 +221,7 @@ export default function HeroAppMockup({
             if (cancelled) return
             setAiPressed(false)
             setAiCursor((c) => ({ ...c, visible: false }))
-            // → navigate to the 구간 분할 결과 page, hold, then loop
+            // → navigate to the segment-split results page, hold, then loop
             await wait(450)
             if (cancelled) return
             setView('split')
@@ -236,7 +236,7 @@ export default function HeroAppMockup({
         }
 
         if (sceneToggle) {
-          // research: zoom into the 동영상/장면 tab, click 장면, then zoom back out
+          // research: zoom into the video/scene tab, click scene, then zoom back out
           await wait(900)
           if (cancelled) return
           const tog = gridToggleRef.current
@@ -252,7 +252,7 @@ export default function HeroAppMockup({
           setZoom(2.2)
           await wait(1150)
           if (cancelled) return
-          // cursor (content space) to the 장면 tab, then switch
+          // cursor (content space) to the scene tab, then switch
           const sp = sceneSpanRef.current
           const cEl = contentRef.current
           if (sp && cEl) {
@@ -323,7 +323,7 @@ export default function HeroAppMockup({
       className="relative bg-grayscale-10"
       style={{
         transform: `scale(${zoom})`,
-        transformOrigin: zoomOrigin, // search bar by default; the 동영상/장면 tab when toggling
+        transformOrigin: zoomOrigin, // search bar by default; the video/scene tab when toggling
         transition: 'transform 750ms cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
@@ -395,10 +395,10 @@ export default function HeroAppMockup({
               )}
             </div>
             <div className="flex items-center gap-[28px]">
-              {/* AI buttons — shown on the detail screen (개요 · 장면 분석 tabs) */}
+              {/* AI buttons — shown on the detail screen (overview · scene-analysis tabs) */}
               {view === 'detail' && (
                 <div className="flex items-center gap-[8px]">
-                  {/* Secondary — pressed during the marketer 구간 분할 step */}
+                  {/* Secondary — pressed during the marketer segment-split step */}
                   <button
                     ref={aiSplitRef}
                     type="button"
@@ -641,7 +641,7 @@ export default function HeroAppMockup({
             </div>
           </div>
 
-          {/* AI 구간 분할 cursor — marketer flow, in the 1190-wide content space */}
+          {/* AI segment-split cursor — marketer flow, in the 1190-wide content space */}
           <FakeCursor x={aiCursor.x} y={aiCursor.y} visible={aiCursor.visible} dur={aiCursor.dur} />
         </div>
       </div>

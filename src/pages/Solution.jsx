@@ -24,13 +24,13 @@ const ICONS = { clock: ClockArrowDown, brain: BrainCircuit, shield: ShieldCheck 
 const top8 = (paths) =>
   Array.from({ length: 16 }, (_, i) => (i < 8 ? paths[i % paths.length] : null))
 
-// Legal detail screen content for the 3rd card (교차로 신호위반 접촉사고).
+// Legal detail screen content for the 3rd card (intersection signal violation collision).
 const LEGAL_DETAIL = {
-  // 행동 요약 — one objective sentence describing what is visible in the video.
+  // Action summary — one objective sentence describing what is visible in the video.
   summary: '야간 빗길 도로를 주행하던 중 노면이 미끄러워 차량이 미끄러지며 사고가 발생한다.',
-  // 스크립트 — none for this dashcam clip (no usable audio).
+  // Script — none for this dashcam clip (no usable audio).
   script: [],
-  // 장면 분석 — the clip split roughly in half into two segments.
+  // Scene analysis — the clip split roughly in half into two segments.
   scenes: [
     {
       range: '00:00:00 - 00:00:09',
@@ -66,7 +66,7 @@ const LEGAL_DETAIL_EN = {
 }
 
 // Marketer (home-shopping vitamin) detail — host narration + 11 AI-split scenes
-// matched in order to the "비타민C 여러컷" cuts.
+// matched in order to the "vitamin C multi-cut" cuts.
 const MKT_SCENE_RANGES = [
   '00:00:00 - 00:00:10', '00:00:10 - 00:00:20', '00:00:20 - 00:00:30',
   '00:00:30 - 00:00:40', '00:00:40 - 00:00:50', '00:00:50 - 00:01:00',
@@ -250,7 +250,7 @@ const DEMOS = {
     placeholderEn: 'Describe a scene to search — "anomalous motion"',
     durRange: [3600, 10800],
     sceneToggle: true,
-    // 동영상 mode → factory/lab shots; 장면 mode → the original robot cuts
+    // video mode → factory/lab shots; scene mode → the original robot cuts
     images: top8([1, 2, 3, 4, 5, 6, 7].map((n) => `/assets/research/research-vid-${n}.jpg`)),
     sceneImages: top8([1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/assets/research/research-${n}.jpg`)),
     titles: [
@@ -345,7 +345,7 @@ function SolutionDemo({ tab }) {
   )
 }
 
-// FAQ accordion — mirrors the home page "4가지 특징" numbered accordion.
+// FAQ accordion — mirrors the home page "4 features" numbered accordion.
 function FaqAccordion({ items }) {
   const [open, setOpen] = useState(-1)
   return (
@@ -443,7 +443,7 @@ export default function Solution() {
             <div className="flex flex-col items-center gap-5">
               <div className="flex flex-col items-center gap-2">
                 {/* in-page switcher across the three solution pages —
-                    same pill style as the 약관/개인정보 (Policy) page tabs */}
+                    same pill style as the terms/privacy (Policy) page tabs */}
                 <div
                   ref={tabsRef}
                   className="relative mb-6 inline-grid grid-cols-3 gap-1 rounded-full bg-white p-1 shadow-card"

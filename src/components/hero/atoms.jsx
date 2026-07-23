@@ -55,7 +55,7 @@ export function VideoCard({ source, img, sceneImg, title, hovered, shown, index,
   const w = horizontal ? 'w-[220px]' : 'w-[200px]'
   const box = horizontal ? 'h-[124px] w-[220px]' : 'h-[337px] w-[200px]'
   // deterministic, varied per-card runtime (range per demo) shown bottom-right;
-  // in 장면 mode the corner shows a random scene count instead.
+  // in scene mode the corner shows a random scene count instead.
   const [dmin, dmax] = durRange || [30, 600]
   const dur = fmtDur(dmin + ((index * 2999 + 977) % (dmax - dmin + 1)))
   const sceneN = 3 + ((index * 5 + 2) % 12)
@@ -95,7 +95,7 @@ export function VideoCard({ source, img, sceneImg, title, hovered, shown, index,
             </div>
           )}
         </div>
-        {/* default state: runtime (or scene count in 장면 mode) in the corner */}
+        {/* default state: runtime (or scene count in scene mode) in the corner */}
         {!hovered && (
           <span className="absolute bottom-[8px] right-[8px] rounded-[4px] bg-black/60 px-[6px] py-[1px] text-[12px] font-medium tabular-nums text-white">
             {badge}
