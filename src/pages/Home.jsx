@@ -603,7 +603,7 @@ export default function Home() {
             </Link>
           </Reveal>
 
-          {/* Product screen — the real 동영상 검색 dashboard, scaled to fit and
+          {/* Product screen — the real video search dashboard, scaled to fit and
               bottom-clipped so it reads as embedded in the hero. */}
           {/* Tablet/desktop: grows to push the screen to the bottom edge,
               filling the viewport while keeping a minimum gap above it. */}
@@ -646,7 +646,7 @@ export default function Home() {
         </div>
       </Reveal>
 
-      {/* ───────── 직군별 고민 ───────── */}
+      {/* ───────── Pain points by role ───────── */}
       <Reveal as="section" className="flex flex-col items-center gap-[60px] max-lg:gap-12 px-[60px] max-lg:px-8 max-sm:px-5 py-[100px] max-lg:py-[80px] max-sm:py-[64px]">
         <h2 className="text-center text-[50px] max-md:text-[30px] max-sm:text-[24px] font-bold leading-[1.4] tracking-[-1.25px]">
           <span className="text-navy-500">
@@ -681,7 +681,7 @@ export default function Home() {
                 }}
               />
 
-              {/* 자세히 보기 — top right */}
+              {/* Learn more — top right */}
               <span className="relative z-10 inline-flex items-center gap-[2px] rounded-[20px] bg-black/20 px-[10px] py-[6px] text-sm font-medium leading-[1.4] tracking-[-0.35px] text-white transition-colors group-hover:bg-black/50">
                 {t('자세히 보기', 'Learn more')}
                 <ArrowUpRight size={20} strokeWidth={2} className="group-hover:hidden" />
@@ -745,7 +745,7 @@ export default function Home() {
         </div>
       </Reveal>
 
-      {/* ───────── 영상을 옮기지 않고 ───────── */}
+      {/* ───────── Analyze in place ───────── */}
       <section className="flex flex-col items-center px-[60px] max-lg:px-8 max-sm:px-5 pb-[200px] pt-[100px] max-lg:pb-[100px] max-lg:pt-[80px] max-sm:pb-[72px] max-sm:pt-[64px]">
         <FeatureShowcase />
       </section>

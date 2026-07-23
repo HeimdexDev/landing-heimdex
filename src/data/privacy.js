@@ -1,4 +1,4 @@
-// 하임덱스(HEIMDEX) 개인정보 처리방침 — Figma 1520:31692 전문
+// HEIMDEX Privacy Policy — Figma 1520:31692 full text
 // block types: { p } paragraph · { ol } numbered list · { ul } bullet list
 // list items may be a string or { t, sub: [...] } for nested bullets.
 

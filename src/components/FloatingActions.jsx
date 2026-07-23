@@ -4,7 +4,7 @@ import { ArrowUp, MessageSquareText } from 'lucide-react'
 import { useLang } from '../i18n/LanguageContext.jsx'
 
 /**
- * Floating scroll-to-top + 문의하기 widget (Figma 1540:46922).
+ * Floating scroll-to-top + Contact widget (Figma 1540:46922).
  * Appears once the user has scrolled past one full viewport height.
  * Mounted globally so it shows on every page.
  */
@@ -39,7 +39,7 @@ export default function FloatingActions() {
         <ArrowUp size={24} className="text-grayscale-800" />
       </button>
 
-      {/* 문의하기 */}
+      {/* Contact */}
       <div className="flex flex-col items-center gap-1">
         <Link
           to="/contact"

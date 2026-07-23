@@ -63,7 +63,7 @@ export function EditorView({ card, img }) {
   const [showPopup, setShowPopup] = useState(false)
 
   // One-shot editor demo: zoom into the timeline, pan, pick a scene box,
-  // delete it via the trash button, then press 저장하기.
+  // delete it via the trash button, then press Save.
   useEffect(() => {
     let cancelled = false
     const wait = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -110,7 +110,7 @@ export function EditorView({ card, img }) {
       setSelSeg(null)
       await wait(900)
       if (cancelled) return
-      // 6) camera pulls back up to the header; cursor travels to 저장하기
+      // 6) camera pulls back up to the header; cursor travels to the save button
       setCam({ scale: 1, x: 0, y: 0 })
       const sv = aim(saveRef.current)
       if (sv) setCursor({ ...sv, visible: true })
@@ -121,7 +121,7 @@ export function EditorView({ card, img }) {
       if (cancelled) return
       setSavePressed(false)
       setCursor((c) => ({ ...c, visible: false }))
-      // 7) "저장이 완료되었습니다" popup appears centered
+      // 7) "Save complete" popup appears centered
       await wait(450)
       if (!cancelled) setShowPopup(true)
     })()
@@ -296,7 +296,7 @@ export function EditorView({ card, img }) {
                 </span>
               </div>
               <div className="h-px w-full bg-neutral-100" />
-              {/* 변형 + 윤곽선 */}
+              {/* Transform + Outline */}
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-[10px]">
                   <p className="text-[14px] font-semibold tracking-[-0.35px] text-grayscale-800">
@@ -335,14 +335,14 @@ export function EditorView({ card, img }) {
                   </div>
                 </div>
               </div>
-              {/* 불투명도 */}
+              {/* Opacity */}
               <div className="flex flex-col gap-[10px]">
                 <p className="text-[14px] font-semibold tracking-[-0.35px] text-grayscale-800">
                   {t('불투명도', 'Opacity')}
                 </p>
                 <PanelSlider value="100%" percent={100} />
               </div>
-              {/* 그림자 */}
+              {/* Shadow */}
               <div className="flex flex-col gap-[10px]">
                 <p className="text-[14px] font-semibold tracking-[-0.35px] text-grayscale-800">
                   {t('그림자', 'Shadow')}
@@ -479,7 +479,7 @@ export function EditorView({ card, img }) {
   )
 }
 
-// "저장이 완료되었습니다" modal (Figma 2107:410685), centered in the visible frame.
+// "Save complete" modal (Figma 2107:410685), centered in the visible frame.
 export function SavePopup() {
   const { t } = useLang()
   return (

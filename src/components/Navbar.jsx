@@ -11,7 +11,7 @@ const NAV = [
   { key: 'contact', label: '문의', en: 'Contact', to: '/contact' },
 ]
 
-// Industry solutions shown in the "제품" mega-menu (label + caption).
+// Industry solutions shown in the "Product" mega-menu (label + caption).
 const PRODUCT_MENU = [
   {
     label: '로펌·수사',
@@ -71,7 +71,7 @@ export default function Navbar() {
   const headerWhite = open ? menuDark : heroLook
 
   // Debounced open/close so moving the cursor across the small gap between the
-  // "제품" trigger and the dropdown (which lives outside the header) doesn't flicker.
+  // "Product" trigger and the dropdown (which lives outside the header) doesn't flicker.
   const openMenu = () => {
     clearTimeout(closeTimer.current)
     setProductOpen(true)
@@ -247,7 +247,7 @@ export default function Navbar() {
                   const cls = `flex items-center py-4 text-[22px] font-semibold leading-[1.3] tracking-[-0.5px] ${
                     menuDark ? 'text-white' : 'text-grayscale-800'
                   }`
-                  // "제품" expands into the three solution sub-items.
+                  // "Product" expands into the three solution sub-items.
                   if (item.key === 'product') {
                     return (
                       <div key={item.key}>

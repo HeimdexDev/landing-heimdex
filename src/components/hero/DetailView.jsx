@@ -3,7 +3,7 @@ import { useLang } from '../../i18n/LanguageContext.jsx'
 import { SPEAKER_COLOR } from './constants.js'
 import { FakeCursor } from './atoms.jsx'
 
-// Speaker badge colors (A red, B green) — matches Figma 화자 component.
+// Speaker badge colors (A red, B green) — matches Figma speaker component.
 
 export function ScriptRow({ speaker, time, text }) {
   return (
@@ -78,7 +78,7 @@ export function SceneCard({ img, label, range, dur, summary, selected, checkRef,
 }
 
 // Video detail screen — left player + metadata (shared), right is a tabbed panel:
-// 개요 (행동 요약 + 스크립트) ↔ 장면 분석 (search + result list of SceneCards).
+// overview (action summary + transcript) ↔ scene analysis (search + result list of SceneCards).
 export function DetailView({
   card,
   detail,
@@ -166,7 +166,7 @@ export function DetailView({
         </div>
 
         {tab === 'scene' ? (
-          /* ── 장면 분석 ── */
+          /* ── Scene Analysis ── */
           <div className="flex flex-col gap-[20px]">
             {/* search bar */}
             <div className="flex items-center gap-[10px] rounded-[10px] border border-neutral-300 px-[16px] py-[12px]">
@@ -220,7 +220,7 @@ export function DetailView({
             </div>
           </div>
         ) : (
-          /* ── 개요 ── */
+          /* ── Overview ── */
           <div className="flex flex-col gap-[32px]">
             <div className="flex flex-col gap-[20px]">
               <div className="flex items-center gap-[10px]">
@@ -256,7 +256,7 @@ export function DetailView({
           </div>
         )}
 
-        {/* cursor that clicks the 장면 분석 tab / 선택 장면 편집 button */}
+        {/* cursor that clicks the scene-analysis tab / edit-selected-scene button */}
         <FakeCursor x={tabCursor.x} y={tabCursor.y} visible={tabCursor.visible} dur={tabCursor.dur} />
       </div>
     </div>
