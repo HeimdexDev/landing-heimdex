@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { Fragment, useState, useRef, useEffect } from 'react'
 import Link from '../i18n/Link.jsx'
 import {
   ArrowUp,
@@ -20,6 +20,13 @@ const LOGOS = [
   { src: '/assets/logo-chxxta.png', w: 200 },
   { src: '/assets/logo-kibo.png', w: 120 },
   { src: '/assets/logo-nvidia-inception.png', w: 139 },
+  // widths tuned to the same rendered-height convention as above (compact ~60px,
+  // wide wordmarks a touch shorter so they don't dominate the row)
+  // h = desktop height, mCls = mobile height override (base 34px). 0.8× / 1.5×.
+  { src: '/assets/logo-kt.png', w: 59, h: 48, mCls: 'max-sm:!h-[27px]' },
+  { src: '/assets/logo-lg-hellovision.png', w: 260 },
+  { src: '/assets/logo-livenow.png', w: 175, h: 90, mCls: 'max-sm:!h-[51px]' },
+  { src: '/assets/logo-samsung-fire.png', w: 137 },
 ]
 
 const CARDS = [
@@ -629,19 +636,21 @@ export default function Home() {
           Trusted by
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8 max-sm:gap-x-3 max-sm:gap-y-6">
-          {/* On phones each logo takes ~30% width → exactly 3 per row (3 + 2) */}
-          {LOGOS.map((logo) => (
-            <div
-              key={logo.src}
-              className="flex items-center justify-center max-sm:w-[30%]"
-            >
-              <img
-                src={logo.src}
-                alt=""
-                style={{ width: logo.w }}
-                className="h-[60px] object-contain max-sm:!h-[34px] max-sm:!w-full"
-              />
-            </div>
+          {/* On phones each logo takes ~30% width → 3 per row */}
+          {LOGOS.map((logo, i) => (
+            <Fragment key={logo.src}>
+              {/* force the 4 newly-added logos (KT onward) onto their own row,
+                  desktop only — mobile keeps its natural 3-per-row flow */}
+              {i === 5 && <div aria-hidden className="w-full max-sm:hidden" />}
+              <div className="flex items-center justify-center max-sm:w-[30%]">
+                <img
+                  src={logo.src}
+                  alt=""
+                  style={{ width: logo.w, height: logo.h ?? 60 }}
+                  className={`object-contain max-sm:!w-full ${logo.mCls ?? 'max-sm:!h-[34px]'}`}
+                />
+              </div>
+            </Fragment>
           ))}
         </div>
       </Reveal>
