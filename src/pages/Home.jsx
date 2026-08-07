@@ -1,4 +1,4 @@
-import { Fragment, useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from '../i18n/Link.jsx'
 import {
   ArrowUp,
@@ -14,19 +14,18 @@ import HeroAppMockup from '../components/HeroAppMockup.jsx'
 import Reveal from '../components/Reveal.jsx'
 import { useLang } from '../i18n/LanguageContext.jsx'
 
+// All source files are normalized to a uniform height, so every logo renders at
+// the same CSS height with auto width — no per-logo tuning needed.
 const LOGOS = [
-  { src: '/assets/logo-1.png', w: 144 },
-  { src: '/assets/logo-yonsei.png', w: 144 },
-  { src: '/assets/logo-chxxta.png', w: 200 },
-  { src: '/assets/logo-kibo.png', w: 120 },
-  { src: '/assets/logo-nvidia-inception.png', w: 139 },
-  // widths tuned to the same rendered-height convention as above (compact ~60px,
-  // wide wordmarks a touch shorter so they don't dominate the row)
-  // h = desktop height, mCls = mobile height override (base 34px). 0.8× / 1.5×.
-  { src: '/assets/logo-kt.png', w: 59, h: 48, mCls: 'max-sm:!h-[27px]' },
-  { src: '/assets/logo-lg-hellovision.png', w: 260 },
-  { src: '/assets/logo-livenow.png', w: 175, h: 90, mCls: 'max-sm:!h-[51px]' },
-  { src: '/assets/logo-samsung-fire.png', w: 137 },
+  '/assets/logo-antler.png',
+  '/assets/logo-yonsei.png',
+  '/assets/logo-chxxta.png',
+  '/assets/logo-kibo.png',
+  '/assets/logo-nvidia.png',
+  '/assets/logo-kt.png',
+  '/assets/logo-lg.png',
+  '/assets/logo-livenow.png',
+  '/assets/logo-samsung.png',
 ]
 
 const CARDS = [
@@ -635,23 +634,28 @@ export default function Home() {
         <p className="font-product text-2xl font-medium tracking-[0.02em] text-grayscale-800">
           Trusted by
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8 max-sm:gap-x-3 max-sm:gap-y-6">
-          {/* On phones each logo takes ~30% width → 3 per row */}
-          {LOGOS.map((logo, i) => (
-            <Fragment key={logo.src}>
-              {/* force the 4 newly-added logos (KT onward) onto their own row,
-                  desktop only — mobile keeps its natural 3-per-row flow */}
-              {i === 5 && <div aria-hidden className="w-full max-sm:hidden" />}
-              <div className="flex items-center justify-center max-sm:w-[30%]">
-                <img
-                  src={logo.src}
-                  alt=""
-                  style={{ width: logo.w, height: logo.h ?? 60 }}
-                  className={`object-contain max-sm:!w-full ${logo.mCls ?? 'max-sm:!h-[34px]'}`}
-                />
-              </div>
-            </Fragment>
-          ))}
+        {/* Single-row marquee scrolling right → left. Two copies + translateX(-50%)
+            makes the loop seamless; each logo carries its own right margin so the
+            50% shift lands exactly one copy forward. */}
+        <style>{`
+          @keyframes tbMarquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+          @media (prefers-reduced-motion: reduce) { .tb-marquee { animation: none !important } }
+        `}</style>
+        <div className="w-screen max-w-none overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)]">
+          <div
+            className="tb-marquee flex w-max items-center hover:[animation-play-state:paused]"
+            style={{ animation: 'tbMarquee 50s linear infinite' }}
+          >
+            {[...LOGOS, ...LOGOS].map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt=""
+                aria-hidden={i >= LOGOS.length || undefined}
+                className="mr-[120px] h-[60px] w-auto shrink-0 object-contain max-sm:mr-[64px] max-sm:h-[36px]"
+              />
+            ))}
+          </div>
         </div>
       </Reveal>
 
