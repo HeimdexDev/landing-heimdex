@@ -20,24 +20,43 @@ const ICONS = { clock: ClockArrowDown, brain: BrainCircuit, shield: ShieldCheck 
 // The heimlog demo is the largest module in the app and only the vlog tab draws
 // it, so it ships as its own chunk instead of riding in every page's bundle.
 const loadHeimlogDemo = () => import('../components/HeimlogDemo.jsx')
-// One retry covers a network blip. React caches a rejected lazy() for the rest of
-// the session, so without it a single failed fetch would empty the tab for good.
-const HeimlogDemo = lazy(() => loadHeimlogDemo().catch(() => loadHeimlogDemo()))
 
 // A lazy chunk can fail to load — almost always a tab opened before a deploy,
 // asking for a chunk hash that no longer exists, which the SPA rewrite answers
-// with index.html. Without a boundary that error unmounts the whole page. With
-// one, the frame stays empty and the page reloads ONCE per session to pick up the
-// new build (the URL keeps ?tab=vlog). Deliberately not a global
+// with index.html. React caches that rejection for the rest of the document, so
+// only a reload recovers (the URL keeps ?tab=vlog). The boundary below does it
+// ONCE: the key is set before reloading, so a chunk that is really gone stops
+// after one try, and it is cleared after every clean load, so the next deploy in
+// the same tab is recovered too. Only a CHUNK failure reloads — a render error
+// would recur, so it just leaves the frame empty. Deliberately not a global
 // `vite:preloadError` listener: that also fires for the silent prefetch on the
 // other tabs, and would reload a page the reader is in the middle of.
 const RELOAD_KEY = 'heimlog-demo-reloaded'
+let chunkFailed = false
+const HeimlogDemo = lazy(() =>
+  loadHeimlogDemo().then(
+    (mod) => {
+      try {
+        sessionStorage.removeItem(RELOAD_KEY)
+      } catch {
+        // storage blocked: nothing to re-arm
+      }
+      return mod
+    },
+    (err) => {
+      chunkFailed = true
+      throw err
+    },
+  ),
+)
+
 class DemoBoundary extends Component {
   state = { failed: false }
   static getDerivedStateFromError() {
     return { failed: true }
   }
   componentDidCatch() {
+    if (!chunkFailed) return
     try {
       if (sessionStorage.getItem(RELOAD_KEY)) return
       sessionStorage.setItem(RELOAD_KEY, '1')
