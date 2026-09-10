@@ -78,8 +78,39 @@ const PICKS = ['먹거리', '풍경']
 
 // The account's balance, and what this batch leaves of it. Stated once so the
 // rail card, the dialog's 잔여 and the cost never drift apart.
+//
+// Priced the way heimlog prices it: ceil(combined minutes) over the PLACED clips
+// only — the 촬영 정보 없음 column is "분석에 포함되지 않아요", so it is neither
+// counted nor charged (heimlog `credit-policy.ts`, `UploadScreen` analysable).
 const CREDIT_BALANCE = 200
-const CREDIT_COST = CLIP_TOTAL * 3
+const lenMs = (len) => {
+  // m:ss only. A bad length throws in dev, where whoever edited DAYS sees it at
+  // once; in production (no CI evaluates this module) it logs and counts as 0
+  // rather than emptying the demo frame on every visit.
+  const hit = /^(\d+):([0-5]\d)$/.exec(len)
+  if (!hit) {
+    const msg = `HeimlogDemo: clip length must be m:ss, got "${len}"`
+    if (import.meta.env.DEV) throw new Error(msg)
+    console.error(msg)
+    return 0
+  }
+  return (Number(hit[1]) * 60 + Number(hit[2])) * 1000
+}
+const clipsMs = (clips) => clips.reduce((n, c) => n + lenMs(c.len), 0)
+const creditsFor = (ms) => (ms > 0 ? Math.ceil(ms / 60000) : 0)
+const PLACED_CLIPS = DAYS.flatMap((d) => d.clips)
+const PLACED_MS = clipsMs(PLACED_CLIPS)
+const CREDIT_COST = creditsFor(PLACED_MS)
+// heimlog's formatKoreanDuration, for the dialog's length line.
+const PLACED_DURATION = (() => {
+  const t = Math.floor(PLACED_MS / 1000)
+  const h = Math.floor(t / 3600)
+  const m = Math.floor(t / 60) % 60
+  const s = t % 60
+  if (h > 0) return `${h}시간 ${m}분 ${s}초`
+  if (m > 0) return `${m}분 ${s}초`
+  return `${s}초`
+})()
 
 // The faces the blur analysis comes back with — frames cut out of this project's
 // own footage. 블러3 and 블러5 are the 주요 인물 it elected to leave alone, which is
@@ -338,11 +369,12 @@ function UploadView({ staged, analyzeRef, pressed }) {
           <span className="truncate text-[20px] font-semibold text-white">제주도 여행 3일차</span>
         </div>
         <div className="flex shrink-0 items-center gap-[10px]">
-          {/* 사용될 크레딧 — it prices what is staged, so it climbs with the list. */}
+          {/* 사용될 크레딧 — it prices what is placed, so it climbs with the dated
+              list and holds while the 촬영 정보 없음 clips upload. */}
           <span className="flex h-[44px] items-center gap-[10px] rounded-full border border-[#7b7b7b] px-[20px]">
             {creditMark(28)}
             <span className="text-[24px] font-semibold tracking-[-0.48px] text-[#ff7a66]">
-              {staged * 3}
+              {creditsFor(clipsMs(PLACED_CLIPS.slice(0, placed)))}
             </span>
             <span className="text-[16px] font-medium tracking-[-0.32px] text-[#c4c4c4]">
               크레딧 사용
@@ -546,9 +578,9 @@ function CreditsDialog({ mode, picked, themeRef, chipRefs, confirmRef, pressed }
               {CREDIT_COST} 크레딧 사용
             </p>
             <p className="flex items-center gap-[4px] whitespace-nowrap px-[2px] text-[12px] font-medium tracking-[-0.24px] text-[#d9d9d9]">
-              <span>1시간 12분</span>
+              <span>{PLACED_DURATION}</span>
               <span>·</span>
-              <span>클립 {CLIP_TOTAL}개</span>
+              <span>클립 {PLACED_TOTAL}개</span>
               <span>·</span>
               <span>잔여 {CREDIT_BALANCE - CREDIT_COST} 크레딧</span>
             </p>

@@ -44,7 +44,7 @@ export const SOLUTIONS = {
     faq: [
       {
         q: '촬영본이 많아도 한 번에 편집할 수 있나요?',
-        a: '파일 1개 당 5G, 총 200분 분량까지 한 번에 분석 가능해요. AI가 각 영상에서 활용할 만한 장면을 찾아 브이로그 초안으로 구성합니다.',
+        a: '파일 1개당 5GB, 한 프로젝트에 총 90분(최대 30GB) 분량까지 한 번에 분석 가능해요. AI가 각 영상에서 활용할 만한 장면을 찾아 브이로그 초안으로 구성합니다.',
       },
       {
         q: '어떤 방식으로 브이로그를 만들 수 있나요?',
@@ -52,7 +52,7 @@ export const SOLUTIONS = {
       },
       {
         q: '자동으로 만든 영상도 직접 수정할 수 있나요?',
-        a: '네, 가능해요. AI가 만든 초안을 확인한 뒤 필요한 장면과 자막을 직접 수정할 수 있습니다. 그리고 저작권 없는 BGM까지 원스탑으로 넣을 수 있어요.',
+        a: '네, 가능해요. AI가 만든 초안을 확인한 뒤 필요한 장면과 자막을 직접 수정할 수 있습니다. 그리고 상업적으로 쓸 수 있는 무료 BGM(출처 표기 필요)까지 원스탑으로 넣을 수 있어요.',
       },
       {
         q: '자막은 자동으로 생성되나요?',
@@ -258,7 +258,7 @@ export const SOLUTIONS_EN = {
     title: ['Vlog Creators'],
     subtitle: 'Footage you piled up becomes a finished vlog in 30 minutes.',
     ctaLabel: 'Make a Vlog',
-    ctaHref: 'https://heimlog.heimdex.co/projects/new',
+    ctaHref: 'https://heimlog.heimdex.co/en/projects/new',
     media: [
       { step: '01', label: 'Scene Picking · Auto Edit' },
       { step: '02', label: 'Auto Subtitles' },
@@ -286,15 +286,15 @@ export const SOLUTIONS_EN = {
     faq: [
       {
         q: 'Can it handle a lot of footage in one go?',
-        a: 'Up to 5GB per file and 200 minutes in total can be analyzed at once. AI finds the usable scenes across each clip and assembles them into a first cut.',
+        a: 'Up to 5GB per file and 90 minutes (up to 30GB) per project can be analyzed at once. AI finds the usable scenes across each clip and assembles them into a first cut.',
       },
       {
         q: 'What editing styles can I choose from?',
-        a: 'Date-order editing, which keeps the flow of the shoot, and theme editing, which gathers the scenes you want. There are six themes — food, shopping, stays, sightseeing, scenery, and travel — and you can pick more than one.',
+        a: 'Date-order editing, which keeps the flow of the shoot, and theme editing, which gathers the scenes you want. There are six themes — food, shopping, stays, sightseeing, scenery, and getting around — and you can pick more than one.',
       },
       {
         q: 'Can I edit the auto-generated video myself?',
-        a: 'Yes. Review the first cut AI made, then adjust the scenes and subtitles yourself. You can also drop in royalty-free BGM in the same place.',
+        a: 'Yes. Review the first cut AI made, then adjust the scenes and subtitles yourself. You can also drop in free, commercial-use BGM (artist credit required) in the same place.',
       },
       {
         q: 'Are subtitles generated automatically?',
@@ -308,7 +308,7 @@ export const SOLUTIONS_EN = {
     cta: {
       title: 'Take that footage you never touched\nand make a vlog today',
       button: 'Start a Vlog',
-      href: 'https://heimlog.heimdex.co/projects/new',
+      href: 'https://heimlog.heimdex.co/en/projects/new',
     },
   },
 

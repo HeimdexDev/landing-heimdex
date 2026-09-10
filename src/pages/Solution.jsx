@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Component, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Link from '../i18n/Link.jsx'
 import {
@@ -13,10 +13,62 @@ import { TABS, SOLUTIONS, SOLUTIONS_EN } from '../data/solutions.js'
 import CtaBanner from '../components/CtaBanner.jsx'
 import Reveal from '../components/Reveal.jsx'
 import HeroAppMockup from '../components/HeroAppMockup.jsx'
-import HeimlogDemo from '../components/HeimlogDemo.jsx'
 import { useLang } from '../i18n/LanguageContext.jsx'
 
 const ICONS = { clock: ClockArrowDown, brain: BrainCircuit, shield: ShieldCheck }
+
+// The heimlog demo is the largest module in the app and only the vlog tab draws
+// it, so it ships as its own chunk instead of riding in every page's bundle.
+const loadHeimlogDemo = () => import('../components/HeimlogDemo.jsx')
+
+// A lazy chunk can fail to load — almost always a tab opened before a deploy,
+// asking for a chunk hash that no longer exists, which the SPA rewrite answers
+// with index.html. React caches that rejection for the rest of the document, so
+// only a reload recovers (the URL keeps ?tab=vlog). The boundary below does it
+// ONCE: the key is set before reloading, so a chunk that is really gone stops
+// after one try, and it is cleared after every clean load, so the next deploy in
+// the same tab is recovered too. Only a CHUNK failure reloads — a render error
+// would recur, so it just leaves the frame empty. Deliberately not a global
+// `vite:preloadError` listener: that also fires for the silent prefetch on the
+// other tabs, and would reload a page the reader is in the middle of.
+const RELOAD_KEY = 'heimlog-demo-reloaded'
+let chunkFailed = false
+const HeimlogDemo = lazy(() =>
+  loadHeimlogDemo().then(
+    (mod) => {
+      try {
+        sessionStorage.removeItem(RELOAD_KEY)
+      } catch {
+        // storage blocked: nothing to re-arm
+      }
+      return mod
+    },
+    (err) => {
+      chunkFailed = true
+      throw err
+    },
+  ),
+)
+
+class DemoBoundary extends Component {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  componentDidCatch() {
+    if (!chunkFailed) return
+    try {
+      if (sessionStorage.getItem(RELOAD_KEY)) return
+      sessionStorage.setItem(RELOAD_KEY, '1')
+    } catch {
+      return // storage blocked: no guard against a loop, so no reload either
+    }
+    window.location.reload()
+  }
+  render() {
+    return this.state.failed ? null : this.props.children
+  }
+}
 
 /**
  * A paragraph, one line per sentence.
@@ -333,6 +385,11 @@ function SolutionDemo({ tab }) {
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
+  // Start fetching the heimlog chunk as soon as the product page mounts, so a
+  // switch to the vlog tab from another tab does not wait on the network.
+  useEffect(() => {
+    loadHeimlogDemo().catch(() => {})
+  }, [])
   // The vlog tab is heimlog's product, not this dashboard, so it draws heimlog's
   // own 새 프로젝트 screen inside the same frame — a dark app, hence the ground.
   const heimlog = tab === 'vlog'
@@ -350,7 +407,12 @@ function SolutionDemo({ tab }) {
         {/* key={tab + lang} remounts the mockup on tab/language change so its
             animation timeline restarts with the new content. */}
         {heimlog ? (
-          <HeimlogDemo key={tab} />
+          // No fallback UI: the frame's own dark ground is the loading state.
+          <DemoBoundary>
+            <Suspense fallback={null}>
+              <HeimlogDemo key={tab} />
+            </Suspense>
+          </DemoBoundary>
         ) : (
         <HeroAppMockup
           key={tab + lang}
