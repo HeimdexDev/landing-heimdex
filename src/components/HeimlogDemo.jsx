@@ -84,12 +84,16 @@ const PICKS = ['먹거리', '풍경']
 // counted nor charged (heimlog `credit-policy.ts`, `UploadScreen` analysable).
 const CREDIT_BALANCE = 200
 const lenMs = (len) => {
-  const [m, s] = len.split(':').map(Number)
-  return (m * 60 + s) * 1000
+  // m:ss only — fail loud rather than price an `h:mm:ss` or heimlog's '—' as
+  // NaN credits the next time someone edits DAYS.
+  const hit = /^(\d+):([0-5]\d)$/.exec(len)
+  if (!hit) throw new Error(`HeimlogDemo: clip length must be m:ss, got "${len}"`)
+  return (Number(hit[1]) * 60 + Number(hit[2])) * 1000
 }
+const clipsMs = (clips) => clips.reduce((n, c) => n + lenMs(c.len), 0)
 const creditsFor = (ms) => (ms > 0 ? Math.ceil(ms / 60000) : 0)
 const PLACED_CLIPS = DAYS.flatMap((d) => d.clips)
-const PLACED_MS = PLACED_CLIPS.reduce((n, c) => n + lenMs(c.len), 0)
+const PLACED_MS = clipsMs(PLACED_CLIPS)
 const CREDIT_COST = creditsFor(PLACED_MS)
 // heimlog's formatKoreanDuration, for the dialog's length line.
 const PLACED_DURATION = (() => {
@@ -359,11 +363,12 @@ function UploadView({ staged, analyzeRef, pressed }) {
           <span className="truncate text-[20px] font-semibold text-white">제주도 여행 3일차</span>
         </div>
         <div className="flex shrink-0 items-center gap-[10px]">
-          {/* 사용될 크레딧 — it prices what is staged, so it climbs with the list. */}
+          {/* 사용될 크레딧 — it prices what is placed, so it climbs with the dated
+              list and holds while the 촬영 정보 없음 clips upload. */}
           <span className="flex h-[44px] items-center gap-[10px] rounded-full border border-[#7b7b7b] px-[20px]">
             {creditMark(28)}
             <span className="text-[24px] font-semibold tracking-[-0.48px] text-[#ff7a66]">
-              {creditsFor(PLACED_CLIPS.slice(0, placed).reduce((n, c) => n + lenMs(c.len), 0))}
+              {creditsFor(clipsMs(PLACED_CLIPS.slice(0, placed)))}
             </span>
             <span className="text-[16px] font-medium tracking-[-0.32px] text-[#c4c4c4]">
               크레딧 사용
