@@ -84,10 +84,16 @@ const PICKS = ['먹거리', '풍경']
 // counted nor charged (heimlog `credit-policy.ts`, `UploadScreen` analysable).
 const CREDIT_BALANCE = 200
 const lenMs = (len) => {
-  // m:ss only — fail loud rather than price an `h:mm:ss` or heimlog's '—' as
-  // NaN credits the next time someone edits DAYS.
+  // m:ss only. A bad length throws in dev, where whoever edited DAYS sees it at
+  // once; in production (no CI evaluates this module) it logs and counts as 0
+  // rather than emptying the demo frame on every visit.
   const hit = /^(\d+):([0-5]\d)$/.exec(len)
-  if (!hit) throw new Error(`HeimlogDemo: clip length must be m:ss, got "${len}"`)
+  if (!hit) {
+    const msg = `HeimlogDemo: clip length must be m:ss, got "${len}"`
+    if (import.meta.env.DEV) throw new Error(msg)
+    console.error(msg)
+    return 0
+  }
   return (Number(hit[1]) * 60 + Number(hit[2])) * 1000
 }
 const clipsMs = (clips) => clips.reduce((n, c) => n + lenMs(c.len), 0)
