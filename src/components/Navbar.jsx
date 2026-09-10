@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Link from '../i18n/Link.jsx'
-import { Menu, X, ArrowUpRight, ChevronDown } from 'lucide-react'
+import { Menu, X, ChevronDown } from 'lucide-react'
 import { useLang } from '../i18n/LanguageContext.jsx'
 
 const NAV = [
@@ -13,6 +13,13 @@ const NAV = [
 
 // Industry solutions shown in the "Product" mega-menu (label + caption).
 const PRODUCT_MENU = [
+  {
+    label: '브이로그 크리에이터',
+    en: 'Vlog Creators',
+    caption: '쌓여 있던 영상, 30분 만에 브이로그로',
+    captionEn: 'Piled-up footage, a vlog in 30 minutes',
+    to: '/product?tab=vlog',
+  },
   {
     label: '로펌·수사',
     en: 'Legal & Investigation',
@@ -167,21 +174,9 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Right action */}
+          {/* Right action — the language toggle alone. 웹에서 체험하기 moved to
+              the product page's tab row, beside the industry it applies to. */}
           <div className="flex flex-1 items-center justify-end gap-1 max-lg:hidden">
-            <a
-              href="https://playground.heimdex.co/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onMouseEnter={closeNow}
-              className={`flex h-10 items-center justify-center rounded-lg px-4 py-[10px] text-[15px] font-semibold transition-colors ${
-                heroLook
-                  ? 'text-[#e3edfb] hover:bg-white/10'
-                  : 'text-navy-500 hover:bg-navy-500/5'
-              }`}
-            >
-              {t('웹에서 체험하기', 'Try on Web')}
-            </a>
             {/* KOR / ENG language toggle */}
             <div
               onMouseEnter={closeNow}
@@ -334,19 +329,6 @@ export default function Navbar() {
                     ENG
                   </button>
                 </div>
-                {/* CTA — same style as the desktop header CTA */}
-                <a
-                  href="https://playground.heimdex.co/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setOpen(false)}
-                  className={`inline-flex items-center justify-center gap-1 rounded-lg px-4 py-[10px] text-[15px] font-semibold transition-colors ${
-                    menuDark ? 'text-[#e3edfb] hover:bg-white/10' : 'text-navy-500 hover:bg-navy-500/5'
-                  }`}
-                >
-                  {t('웹에서 체험하기', 'Try on Web')}
-                  <ArrowUpRight size={20} strokeWidth={2} />
-                </a>
               </div>
             </div>
           </div>
@@ -375,7 +357,7 @@ export default function Navbar() {
               : 'pointer-events-none -translate-y-3 opacity-0'
           }`}
         >
-        <div className="mx-auto flex w-full max-w-page items-center gap-16 px-[60px] py-10">
+        <div className="mx-auto flex w-full max-w-page items-center gap-10 px-[48px] py-10">
           {/* Left — blurb */}
           <div className="w-[300px] shrink-0">
             <p className={`text-sm leading-[1.6] ${heroLook ? 'text-[#e6eefb]' : 'text-navy-500'}`}>
@@ -392,14 +374,16 @@ export default function Navbar() {
               {t('각 산업별 사례를 통해 자세히 알아보세요.', 'Explore how it works for each industry.')}
             </p>
           </div>
-          {/* Right — 3 industry cards */}
-          <div className="grid flex-1 grid-cols-3 gap-3">
+          {/* Right — industry cards. One row on wide screens; below xl the row
+              would squeeze each caption to two or three words per line, so they
+              fold into a 2x2 instead. */}
+          <div className="grid flex-1 grid-cols-4 gap-2 max-xl:grid-cols-2">
             {PRODUCT_MENU.map((m) => (
               <Link
                 key={m.label}
                 to={m.to}
                 onClick={closeNow}
-                className={`group rounded-lg p-5 transition-colors ${
+                className={`group rounded-lg p-4 transition-colors ${
                   heroLook ? 'hover:bg-white/[0.06]' : 'hover:bg-softblue-50/40'
                 }`}
               >
@@ -411,11 +395,17 @@ export default function Navbar() {
                   {lang === 'en' ? m.en : m.label}
                 </p>
                 <p
-                  className={`mt-2 text-[13px] leading-[1.5] ${
+                  className={`mt-2 text-[12px] leading-[1.5] ${
                     heroLook ? 'text-[#c7d6ec]' : 'text-grayscale-500'
                   }`}
                 >
-                  {lang === 'en' ? m.captionEn : m.caption}
+                  {/* A caption carrying \n is written to a specific rhythm, so it
+                      breaks where the copy says; the rest wrap on their own. */}
+                  {(lang === 'en' ? m.captionEn : m.caption).split('\n').map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
                 </p>
               </Link>
             ))}

@@ -38,6 +38,28 @@ body {
   color: #272833;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Hangul counts as CJK, so the default `word-break: normal` lets a line end
+     between any two syllables — "결정적 단 / 서만". `keep-all` moves the break to
+     the spaces between 어절 instead, which is how Korean copy is meant to wrap,
+     and is most of why long paragraphs on this site read without a breath.
+     `break-word` is the escape hatch for a single token wider than the column
+     (a long URL, a filename), which `keep-all` would otherwise push out of it. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  /* `word-break` decides where a line MAY break; this decides which of those
+     breaks gets used, pulling a word down rather than leaving the last line of a
+     paragraph carrying one on its own. It inherits, so every block of copy gets
+     it. Headings opt into `balance` below instead. A browser without either
+     wraps the way it did. */
+  text-wrap: pretty;
+}
+
+/* A heading is short enough to be worth evening out end to end, rather than
+   filling the first line and letting the rest fall where it lands. */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
 }
 
 a {
@@ -187,5 +209,46 @@ a {
   }
   .btn-outline {
     @apply inline-flex items-center justify-center gap-1 rounded-lg border border-navy-500 px-6 py-5 text-base font-semibold text-navy-500 transition-colors hover:bg-navy-500/5;
+  }
+}
+
+/* The heimlog upload mockup fills its clip list on mount — the demo's one beat.
+   Each row carries its own --d so the stagger lives in the markup, not here. */
+@keyframes clip-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.clip-in {
+  animation: clip-in 420ms ease-out both;
+  animation-delay: var(--d, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clip-in {
+    animation: none;
+  }
+}
+
+@keyframes hl-indeterminate {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(420%);
+  }
+}
+.hl-indeterminate {
+  animation: hl-indeterminate 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hl-indeterminate {
+    animation: none;
   }
 }

@@ -13,9 +13,29 @@ import { TABS, SOLUTIONS, SOLUTIONS_EN } from '../data/solutions.js'
 import CtaBanner from '../components/CtaBanner.jsx'
 import Reveal from '../components/Reveal.jsx'
 import HeroAppMockup from '../components/HeroAppMockup.jsx'
+import HeimlogDemo from '../components/HeimlogDemo.jsx'
 import { useLang } from '../i18n/LanguageContext.jsx'
 
 const ICONS = { clock: ClockArrowDown, brain: BrainCircuit, shield: ShieldCheck }
+
+/**
+ * A paragraph, one line per sentence.
+ *
+ * The answers and the reason blurbs run two or three sentences, and set as one
+ * flowing block the reader gets no pause where the writer put one — which is
+ * what makes them read in a single long breath. The break goes at the full stop
+ * rather than at a width, so it lands the same way on every screen; the lines
+ * still wrap normally inside a sentence when the column is narrow.
+ *
+ * Lookbehind so the stop stays with the sentence it ends.
+ */
+function Sentences({ text }) {
+  return text.split(/(?<=[.!?])\s+/).map((line) => (
+    <span key={line} className="block">
+      {line}
+    </span>
+  ))
+}
 
 // Solution demos — reuse the home dashboard interaction (type a query → zoom out
 // to reveal results). Legal also navigates to a detail screen on a card click;
@@ -313,17 +333,25 @@ function SolutionDemo({ tab }) {
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
-  if (!cfg) return null
+  // The vlog tab is heimlog's product, not this dashboard, so it draws heimlog's
+  // own 새 프로젝트 screen inside the same frame — a dark app, hence the ground.
+  const heimlog = tab === 'vlog'
+  if (!cfg && !heimlog) return null
   const en = lang === 'en'
   return (
     <div
       ref={frameRef}
-      className="relative aspect-[1040/470] w-full overflow-hidden rounded-t-[20px] bg-white shadow-card ring-1 ring-grayscale-100 max-sm:rounded-t-[14px]"
+      className={`relative aspect-[1040/470] w-full overflow-hidden rounded-t-[20px] shadow-card ring-1 ring-grayscale-100 max-sm:rounded-t-[14px] ${
+        heimlog ? 'bg-[#262626]' : 'bg-white'
+      }`}
       style={{ transform: 'translateZ(0)', clipPath: `inset(0 round ${radius}px ${radius}px 0 0)` }}
     >
       <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}>
         {/* key={tab + lang} remounts the mockup on tab/language change so its
             animation timeline restarts with the new content. */}
+        {heimlog ? (
+          <HeimlogDemo key={tab} />
+        ) : (
         <HeroAppMockup
           key={tab + lang}
           query={en ? cfg.queryEn : cfg.query}
@@ -340,6 +368,7 @@ function SolutionDemo({ tab }) {
           sceneToggle={cfg.sceneToggle ?? false}
           sceneImages={cfg.sceneImages || null}
         />
+        )}
       </div>
     </div>
   )
@@ -388,7 +417,7 @@ function FaqAccordion({ items }) {
             >
               <div className="overflow-hidden">
                 <p className="pb-6 font-noto text-base leading-[1.7] tracking-[-0.4px] text-grayscale-500">
-                  {f.a}
+                  <Sentences text={f.a} />
                 </p>
               </div>
             </div>
@@ -408,7 +437,7 @@ function FaqAccordion({ items }) {
 export default function Solution() {
   const { lang, t } = useLang()
   const [params, setParams] = useSearchParams()
-  const tab = SOLUTIONS[params.get('tab')] ? params.get('tab') : 'legal'
+  const tab = SOLUTIONS[params.get('tab')] ? params.get('tab') : TABS[0].id
   const data = (lang === 'en' ? SOLUTIONS_EN : SOLUTIONS)[tab]
   // Tabs migrated to the new layout expose a `faq` array.
   const isNew = Array.isArray(data.faq)
@@ -444,9 +473,10 @@ export default function Solution() {
               <div className="flex flex-col items-center gap-2">
                 {/* in-page switcher across the three solution pages —
                     same pill style as the terms/privacy (Policy) page tabs */}
+                <div className="mb-6 flex items-center gap-3 max-sm:flex-col">
                 <div
                   ref={tabsRef}
-                  className="relative mb-6 inline-grid grid-cols-3 gap-1 rounded-full bg-white p-1 shadow-card"
+                  className="relative inline-grid grid-cols-4 gap-1 rounded-full bg-white p-1 shadow-card max-sm:grid-cols-2 max-sm:rounded-[28px]"
                 >
                   <span
                     aria-hidden
@@ -469,6 +499,7 @@ export default function Solution() {
                     )
                   })}
                 </div>
+                </div>
                 <h1 className="font-product text-[54px] font-bold leading-[1.3] text-grayscale-800 max-md:text-[40px] max-sm:text-[30px]">
                   {data.title.map((line) => (
                     <span key={line} className="block">
@@ -481,10 +512,42 @@ export default function Solution() {
                 {data.subtitle}
               </p>
             </div>
-            <Link to="/contact" className="btn-primary">
-              {t('한 달 무료신청', 'Start Free Trial')}
-              <ArrowUpRight size={20} strokeWidth={2} />
-            </Link>
+            {/* A tab may name its own action (the vlog page says "브이로그 만들기");
+                the rest fall back to the shared trial CTA. `data` is already
+                language-selected, so the label needs no t(). */}
+            <div className="flex items-center gap-3 max-sm:flex-col">
+              {data.ctaHref ? (
+                <a
+                  href={data.ctaHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary"
+                >
+                  {data.ctaLabel}
+                  <ArrowUpRight size={20} strokeWidth={2} />
+                </a>
+              ) : (
+                <Link to="/contact" className="btn-primary">
+                  {data.ctaLabel || t('한 달 무료신청', 'Start Free Trial')}
+                  <ArrowUpRight size={20} strokeWidth={2} />
+                </Link>
+              )}
+              {/* The playground runs the heimdex product, so it stands beside the
+                  trial on the three heimdex industries and not on the vlog tab,
+                  whose own CTA opens heimlog instead. btn-primary's box, its own
+                  colours. */}
+              {!data.ctaHref && (
+                <a
+                  href="https://playground.heimdex.co/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-navy-500/25 bg-white px-6 py-5 text-base font-semibold text-navy-500 shadow-card transition-colors hover:bg-softblue-50/60"
+                >
+                  {t('웹에서 체험하기', 'Try on Web')}
+                  <ArrowUpRight size={20} strokeWidth={2} />
+                </a>
+              )}
+            </div>
           </Reveal>
 
           {/* Grows to push the demo to the bottom, filling the viewport like home */}
@@ -609,8 +672,8 @@ export default function Solution() {
                         </span>
                       ))}
                     </h3>
-                    <p className="font-noto text-base leading-[1.7] tracking-[-0.4px] text-grayscale-500 [word-break:keep-all]">
-                      {r.desc}
+                    <p className="font-noto text-base leading-[1.7] tracking-[-0.4px] text-grayscale-500">
+                      <Sentences text={r.desc} />
                     </p>
                   </div>
                 ))}
@@ -702,7 +765,8 @@ export default function Solution() {
         {isNew ? (
           <CtaBanner
             title={data.cta.title}
-            primaryLabel={t('도입 문의', 'Get in Touch')}
+            primaryLabel={data.cta.button || t('도입 문의', 'Get in Touch')}
+            primaryHref={data.cta.href || null}
             outlineLabel={null}
           />
         ) : (

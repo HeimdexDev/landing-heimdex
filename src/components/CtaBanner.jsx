@@ -9,8 +9,17 @@ export default function CtaBanner({
   title,
   subtitle,
   primaryLabel = '한 달 무료신청',
+  primaryHref = null,
   outlineLabel = '웹에서 체험하기',
 }) {
+  // Most pages send the primary button to /contact; a page can instead point it
+  // at an external product URL, which needs a plain anchor rather than a Link.
+  // A page that names its own action can carry a longer label than the shared
+  // 도입 문의, so the button takes its width from the text rather than the
+  // 150/200 the paired buttons share — and never breaks it over two lines.
+  const primaryClass = outlineLabel
+    ? 'btn-primary w-[200px]'
+    : 'btn-primary whitespace-nowrap px-8'
   return (
     <section className="flex justify-center">
       <div
@@ -42,10 +51,22 @@ export default function CtaBanner({
             )}
           </div>
           <div className="flex items-start justify-center gap-5 max-sm:flex-wrap">
-            <Link to="/contact" className={`btn-primary ${outlineLabel ? 'w-[200px]' : 'w-[150px]'}`}>
-              {primaryLabel}
-              {outlineLabel && <ArrowUpRight size={20} strokeWidth={2} />}
-            </Link>
+            {primaryHref ? (
+              <a
+                href={primaryHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={primaryClass}
+              >
+                {primaryLabel}
+                <ArrowUpRight size={20} strokeWidth={2} />
+              </a>
+            ) : (
+              <Link to="/contact" className={primaryClass}>
+                {primaryLabel}
+                {outlineLabel && <ArrowUpRight size={20} strokeWidth={2} />}
+              </Link>
+            )}
             {outlineLabel && (
               <a
                 href="https://playground.heimdex.co/"

@@ -1,13 +1,75 @@
-// Verbatim copy for the three solution tabs, extracted from the Figma file.
+// Verbatim copy for the solution tabs, extracted from the Figma file.
 // Each page shares the same template; only the text differs.
 
 export const TABS = [
+  { id: 'vlog', label: 'for Vlogger' },
   { id: 'legal', label: 'for Legal' },
   { id: 'creative', label: 'for Creative' },
   { id: 'research', label: 'for Research' },
 ]
 
 export const SOLUTIONS = {
+  vlog: {
+    label: 'for Vlogger',
+    title: ['브이로그 크리에이터'],
+    subtitle: '쌓여 있던 영상이 30분 만에 브이로그로 자동 완성됩니다.',
+    // The vlog hero/CTA buttons name the action instead of the sales enquiry the
+    // other tabs use, and they open the heimlog app rather than /contact.
+    ctaLabel: '브이로그 만들기',
+    ctaHref: 'https://heimlog.heimdex.co/projects/new',
+    media: [
+      { step: '01', label: '장면 선별 · 자동 편집' },
+      { step: '02', label: '자막 자동 생성' },
+      { step: '03', label: '얼굴 자동 블러' },
+    ],
+    reasonsTitle: '찍어둔 일상을\n한 편의 브이로그로, 하임로그',
+    reasonsList: [
+      {
+        title: '장면을 고르는 일은\nAI에게',
+        desc: '쓸 장면을 찾으려고 촬영본을 다 돌려볼 필요 없어요. AI가 영상의 흐름과 장면을 분석해 브이로그에 어울리는 컷을 골라냅니다.',
+      },
+      {
+        title: '날짜순 또는 원하는\n테마로 자동 편집',
+        desc: '촬영한 순서대로 흐름을 살리거나, 원하는 테마의 장면만 모을 수 있어요. 편집 방식을 선택하면 AI가 쓸 만한 장면을 골라 브이로그 초안을 완성합니다.',
+      },
+      {
+        title: '영상 속 말소리를\n자막으로 자동 생성',
+        desc: '영상 속 대화나 카메라 앞에서 설명한 내용을 직접 받아 적을 필요 없어요. AI가 말소리를 인식해 장면에 맞는 자막을 자동으로 넣어줍니다.',
+      },
+      {
+        title: '얼굴을 분석해\n자동 블러 처리',
+        desc: '영상에 등장한 얼굴을 분석해 AI가 자동으로 블러를 적용합니다. 장면마다 가릴 인물을 찾아 반복해서 편집하는 수고를 줄여줍니다.',
+      },
+    ],
+    faq: [
+      {
+        q: '촬영본이 많아도 한 번에 편집할 수 있나요?',
+        a: '파일 1개 당 5G, 총 200분 분량까지 한 번에 분석 가능해요. AI가 각 영상에서 활용할 만한 장면을 찾아 브이로그 초안으로 구성합니다.',
+      },
+      {
+        q: '어떤 방식으로 브이로그를 만들 수 있나요?',
+        a: '촬영 흐름을 살리는 날짜순 편집과 원하는 장면을 모으는 테마별 편집을 지원합니다. 테마는 먹거리, 쇼핑, 숙소, 관광, 풍경, 이동 총 6가지가 있고 이 중 원하는 테마를 중복 선택도 가능해요.',
+      },
+      {
+        q: '자동으로 만든 영상도 직접 수정할 수 있나요?',
+        a: '네, 가능해요. AI가 만든 초안을 확인한 뒤 필요한 장면과 자막을 직접 수정할 수 있습니다. 그리고 저작권 없는 BGM까지 원스탑으로 넣을 수 있어요.',
+      },
+      {
+        q: '자막은 자동으로 생성되나요?',
+        a: '네, 영상 속 말소리를 인식해 장면에 맞는 자막을 자동으로 생성합니다. 여기서 ‘고급 자막 사용하기’ 기능을 활용하면 화자가 여러 명이거나 현장 잡음이 있는 영상에서도 안정적으로 동작하고 고유명사, 전문 용어, 빠른 발화에 대한 정확도를 높일 수 있어요.',
+      },
+      {
+        q: '영상 속 다른 사람의 얼굴도 가릴 수 있나요?',
+        a: '네, AI가 영상에 등장한 얼굴을 분석해서 자동으로 블러 처리합니다. 행인이 많이 나오거나, 가족 및 친구 얼굴을 블러 처리하고 싶다면 사용해보세요.',
+      },
+    ],
+    cta: {
+      title: '묵혀둔 영상으로 오늘 바로\n브이로그를 만들어보세요',
+      button: '브이로그 시작하기',
+      href: 'https://heimlog.heimdex.co/projects/new',
+    },
+  },
+
   legal: {
     label: 'for Legal',
     title: ['법률 · 수사'],
@@ -191,6 +253,65 @@ export const SOLUTIONS = {
 
 // English mirror of SOLUTIONS — same shape, swapped wholesale by language.
 export const SOLUTIONS_EN = {
+  vlog: {
+    label: 'for Vlogger',
+    title: ['Vlog Creators'],
+    subtitle: 'Footage you piled up becomes a finished vlog in 30 minutes.',
+    ctaLabel: 'Make a Vlog',
+    ctaHref: 'https://heimlog.heimdex.co/projects/new',
+    media: [
+      { step: '01', label: 'Scene Picking · Auto Edit' },
+      { step: '02', label: 'Auto Subtitles' },
+      { step: '03', label: 'Auto Face Blur' },
+    ],
+    reasonsTitle: 'The everyday you filmed,\nas one vlog — Heimlog',
+    reasonsList: [
+      {
+        title: 'Leave picking the scenes\nto the AI',
+        desc: 'No need to scrub through every take looking for the usable shots. AI reads the flow and the scenes and picks the cuts that suit a vlog.',
+      },
+      {
+        title: 'Auto-edited by date\nor by the theme you want',
+        desc: 'Keep the flow of the order you shot in, or gather only the scenes on a theme. Choose the editing style and AI picks the usable scenes and finishes a first cut.',
+      },
+      {
+        title: 'Speech in the footage,\nturned into subtitles',
+        desc: 'No transcribing the conversations or the pieces you narrated to camera. AI recognizes the speech and drops in subtitles that match each scene.',
+      },
+      {
+        title: 'Faces detected\nand blurred automatically',
+        desc: 'AI analyzes the faces that appear and applies blur on its own — sparing you the repeat pass of hunting for who to hide in every scene.',
+      },
+    ],
+    faq: [
+      {
+        q: 'Can it handle a lot of footage in one go?',
+        a: 'Up to 5GB per file and 200 minutes in total can be analyzed at once. AI finds the usable scenes across each clip and assembles them into a first cut.',
+      },
+      {
+        q: 'What editing styles can I choose from?',
+        a: 'Date-order editing, which keeps the flow of the shoot, and theme editing, which gathers the scenes you want. There are six themes — food, shopping, stays, sightseeing, scenery, and travel — and you can pick more than one.',
+      },
+      {
+        q: 'Can I edit the auto-generated video myself?',
+        a: 'Yes. Review the first cut AI made, then adjust the scenes and subtitles yourself. You can also drop in royalty-free BGM in the same place.',
+      },
+      {
+        q: 'Are subtitles generated automatically?',
+        a: 'Yes — speech in the footage is recognized and turned into subtitles that match each scene. Turning on “advanced subtitles” keeps it stable across multiple speakers and noisy locations, and raises accuracy on proper nouns, technical terms, and fast speech.',
+      },
+      {
+        q: 'Can I hide other people’s faces in the video?',
+        a: 'Yes. AI analyzes the faces that appear and blurs them automatically. Use it when passersby show up often, or when you want to blur family and friends.',
+      },
+    ],
+    cta: {
+      title: 'Take that footage you never touched\nand make a vlog today',
+      button: 'Start a Vlog',
+      href: 'https://heimlog.heimdex.co/projects/new',
+    },
+  },
+
   legal: {
     label: 'for Legal',
     title: ['Legal & Investigation'],
