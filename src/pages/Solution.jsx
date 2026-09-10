@@ -20,16 +20,31 @@ const ICONS = { clock: ClockArrowDown, brain: BrainCircuit, shield: ShieldCheck 
 // The heimlog demo is the largest module in the app and only the vlog tab draws
 // it, so it ships as its own chunk instead of riding in every page's bundle.
 const loadHeimlogDemo = () => import('../components/HeimlogDemo.jsx')
-const HeimlogDemo = lazy(loadHeimlogDemo)
+// One retry covers a network blip. React caches a rejected lazy() for the rest of
+// the session, so without it a single failed fetch would empty the tab for good.
+const HeimlogDemo = lazy(() => loadHeimlogDemo().catch(() => loadHeimlogDemo()))
 
-// A lazy chunk can fail to load — most often a tab opened before a deploy asking
-// for a chunk hash that no longer exists, which the SPA rewrite answers with
-// index.html. Without a boundary that error unmounts the whole page; with one,
-// the frame just stays empty.
+// A lazy chunk can fail to load — almost always a tab opened before a deploy,
+// asking for a chunk hash that no longer exists, which the SPA rewrite answers
+// with index.html. Without a boundary that error unmounts the whole page. With
+// one, the frame stays empty and the page reloads ONCE per session to pick up the
+// new build (the URL keeps ?tab=vlog). Deliberately not a global
+// `vite:preloadError` listener: that also fires for the silent prefetch on the
+// other tabs, and would reload a page the reader is in the middle of.
+const RELOAD_KEY = 'heimlog-demo-reloaded'
 class DemoBoundary extends Component {
   state = { failed: false }
   static getDerivedStateFromError() {
     return { failed: true }
+  }
+  componentDidCatch() {
+    try {
+      if (sessionStorage.getItem(RELOAD_KEY)) return
+      sessionStorage.setItem(RELOAD_KEY, '1')
+    } catch {
+      return // storage blocked: no guard against a loop, so no reload either
+    }
+    window.location.reload()
   }
   render() {
     return this.state.failed ? null : this.props.children
