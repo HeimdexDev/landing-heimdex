@@ -286,7 +286,7 @@ export const SOLUTIONS_EN = {
     faq: [
       {
         q: 'Can it handle a lot of footage in one go?',
-        a: 'Up to 5GB per file and 90 minutes (30GB) per project can be analyzed at once. AI finds the usable scenes across each clip and assembles them into a first cut.',
+        a: 'Up to 5GB per file and 90 minutes (up to 30GB) per project can be analyzed at once. AI finds the usable scenes across each clip and assembles them into a first cut.',
       },
       {
         q: 'What editing styles can I choose from?',
