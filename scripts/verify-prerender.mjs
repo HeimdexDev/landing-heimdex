@@ -7,6 +7,7 @@ import { existsSync, readFileSync } from 'node:fs'
 
 const DIST = new URL('../dist/', import.meta.url)
 const SITEMAP = new URL('../public/sitemap.xml', import.meta.url)
+const VERCEL = new URL('../vercel.json', import.meta.url)
 const ORIGIN = 'https://www.heimdex.co'
 
 // Per-route title copy is not written yet, so routes of one language still share
@@ -65,6 +66,20 @@ for (const loc of expectedLocs) {
 }
 for (const loc of sitemapLocs) {
   if (!expectedLocs.has(loc)) failures.push(`sitemap.xml: ${loc} is not a verified route`)
+}
+
+// Hosting config: a wildcard rewrite would answer every unknown URL with a 200 page
+// (a soft 404), and each rewrite must point at a file the build produced. Whether
+// the host really answers 404 can only be seen on a deployment.
+const noRoute = (msg) => failures.push(`vercel.json: ${msg}`)
+for (const { source, destination } of JSON.parse(readFileSync(VERCEL, 'utf8')).rewrites ?? []) {
+  if (source.includes('(')) noRoute(`wildcard rewrite ${source} turns unknown URLs into 200 pages`)
+  if (!existsSync(new URL(destination.slice(1), DIST))) noRoute(`${destination} is not in dist`)
+}
+const notFound = new URL('404.html', DIST)
+if (!existsSync(notFound)) failures.push('dist/404.html is missing')
+else if (!/<meta[^>]*name="robots"[^>]*noindex/.test(readFileSync(notFound, 'utf8'))) {
+  failures.push('dist/404.html is not noindex')
 }
 
 const hreflangSets = new Map()

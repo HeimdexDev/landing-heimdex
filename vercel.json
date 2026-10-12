@@ -3,21 +3,19 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install",
+  "redirects": [
+    { "source": "/ko", "destination": "/", "permanent": true },
+    { "source": "/ko/:path*", "destination": "/:path*", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/product", "destination": "/product/index.html" },
     { "source": "/contact", "destination": "/contact/index.html" },
     { "source": "/policy", "destination": "/policy/index.html" },
+    { "source": "/blog", "destination": "/index.html" },
     { "source": "/en", "destination": "/en/index.html" },
     { "source": "/en/product", "destination": "/en/product/index.html" },
     { "source": "/en/contact", "destination": "/en/contact/index.html" },
     { "source": "/en/policy", "destination": "/en/policy/index.html" },
-    {
-      "source": "/en/(.*)",
-      "destination": "/en/index.html"
-    },
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/en/blog", "destination": "/en/index.html" }
   ]
 }
