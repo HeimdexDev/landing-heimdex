@@ -4,10 +4,13 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "rewrites": [
-    {
-      "source": "/en",
-      "destination": "/en/index.html"
-    },
+    { "source": "/product", "destination": "/product/index.html" },
+    { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/policy", "destination": "/policy/index.html" },
+    { "source": "/en", "destination": "/en/index.html" },
+    { "source": "/en/product", "destination": "/en/product/index.html" },
+    { "source": "/en/contact", "destination": "/en/contact/index.html" },
+    { "source": "/en/policy", "destination": "/en/policy/index.html" },
     {
       "source": "/en/(.*)",
       "destination": "/en/index.html"
