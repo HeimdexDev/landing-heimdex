@@ -1,4 +1,6 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+import { useClientReady } from '../lib/useClientReady.js'
+import { useIsomorphicLayoutEffect } from '../lib/useIsomorphicLayoutEffect.js'
 import { useSearchParams } from 'react-router-dom'
 import { PRIVACY } from '../data/privacy.js'
 import { TERMS } from '../data/terms.js'
@@ -14,13 +16,15 @@ const TABS = [
 export default function Policy() {
   const { lang } = useLang()
   const [params, setParams] = useSearchParams()
-  const tab = DOCS[params.get('tab')] ? params.get('tab') : 'terms'
+  // The prerendered page is the terms tab; a ?tab= link switches right after hydration.
+  const clientReady = useClientReady()
+  const tab = clientReady && DOCS[params.get('tab')] ? params.get('tab') : 'terms'
   const doc = DOCS[tab]
 
   // Sliding tab indicator
   const tabsRef = useRef(null)
   const [pill, setPill] = useState({ left: 0, top: 0, width: 0, height: 0 })
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const measure = () => {
       const el = tabsRef.current?.querySelector('[data-active="true"]')
       if (el)

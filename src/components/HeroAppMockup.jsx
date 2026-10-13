@@ -5,6 +5,7 @@ import {
   ChevronsRight, RectangleHorizontal, RectangleVertical,
 } from 'lucide-react'
 import { useLang } from '../i18n/LanguageContext.jsx'
+import { useClientReady } from '../lib/useClientReady.js'
 import {
   QUERY, QUERY_EN, TITLES, TITLES_EN, STAGE_IMAGES,
   DEFAULT_PLACEHOLDER, DEFAULT_PLACEHOLDER_EN, SOURCE_CYCLE, SOURCES,
@@ -13,6 +14,10 @@ import { VideoCard, NavItem, FilterChip, FakeCursor } from './hero/atoms.jsx'
 import { DetailView } from './hero/DetailView.jsx'
 import { EditorView } from './hero/EditorView.jsx'
 import { SplitView } from './hero/SplitView.jsx'
+
+// Stand-ins for the current date and the random library stats while prerendering.
+const PRERENDER_DATE = new Date(2026, 0, 1)
+const PRERENDER_COUNTS = { videos: 128, folders: 8 }
 
 export default function HeroAppMockup({
   query = null,
@@ -44,7 +49,7 @@ export default function HeroAppMockup({
 
   // Dates reflect the current date so the mockup never looks stale.
   const pad = (n) => String(n).padStart(2, '0')
-  const today = new Date()
+  const today = useClientReady() ? new Date() : PRERENDER_DATE
   const weekAgo = new Date(today)
   weekAgo.setDate(today.getDate() - 7)
   const dateRange = `${weekAgo.getFullYear()}.${pad(weekAgo.getMonth() + 1)}.${pad(
@@ -53,10 +58,14 @@ export default function HeroAppMockup({
   const updatedAt = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`
 
   // Per-interaction random library stats — folders are far fewer than videos.
-  const [counts] = useState(() => ({
-    videos: 80 + Math.floor(Math.random() * 240), // ~80–319
-    folders: 4 + Math.floor(Math.random() * 14), // ~4–17
-  }))
+  // Fixed in the prerendered markup (random numbers cannot hydrate), then drawn once mounted.
+  const [counts, setCounts] = useState(PRERENDER_COUNTS)
+  useEffect(() => {
+    setCounts({
+      videos: 80 + Math.floor(Math.random() * 240), // ~80–319
+      folders: 4 + Math.floor(Math.random() * 14), // ~4–17
+    })
+  }, [])
 
   // ── Demo interaction state ──
   const [typed, setTyped] = useState('')
