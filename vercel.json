@@ -2,6 +2,7 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "trailingSlash": false,
   "installCommand": "npm install",
   "redirects": [
     { "source": "/ko", "destination": "/", "permanent": true },

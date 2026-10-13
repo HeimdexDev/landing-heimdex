@@ -108,6 +108,8 @@ if (existsSync(DIST)) {
 const noRoute = (msg) => failures.push(`vercel.json: ${msg}`)
 const vercel = JSON.parse(readFileSync(VERCEL, 'utf8'))
 const rewrites = vercel.rewrites ?? []
+// /product/ must resolve to /product so the canonical, the sitemap and the served URL agree.
+if (vercel.trailingSlash !== false) noRoute('trailingSlash must be false')
 // Legacy /ko URLs are still indexed; the host must send them to the unprefixed page.
 for (const [source, destination] of [['/ko', '/'], ['/ko/:path*', '/:path*']]) {
   const r = (vercel.redirects ?? []).find((x) => x.source === source)
@@ -130,8 +132,13 @@ for (const { path } of pages) {
 }
 const notFound = new URL('404.html', DIST)
 if (!existsSync(notFound)) failures.push('dist/404.html is missing')
-else if (!/<meta[^>]*name="robots"[^>]*noindex/.test(readFileSync(notFound, 'utf8'))) {
-  failures.push('dist/404.html is not noindex')
+else {
+  const html404 = readFileSync(notFound, 'utf8')
+  if (!/<meta[^>]*name="robots"[^>]*noindex/.test(html404)) failures.push('dist/404.html is not noindex')
+  // The shell is served for every unknown URL, so it must not name any page as canonical.
+  if (/<link[^>]*rel="(canonical|alternate)"/.test(html404)) {
+    failures.push('dist/404.html has a canonical or alternate link')
+  }
 }
 
 const hreflangSets = new Map()

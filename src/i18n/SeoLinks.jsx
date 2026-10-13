@@ -21,28 +21,48 @@ function setLink(rel, href, hreflang) {
   el.setAttribute('href', href)
 }
 
+function setMeta(selector, content) {
+  document.head.querySelector(selector)?.setAttribute('content', content)
+}
+
 // Tells Google which URL is canonical for this page and where its other-language
-// twin lives. Without this the /en pages read as duplicates of the Korean ones.
+// twin lives, and keeps the title, description and share-card tags in step with the
+// route after client-side navigation. Without this the /en pages read as duplicates
+// of the Korean ones. A URL that is not a route (the 404 shell) gets no canonical or
+// hreflang, so it never names itself as the page to index.
 export default function SeoLinks() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const bare = stripLangPrefix(pathname)
+    const lang = langFromPath(pathname)
+    // /product/ and /product are the same page.
+    const bare = stripLangPrefix(pathname).replace(/\/$/, '') || '/'
+    const meta = ROUTE_META[bare]?.[lang]
+
+    if (!meta) {
+      document.head
+        .querySelectorAll('link[rel="canonical"], link[rel="alternate"][hreflang]')
+        .forEach((el) => el.remove())
+      return
+    }
+
     const ko = ORIGIN + bare
     const en = ORIGIN + localizePath(bare, 'en')
-    const current = langFromPath(pathname) === 'en' ? en : ko
+    const current = lang === 'en' ? en : ko
 
     setLink('canonical', current)
     setLink('alternate', ko, 'ko')
     setLink('alternate', en, 'en')
     setLink('alternate', ko, 'x-default')
 
-    // Routes outside the table (404) keep whatever title the page already has.
-    const meta = ROUTE_META[bare]?.[langFromPath(pathname)]
-    if (meta) {
-      document.title = meta.title
-      document.head.querySelector('meta[name="description"]')?.setAttribute('content', meta.description)
-    }
+    document.title = meta.title
+    setMeta('meta[name="description"]', meta.description)
+    setMeta('meta[property="og:title"]', meta.title)
+    setMeta('meta[property="og:description"]', meta.description)
+    setMeta('meta[property="og:url"]', current)
+    setMeta('meta[property="og:locale"]', lang === 'en' ? 'en_US' : 'ko_KR')
+    setMeta('meta[name="twitter:title"]', meta.title)
+    setMeta('meta[name="twitter:description"]', meta.description)
   }, [pathname])
 
   return null

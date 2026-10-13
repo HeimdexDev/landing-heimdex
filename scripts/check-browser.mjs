@@ -70,6 +70,12 @@ const readHead = (page) =>
     return {
       title: document.title,
       description: document.querySelector('meta[name="description"]')?.content,
+      share: Object.fromEntries(
+        [...document.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]')].map((m) => [
+          m.getAttribute('property') ?? m.getAttribute('name'),
+          m.content,
+        ]),
+      ),
       canonical: links('link[rel="canonical"]'),
       alternates: Object.fromEntries(
         [...document.querySelectorAll('link[rel="alternate"][hreflang]')].map((l) => [l.hreflang, l.href]),
@@ -83,6 +89,17 @@ function expectHead(browser, where, head, route) {
   const canonical = ORIGIN + route
   if (head.title !== meta.title) fail(browser, where, `title is ${head.title}`)
   if (head.description !== meta.description) fail(browser, where, `description is ${head.description}`)
+  const share = {
+    'og:title': meta.title,
+    'og:description': meta.description,
+    'og:url': canonical,
+    'og:locale': langOf(route) === 'en' ? 'en_US' : 'ko_KR',
+    'twitter:title': meta.title,
+    'twitter:description': meta.description,
+  }
+  for (const [k, v] of Object.entries(share)) {
+    if (head.share[k] !== v) fail(browser, where, `${k} is ${head.share[k]}`)
+  }
   if (head.canonical.join() !== canonical) fail(browser, where, `canonical is [${head.canonical}]`)
   const want = { ko: ORIGIN + koPath, en: ORIGIN + enPathOf(koPath), 'x-default': ORIGIN + koPath }
   for (const [k, v] of Object.entries(want)) {
@@ -125,12 +142,35 @@ async function checkNavigation(browser, base) {
   await page.close()
 }
 
+// A trailing slash must not change the canonical, and an unknown URL (served as the
+// 404 shell) must not get a canonical or hreflang pointing at itself.
+async function checkEdgeUrls(browser, base) {
+  const name = browser.browserType().name()
+  for (const url of ['/product/', '/en/policy/']) {
+    const page = await browser.newPage()
+    await page.goto(base + url, { waitUntil: 'networkidle' })
+    await page.waitForTimeout(400)
+    expectHead(name, url, await readHead(page), url.replace(/\/$/, ''))
+    await page.close()
+  }
+  for (const url of ['/blog', '/en/foo']) {
+    const page = await browser.newPage()
+    await page.goto(base + url, { waitUntil: 'networkidle' })
+    await page.waitForTimeout(400)
+    const head = await readHead(page)
+    if (head.canonical.length) fail(name, url, `404 page has canonical [${head.canonical}]`)
+    if (Object.keys(head.alternates).length) fail(name, url, '404 page has hreflang links')
+    await page.close()
+  }
+}
+
 const server = await serve()
 const base = `http://127.0.0.1:${server.address().port}`
 for (const name of (process.env.BROWSERS ?? 'chromium').split(',')) {
   const browser = await engines[name].launch()
   await checkLoads(browser, base)
   await checkNavigation(browser, base)
+  await checkEdgeUrls(browser, base)
   await browser.close()
 }
 server.close()
