@@ -13,16 +13,15 @@ const DIST = new URL('../dist/', import.meta.url)
 const SSR_ENTRY = new URL('../dist-ssr/entry-server.js', import.meta.url)
 const ORIGIN = 'https://www.heimdex.co'
 
-const KO_TITLE = 'HEIMDEX — 영상 속 원하는 장면, 검색 한 줄로'
-const KO_DESC =
-  '업로드 없이, 시청 없이. 검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로 만들어 드립니다.'
+import { ROUTE_META } from '../src/data/routeMeta.js'
 
-const EN_TITLE = 'HEIMDEX — The scene you need, in a single search'
-const EN_DESC =
-  'No uploads, no watching. One search finds the scene you need — and even builds the short-form for you.'
+// The home copy is what index.html ships, so it doubles as the find-string when
+// the template is cloned per language and per route.
+const { title: KO_TITLE, description: KO_DESC } = ROUTE_META['/'].ko
+const { title: EN_TITLE, description: EN_DESC } = ROUTE_META['/'].en
 
 // Korean paths; the English twin of each lives under /en.
-const KO_PATHS = ['/', '/product', '/contact', '/policy']
+const KO_PATHS = Object.keys(ROUTE_META)
 
 // [find, replace, label] — every swap must match at least once, otherwise the
 // source template drifted and the English pages would silently ship Korean tags.
@@ -60,6 +59,14 @@ function headTags(koPath) {
   ].join('\n    ')
 }
 
+// Swaps the language shell's home title/description (title, og:*, twitter:*) for
+// the route's own.
+function withRouteMeta(html, koPath, lang) {
+  const { title, description } = ROUTE_META[koPath][lang]
+  const home = ROUTE_META['/'][lang]
+  return html.replaceAll(home.title, () => title).replaceAll(home.description, () => description)
+}
+
 async function write(file, html) {
   const url = new URL(file, DIST)
   await mkdir(new URL('./', url), { recursive: true })
@@ -81,7 +88,7 @@ for (const koPath of KO_PATHS) {
   for (const lang of ['ko', 'en']) {
     const path = lang === 'ko' ? koPath : enPath(koPath)
     const canonical = ORIGIN + path
-    const html = shells[lang]
+    const html = withRouteMeta(shells[lang], koPath, lang)
       .replace(EMPTY_ROOT, () => `<div id="root">${render(path)}</div>`)
       .replace(OG_URL, `<meta property="og:url" content="${canonical}" />`)
       .replace(

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { ROUTE_META } from '../data/routeMeta.js'
 import { langFromPath, localizePath, stripLangPrefix } from './LanguageContext.jsx'
 
 const ORIGIN = 'https://www.heimdex.co'
@@ -35,6 +36,13 @@ export default function SeoLinks() {
     setLink('alternate', ko, 'ko')
     setLink('alternate', en, 'en')
     setLink('alternate', ko, 'x-default')
+
+    // Routes outside the table (404) keep whatever title the page already has.
+    const meta = ROUTE_META[bare]?.[langFromPath(pathname)]
+    if (meta) {
+      document.title = meta.title
+      document.head.querySelector('meta[name="description"]')?.setAttribute('content', meta.description)
+    }
   }, [pathname])
 
   return null

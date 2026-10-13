@@ -10,10 +10,13 @@ const SITEMAP = new URL('../public/sitemap.xml', import.meta.url)
 const VERCEL = new URL('../vercel.json', import.meta.url)
 const ORIGIN = 'https://www.heimdex.co'
 
-// Per-route title copy is not written yet, so routes of one language still share
-// a title. Flip to true once each route has its own; until then the sharing is
-// reported as a warning instead of failing the build.
-const REQUIRE_UNIQUE_TITLES = false
+// Every route carries its own title and description; a shared one is a failure.
+// Set to false only to downgrade the title check to a warning while debugging.
+const REQUIRE_UNIQUE_TITLES = true
+
+// Search-result display limits the route copy must stay within (characters).
+const MAX_TITLE = 60
+const MAX_DESCRIPTION = 155
 
 // Korean path -> a phrase that must appear inside the rendered body, per language.
 // The product phrase is the first tab's heading; /product?tab=x renders that tab
@@ -51,6 +54,7 @@ function parse(html) {
   return {
     lang: html.match(/<html[^>]*\blang="([^"]*)"/)?.[1],
     title: html.match(/<title>([^<]*)<\/title>/)?.[1],
+    description: html.match(/<meta\s+name="description"\s+content="([^"]*)"/)?.[1],
     canonicals: links.filter((l) => l.rel === 'canonical').map((l) => l.href),
     alternates: links.filter((l) => l.rel === 'alternate' && l.hreflang),
     body: root.replace(/<[^>]*>/g, ' '),
@@ -85,6 +89,7 @@ else if (!/<meta[^>]*name="robots"[^>]*noindex/.test(readFileSync(notFound, 'utf
 
 const hreflangSets = new Map()
 const titles = new Map()
+const descriptions = new Map()
 
 for (const page of pages) {
   const own = ownFile(page.path)
@@ -101,6 +106,15 @@ for (const page of pages) {
 
   if (!doc.title) fail(page, 'no <title>')
   else titles.set(doc.title, [...(titles.get(doc.title) ?? []), page.path])
+
+  if (!doc.description) fail(page, 'no meta description')
+  else descriptions.set(doc.description, [...(descriptions.get(doc.description) ?? []), page.path])
+  if (doc.title && [...doc.title].length > MAX_TITLE) {
+    fail(page, `title is ${[...doc.title].length} chars, max ${MAX_TITLE}`)
+  }
+  if (doc.description && [...doc.description].length > MAX_DESCRIPTION) {
+    fail(page, `description is ${[...doc.description].length} chars, max ${MAX_DESCRIPTION}`)
+  }
 
   const expectedCanonical = urlOf(page.path)
   if (doc.canonicals.length !== 1) fail(page, `${doc.canonicals.length} canonical links, want 1`)
@@ -127,6 +141,12 @@ for (const [title, paths] of titles) {
   const msg = `title "${title}" is shared by ${paths.join(', ')}`
   if (REQUIRE_UNIQUE_TITLES) failures.push(msg)
   else console.warn(`[verify-prerender] warning: ${msg}`)
+}
+
+for (const [description, paths] of descriptions) {
+  if (paths.length > 1) {
+    failures.push(`description "${description}" is shared by ${paths.join(', ')}`)
+  }
 }
 
 // Reciprocity: the page an alternate points at must point back at this one.
