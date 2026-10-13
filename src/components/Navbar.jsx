@@ -60,7 +60,6 @@ export default function Navbar() {
   // header should behave exactly like it does on '/'.
   const isNotFound =
     pathname !== '/' &&
-    pathname !== '/blog' &&
     !pathname.startsWith('/product') &&
     !pathname.startsWith('/contact') &&
     !pathname.startsWith('/policy')

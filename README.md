@@ -49,7 +49,6 @@ Client-side routes (React Router):
 - `/product` — Product / Solution page with tab switcher (`?tab=legal | creative | research`)
 - `/contact` — Contact / inquiry form (lead capture)
 - `/policy` — Terms & Privacy (`?tab=terms | privacy`)
-- `/blog` — Blog (links out to https://blog.heimdex.co/)
 
 ## Project Structure
 

@@ -73,6 +73,7 @@ for (const loc of sitemapLocs) {
 // the host really answers 404 can only be seen on a deployment.
 const noRoute = (msg) => failures.push(`vercel.json: ${msg}`)
 for (const { source, destination } of JSON.parse(readFileSync(VERCEL, 'utf8')).rewrites ?? []) {
+  if (source.includes('/blog')) noRoute(`${source} is a removed placeholder route`)
   if (source.includes('(')) noRoute(`wildcard rewrite ${source} turns unknown URLs into 200 pages`)
   if (!existsSync(new URL(destination.slice(1), DIST))) noRoute(`${destination} is not in dist`)
 }
