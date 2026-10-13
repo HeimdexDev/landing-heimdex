@@ -65,6 +65,11 @@ const META_TAGS = [
 
 // Writes the route's title and description into every tag above; a tag the
 // template no longer has stops the build.
+// Text goes into HTML attribute values and the <title> element, so the markup
+// characters are written as entities.
+const escapeHtml = (v) =>
+  v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
 function withRouteMeta(html, koPath, lang) {
   const meta = ROUTE_META[koPath][lang]
   let out = html
@@ -73,7 +78,7 @@ function withRouteMeta(html, koPath, lang) {
       console.error(`[prerender] template has no ${label} tag`)
       process.exit(1)
     }
-    out = out.replace(pattern, () => tag(meta[field]))
+    out = out.replace(pattern, () => tag(escapeHtml(meta[field])))
   }
   return out
 }
