@@ -111,7 +111,13 @@ const rewrites = vercel.rewrites ?? []
 // /product/ must resolve to /product so the canonical, the sitemap and the served URL agree.
 if (vercel.trailingSlash !== false) noRoute('trailingSlash must be false')
 // Legacy /ko URLs are still indexed; the host must send them to the unprefixed page.
-for (const [source, destination] of [['/ko', '/'], ['/ko/:path*', '/:path*']]) {
+const LEGACY_REDIRECTS = [['/ko', '/'], ['/ko/:path*', '/:path*']]
+for (const r of vercel.redirects ?? []) {
+  if (!LEGACY_REDIRECTS.some(([source]) => source === r.source)) noRoute(`unexpected redirect ${r.source}`)
+}
+// The legacy `routes` key would bypass rewrites and redirects entirely.
+if ('routes' in vercel) noRoute('"routes" must not be used; it overrides rewrites and redirects')
+for (const [source, destination] of LEGACY_REDIRECTS) {
   const r = (vercel.redirects ?? []).find((x) => x.source === source)
   if (!r) noRoute(`no redirect for ${source}`)
   else if (r.destination !== destination || r.permanent !== true) {
@@ -122,6 +128,12 @@ for (const { source, destination } of rewrites) {
   if (source.includes('/blog')) noRoute(`${source} is a removed placeholder route`)
   if (/[:*(]/.test(source)) noRoute(`pattern rewrite ${source} turns unknown URLs into 200 pages`)
   if (!existsSync(new URL(destination.slice(1), DIST))) noRoute(`${destination} is not in dist`)
+}
+// Rewrites are exactly the prerendered routes except `/`: an extra literal source
+// would answer that URL with a 200 page.
+const routePaths = new Set(pages.map((p) => p.path).filter((p) => p !== '/'))
+for (const { source } of rewrites) {
+  if (!routePaths.has(source)) noRoute(`rewrite ${source} is not a prerendered route`)
 }
 for (const { path } of pages) {
   if (path === '/') continue
