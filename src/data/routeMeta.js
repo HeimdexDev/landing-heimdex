@@ -1,7 +1,7 @@
 // Search-result title and description per public route, keyed by the Korean
 // path; each entry carries both languages. Read by scripts/prerender.mjs (static
 // <head>) and src/i18n/SeoLinks.jsx (client-side navigation), and bounded by
-// scripts/verify-prerender.mjs (title <= 60, description <= 155 characters).
+// scripts/verify-prerender.mjs (title 60, description 155 characters, as warnings).
 // Plain text: prerender escapes & < > " when it writes the HTML.
 export const ROUTE_META = {
   '/': {

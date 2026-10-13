@@ -15,7 +15,8 @@ const ORIGIN = 'https://www.heimdex.co'
 // Set to false only to downgrade the title check to a warning while debugging.
 const REQUIRE_UNIQUE_TITLES = true
 
-// Search-result display limits the route copy must stay within (characters).
+// Search-result display limits for the route copy (characters). Going over only
+// truncates the snippet, so it is a printed warning and never stops a deploy.
 const MAX_TITLE = 60
 const MAX_DESCRIPTION = 155
 
@@ -40,6 +41,7 @@ for (const { ko, phrase } of ROUTES) {
   if (!phrase) failures.push(`routeMeta: ${ko} has no body phrase in PHRASES`)
 }
 const fail = (page, msg) => failures.push(`${page.path}: ${msg}`)
+const warn = (page, msg) => console.warn(`[verify-prerender] warning: ${page.path}: ${msg}`)
 
 const urlOf = (path) => ORIGIN + path
 const fileOf = (path) => (path === '/' ? 'index.html' : `${path.slice(1)}/index.html`)
@@ -188,10 +190,10 @@ for (const page of pages) {
     if (got !== expected) fail(page, `${label} is ${JSON.stringify(got)}, want ${JSON.stringify(expected)}`)
   }
   if (doc.title && [...doc.title].length > MAX_TITLE) {
-    fail(page, `title is ${[...doc.title].length} chars, max ${MAX_TITLE}`)
+    warn(page, `title is ${[...doc.title].length} chars, max ${MAX_TITLE}`)
   }
   if (doc.description && [...doc.description].length > MAX_DESCRIPTION) {
-    fail(page, `description is ${[...doc.description].length} chars, max ${MAX_DESCRIPTION}`)
+    warn(page, `description is ${[...doc.description].length} chars, max ${MAX_DESCRIPTION}`)
   }
 
   if (doc.ogUrl !== urlOf(page.path)) fail(page, `og:url is ${doc.ogUrl}, want ${urlOf(page.path)}`)
