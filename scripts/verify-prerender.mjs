@@ -3,7 +3,8 @@
 // canonical and the ko/en/x-default hreflang set. Run after `vite build`:
 //   node scripts/verify-prerender.mjs
 // Exits 1 listing every violated check.
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { ROUTE_META } from '../src/data/routeMeta.js'
 
 const DIST = new URL('../dist/', import.meta.url)
 const SITEMAP = new URL('../public/sitemap.xml', import.meta.url)
@@ -18,22 +19,26 @@ const REQUIRE_UNIQUE_TITLES = true
 const MAX_TITLE = 60
 const MAX_DESCRIPTION = 155
 
-// Korean path -> a phrase that must appear inside the rendered body, per language.
-// The product phrase is the first tab's heading; /product?tab=x renders that tab
-// client-side only.
-const ROUTES = [
-  { ko: '/', phrase: { ko: '영상을 옮기지 않고,', en: 'No moving your video' } },
-  { ko: '/product', phrase: { ko: '브이로그 크리에이터', en: 'Vlog Creators' } },
-  { ko: '/contact', phrase: { ko: '데모 상담 신청', en: 'Request a Demo' } },
-  { ko: '/policy', phrase: { ko: '서비스 이용약관', en: 'Terms of Service' } },
-]
+// The route set is ROUTE_META (the same table prerender writes from). Each route
+// needs a phrase that must appear inside its rendered body, per language. The
+// product phrase is the first tab's heading; /product?tab=x renders client-side only.
+const PHRASES = {
+  '/': { ko: '영상을 옮기지 않고,', en: 'No moving your video' },
+  '/product': { ko: '브이로그 크리에이터', en: 'Vlog Creators' },
+  '/contact': { ko: '데모 상담 신청', en: 'Request a Demo' },
+  '/policy': { ko: '서비스 이용약관', en: 'Terms of Service' },
+}
+const ROUTES = Object.keys(ROUTE_META).map((ko) => ({ ko, phrase: PHRASES[ko] }))
 
 const pages = ROUTES.flatMap(({ ko, phrase }) => [
-  { lang: 'ko', path: ko, phrase: phrase.ko },
-  { lang: 'en', path: ko === '/' ? '/en' : `/en${ko}`, phrase: phrase.en },
+  { lang: 'ko', path: ko, phrase: phrase?.ko ?? '' },
+  { lang: 'en', path: ko === '/' ? '/en' : `/en${ko}`, phrase: phrase?.en ?? '' },
 ])
 
 const failures = []
+for (const { ko, phrase } of ROUTES) {
+  if (!phrase) failures.push(`routeMeta: ${ko} has no body phrase in PHRASES`)
+}
 const fail = (page, msg) => failures.push(`${page.path}: ${msg}`)
 
 const urlOf = (path) => ORIGIN + path
@@ -71,6 +76,18 @@ for (const loc of expectedLocs) {
 }
 for (const loc of sitemapLocs) {
   if (!expectedLocs.has(loc)) failures.push(`sitemap.xml: ${loc} is not a verified route`)
+}
+
+// Every HTML page the build shipped must be a verified route, so a route that is
+// prerendered but missing from the sitemap, the rewrites or this script cannot slip by.
+if (existsSync(DIST)) {
+  const known = new Set(pages.map((p) => fileOf(p.path)))
+  for (const rel of readdirSync(DIST, { recursive: true })) {
+    const file = String(rel).replaceAll('\\', '/')
+    if (file.endsWith('index.html') && !file.startsWith('assets/') && !known.has(file)) {
+      failures.push(`dist/${file} is a page that is not a verified route`)
+    }
+  }
 }
 
 // Hosting config: a rewrite whose source is a pattern would answer unknown URLs with
