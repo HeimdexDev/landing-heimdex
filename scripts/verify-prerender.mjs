@@ -31,8 +31,8 @@ const PHRASES = {
 const ROUTES = Object.keys(ROUTE_META).map((ko) => ({ ko, phrase: PHRASES[ko] }))
 
 const pages = ROUTES.flatMap(({ ko, phrase }) => [
-  { lang: 'ko', path: ko, phrase: phrase?.ko ?? '' },
-  { lang: 'en', path: ko === '/' ? '/en' : `/en${ko}`, phrase: phrase?.en ?? '' },
+  { lang: 'ko', ko, path: ko, phrase: phrase?.ko ?? '' },
+  { lang: 'en', ko, path: ko === '/' ? '/en' : `/en${ko}`, phrase: phrase?.en ?? '' },
 ])
 
 const failures = []
@@ -48,19 +48,28 @@ const ownFile = (path) => new URL(fileOf(path), DIST)
 const fallbackFile = (path) =>
   new URL(path === '/en' || path.startsWith('/en/') ? 'en/index.html' : 'index.html', DIST)
 
+const ENTITIES = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" }
+const decode = (v) => v.replace(/&(?:amp|lt|gt|quot|#39);/g, (e) => ENTITIES[e])
+
 function attrs(tag) {
   const out = {}
-  for (const m of tag.matchAll(/([a-zA-Z:-]+)="([^"]*)"/g)) out[m[1]] = m[2]
+  for (const m of tag.matchAll(/([a-zA-Z:-]+)="([^"]*)"/g)) out[m[1]] = decode(m[2])
   return out
 }
 
 function parse(html) {
   const links = [...html.matchAll(/<link\b[^>]*>/g)].map((m) => attrs(m[0]))
+  const metas = [...html.matchAll(/<meta\b[^>]*>/g)].map((m) => attrs(m[0]))
+  const metaContent = (key, value) => metas.find((m) => m[key] === value)?.content
   const root = html.split('<div id="root">')[1] ?? ''
   return {
     lang: html.match(/<html[^>]*\blang="([^"]*)"/)?.[1],
-    title: html.match(/<title>([^<]*)<\/title>/)?.[1],
-    description: html.match(/<meta\s+name="description"\s+content="([^"]*)"/)?.[1],
+    title: decode(html.match(/<title>([^<]*)<\/title>/)?.[1] ?? '') || undefined,
+    description: metaContent('name', 'description'),
+    ogTitle: metaContent('property', 'og:title'),
+    ogDescription: metaContent('property', 'og:description'),
+    twitterTitle: metaContent('name', 'twitter:title'),
+    twitterDescription: metaContent('name', 'twitter:description'),
     canonicals: links.filter((l) => l.rel === 'canonical').map((l) => l.href),
     alternates: links.filter((l) => l.rel === 'alternate' && l.hreflang),
     body: root.replace(/<[^>]*>/g, ' '),
@@ -137,6 +146,18 @@ for (const page of pages) {
 
   if (!doc.description) fail(page, 'no meta description')
   else descriptions.set(doc.description, [...(descriptions.get(doc.description) ?? []), page.path])
+  const copy = ROUTE_META[page.ko][page.lang]
+  const tags = [
+    ['title', doc.title, copy.title],
+    ['description', doc.description, copy.description],
+    ['og:title', doc.ogTitle, copy.title],
+    ['og:description', doc.ogDescription, copy.description],
+    ['twitter:title', doc.twitterTitle, copy.title],
+    ['twitter:description', doc.twitterDescription, copy.description],
+  ]
+  for (const [label, got, expected] of tags) {
+    if (got !== expected) fail(page, `${label} is ${JSON.stringify(got)}, want ${JSON.stringify(expected)}`)
+  }
   if (doc.title && [...doc.title].length > MAX_TITLE) {
     fail(page, `title is ${[...doc.title].length} chars, max ${MAX_TITLE}`)
   }

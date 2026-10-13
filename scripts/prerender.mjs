@@ -15,11 +15,6 @@ const ORIGIN = 'https://www.heimdex.co'
 
 import { ROUTE_META } from '../src/data/routeMeta.js'
 
-// The home copy is what index.html ships, so it doubles as the find-string when
-// the template is cloned per language and per route.
-const { title: KO_TITLE, description: KO_DESC } = ROUTE_META['/'].ko
-const { title: EN_TITLE, description: EN_DESC } = ROUTE_META['/'].en
-
 // Korean paths; the English twin of each lives under /en.
 const KO_PATHS = Object.keys(ROUTE_META)
 
@@ -27,8 +22,6 @@ const KO_PATHS = Object.keys(ROUTE_META)
 // source template drifted and the English pages would silently ship Korean tags.
 const EN_SWAPS = [
   ['<html lang="ko" translate="no">', '<html lang="en" translate="no">', 'html lang'],
-  [KO_TITLE, EN_TITLE, 'title'],
-  [KO_DESC, EN_DESC, 'description'],
   ['content="ko_KR"', 'content="en_US"', 'og:locale'],
 ]
 const OG_URL = '<meta property="og:url" content="https://www.heimdex.co/" />'
@@ -59,12 +52,30 @@ function headTags(koPath) {
   ].join('\n    ')
 }
 
-// Swaps the language shell's home title/description (title, og:*, twitter:*) for
-// the route's own.
+// The tags that carry a route's title and description, found by tag so the
+// template's own copy can change without a route silently keeping it.
+const META_TAGS = [
+  ['title', /<title>[^<]*<\/title>/, 'title', (v) => `<title>${v}</title>`],
+  ['description', /<meta\s+name="description"\s+content="[^"]*"\s*\/>/, 'description', (v) => `<meta name="description" content="${v}" />`],
+  ['og:title', /<meta\s+property="og:title"\s+content="[^"]*"\s*\/>/, 'title', (v) => `<meta property="og:title" content="${v}" />`],
+  ['og:description', /<meta\s+property="og:description"\s+content="[^"]*"\s*\/>/, 'description', (v) => `<meta property="og:description" content="${v}" />`],
+  ['twitter:title', /<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/>/, 'title', (v) => `<meta name="twitter:title" content="${v}" />`],
+  ['twitter:description', /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/>/, 'description', (v) => `<meta name="twitter:description" content="${v}" />`],
+]
+
+// Writes the route's title and description into every tag above; a tag the
+// template no longer has stops the build.
 function withRouteMeta(html, koPath, lang) {
-  const { title, description } = ROUTE_META[koPath][lang]
-  const home = ROUTE_META['/'][lang]
-  return html.replaceAll(home.title, () => title).replaceAll(home.description, () => description)
+  const meta = ROUTE_META[koPath][lang]
+  let out = html
+  for (const [label, pattern, field, tag] of META_TAGS) {
+    if (!pattern.test(out)) {
+      console.error(`[prerender] template has no ${label} tag`)
+      process.exit(1)
+    }
+    out = out.replace(pattern, () => tag(meta[field]))
+  }
+  return out
 }
 
 async function write(file, html) {
