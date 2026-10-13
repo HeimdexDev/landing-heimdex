@@ -142,6 +142,28 @@ async function checkNavigation(browser, base) {
   await page.close()
 }
 
+// The language toggle and history navigation switch ko <-> en without a reload; the
+// language-dependent tags (title, og:locale, hreflang/canonical) must follow.
+async function checkLanguageSwitch(browser, base) {
+  const name = browser.browserType().name()
+  const page = await browser.newPage()
+  await page.goto(base + '/product', { waitUntil: 'networkidle' })
+  const steps = [
+    ['ENG toggle', () => page.getByRole('button', { name: 'ENG', exact: true }).click(), '/en/product'],
+    ['KOR toggle', () => page.getByRole('button', { name: 'KOR', exact: true }).click(), '/product'],
+    ['back', () => page.goBack(), '/en/product'],
+    ['forward', () => page.goForward(), '/product'],
+  ]
+  for (const [label, act, route] of steps) {
+    await act()
+    await page.waitForTimeout(500)
+    const pathname = new URL(page.url()).pathname
+    if (pathname !== route) fail(name, label, `url is ${pathname}, want ${route}`)
+    expectHead(name, label, await readHead(page), route)
+  }
+  await page.close()
+}
+
 // A trailing slash must not change the canonical, and an unknown URL (served as the
 // 404 shell) must not get a canonical or hreflang pointing at itself.
 async function checkEdgeUrls(browser, base) {
@@ -170,6 +192,7 @@ for (const name of (process.env.BROWSERS ?? 'chromium').split(',')) {
   const browser = await engines[name].launch()
   await checkLoads(browser, base)
   await checkNavigation(browser, base)
+  await checkLanguageSwitch(browser, base)
   await checkEdgeUrls(browser, base)
   await browser.close()
 }
