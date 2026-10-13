@@ -66,6 +66,7 @@ function parse(html) {
     lang: html.match(/<html[^>]*\blang="([^"]*)"/)?.[1],
     title: decode(html.match(/<title>([^<]*)<\/title>/)?.[1] ?? '') || undefined,
     description: metaContent('name', 'description'),
+    ogUrl: metaContent('property', 'og:url'),
     ogTitle: metaContent('property', 'og:title'),
     ogDescription: metaContent('property', 'og:description'),
     twitterTitle: metaContent('name', 'twitter:title'),
@@ -105,7 +106,16 @@ if (existsSync(DIST)) {
 // the host serves from index.html) must have its own rewrite to its own file.
 // Whether the host really answers 404 can only be seen on a deployment.
 const noRoute = (msg) => failures.push(`vercel.json: ${msg}`)
-const rewrites = JSON.parse(readFileSync(VERCEL, 'utf8')).rewrites ?? []
+const vercel = JSON.parse(readFileSync(VERCEL, 'utf8'))
+const rewrites = vercel.rewrites ?? []
+// Legacy /ko URLs are still indexed; the host must send them to the unprefixed page.
+for (const [source, destination] of [['/ko', '/'], ['/ko/:path*', '/:path*']]) {
+  const r = (vercel.redirects ?? []).find((x) => x.source === source)
+  if (!r) noRoute(`no redirect for ${source}`)
+  else if (r.destination !== destination || r.permanent !== true) {
+    noRoute(`${source} must redirect permanently to ${destination}`)
+  }
+}
 for (const { source, destination } of rewrites) {
   if (source.includes('/blog')) noRoute(`${source} is a removed placeholder route`)
   if (/[:*(]/.test(source)) noRoute(`pattern rewrite ${source} turns unknown URLs into 200 pages`)
@@ -164,6 +174,8 @@ for (const page of pages) {
   if (doc.description && [...doc.description].length > MAX_DESCRIPTION) {
     fail(page, `description is ${[...doc.description].length} chars, max ${MAX_DESCRIPTION}`)
   }
+
+  if (doc.ogUrl !== urlOf(page.path)) fail(page, `og:url is ${doc.ogUrl}, want ${urlOf(page.path)}`)
 
   const expectedCanonical = urlOf(page.path)
   if (doc.canonicals.length !== 1) fail(page, `${doc.canonicals.length} canonical links, want 1`)
