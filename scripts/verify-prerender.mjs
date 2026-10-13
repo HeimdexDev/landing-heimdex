@@ -37,7 +37,8 @@ const failures = []
 const fail = (page, msg) => failures.push(`${page.path}: ${msg}`)
 
 const urlOf = (path) => ORIGIN + path
-const ownFile = (path) => new URL(path === '/' ? 'index.html' : `${path.slice(1)}/index.html`, DIST)
+const fileOf = (path) => (path === '/' ? 'index.html' : `${path.slice(1)}/index.html`)
+const ownFile = (path) => new URL(fileOf(path), DIST)
 // What the host serves today when a route has no file of its own (vercel.json rewrites).
 const fallbackFile = (path) =>
   new URL(path === '/en' || path.startsWith('/en/') ? 'en/index.html' : 'index.html', DIST)
@@ -72,14 +73,24 @@ for (const loc of sitemapLocs) {
   if (!expectedLocs.has(loc)) failures.push(`sitemap.xml: ${loc} is not a verified route`)
 }
 
-// Hosting config: a wildcard rewrite would answer every unknown URL with a 200 page
-// (a soft 404), and each rewrite must point at a file the build produced. Whether
-// the host really answers 404 can only be seen on a deployment.
+// Hosting config: a rewrite whose source is a pattern would answer unknown URLs with
+// a 200 page (a soft 404), so every source must be a literal path; each rewrite must
+// point at a file the build produced; and every prerendered route except `/` (which
+// the host serves from index.html) must have its own rewrite to its own file.
+// Whether the host really answers 404 can only be seen on a deployment.
 const noRoute = (msg) => failures.push(`vercel.json: ${msg}`)
-for (const { source, destination } of JSON.parse(readFileSync(VERCEL, 'utf8')).rewrites ?? []) {
+const rewrites = JSON.parse(readFileSync(VERCEL, 'utf8')).rewrites ?? []
+for (const { source, destination } of rewrites) {
   if (source.includes('/blog')) noRoute(`${source} is a removed placeholder route`)
-  if (source.includes('(')) noRoute(`wildcard rewrite ${source} turns unknown URLs into 200 pages`)
+  if (/[:*(]/.test(source)) noRoute(`pattern rewrite ${source} turns unknown URLs into 200 pages`)
   if (!existsSync(new URL(destination.slice(1), DIST))) noRoute(`${destination} is not in dist`)
+}
+for (const { path } of pages) {
+  if (path === '/') continue
+  const want = `/${fileOf(path)}`
+  const rewrite = rewrites.find((r) => r.source === path)
+  if (!rewrite) noRoute(`no rewrite for ${path}`)
+  else if (rewrite.destination !== want) noRoute(`${path} rewrites to ${rewrite.destination}, want ${want}`)
 }
 const notFound = new URL('404.html', DIST)
 if (!existsSync(notFound)) failures.push('dist/404.html is missing')
