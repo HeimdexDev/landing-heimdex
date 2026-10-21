@@ -37,7 +37,7 @@ const inputCls =
 
 export default function Contact() {
   const { t, lang } = useLang()
-  const [form, setForm] = useState({ name: '', phone: '', email: '', company: '', message: '' })
+  const [form, setForm] = useState({ name: '', phone: '', email: '', company: '', jobTitle: '', message: '' })
   const [agreeRequired, setAgreeRequired] = useState(false)
   const [agreeMarketing, setAgreeMarketing] = useState(false)
   const [marketingOpen, setMarketingOpen] = useState(false)
@@ -49,7 +49,7 @@ export default function Contact() {
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
   const markTouched = (k) => () => setTouched((s) => ({ ...s, [k]: true }))
 
-  const emailOk = /^\S+@\S+\.\S{2,}$/.test(form.email.trim())
+  const emailOk = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>".]{2,}$/.test(form.email.trim())
   const phoneDigits = form.phone.replace(/\D/g, '')
   const phoneOk = phoneDigits.length >= 7 && phoneDigits.length <= 15
   const canSubmit =
@@ -68,7 +68,15 @@ export default function Contact() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, marketingAgreed: agreeMarketing, website }),
+        body: JSON.stringify({
+          ...form,
+          marketingAgreed: agreeMarketing,
+          privacyAgreed: agreeRequired,
+          lang,
+          website,
+          pageUri: window.location.href,
+          pageName: document.title,
+        }),
       })
       if (!res.ok) throw new Error('전송 실패')
 
@@ -78,7 +86,7 @@ export default function Contact() {
           'Your request has been received. We’ll be in touch shortly.',
         ),
       )
-      setForm({ name: '', phone: '', email: '', company: '', message: '' })
+      setForm({ name: '', phone: '', email: '', company: '', jobTitle: '', message: '' })
       setAgreeRequired(false)
       setAgreeMarketing(false)
       setTouched({ email: false, phone: false })
@@ -155,9 +163,14 @@ export default function Contact() {
                 <span className="text-xs font-medium tracking-[-0.3px] text-[#fa5252]">{t('유효한 이메일 형식이 아닙니다.', 'Enter a valid email address.')}</span>
               )}
             </Field>
-            <Field label={t('회사명', 'Company')}>
-              <input className={inputCls} placeholder={t('회사명을 입력해주세요.', 'Enter your company name.')} value={form.company} onChange={set('company')} maxLength={200} />
-            </Field>
+            <div className="flex gap-[10px] max-sm:flex-col">
+              <Field label={t('회사명', 'Company')}>
+                <input className={inputCls} placeholder={t('회사명을 입력해주세요.', 'Enter your company name.')} value={form.company} onChange={set('company')} maxLength={200} />
+              </Field>
+              <Field label={t('직함', 'Job title')}>
+                <input className={inputCls} placeholder={t('직함을 입력해주세요.', 'Enter your job title.')} value={form.jobTitle} onChange={set('jobTitle')} maxLength={100} />
+              </Field>
+            </div>
             <Field label={t('문의내용', 'Message')}>
               <div className="relative">
                 <textarea

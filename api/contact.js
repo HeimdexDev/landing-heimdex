@@ -38,8 +38,96 @@ function sanitizeForSlack(str) {
     .slice(0, 2000)
 }
 
-const EMAIL_RE = /^\S+@\S+\.\S{2,}$/
-const MAX_LEN = { name: 100, email: 254, phone: 30, company: 200, message: 2000 }
+const EMAIL_RE = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>".]{2,}$/
+const MAX_LEN = { name: 100, email: 254, phone: 30, company: 200, jobTitle: 100, message: 2000 }
+
+/* ── HubSpot Forms API (creates the contact + triggers the HubSpot auto-reply workflow) ──
+   Inert unless HUBSPOT_PORTAL_ID and HUBSPOT_FORM_GUID are set. Scope them to Vercel PRODUCTION
+   only, or Preview deployments create real contacts and send real mail. Marketing consent is sent only when the subscription type id is set.
+   The HubSpot form accepts unknown field names and malformed emails silently, so validation stays
+   ours (above). */
+const HUBSPOT_TIMEOUT_MS = 3000
+
+// HubSpot stores this text as the record of what the visitor agreed to, so it must match the label
+// they saw (/en visitors see English labels).
+const CONSENT_TEXT = {
+  ko: {
+    process: '개인정보 처리방침에 동의합니다.',
+    marketing: '하임덱스의 마케팅 정보를 수신하는 데 동의합니다.',
+  },
+  en: {
+    process: 'I agree to the Privacy Policy.',
+    marketing: 'I agree to receive marketing information from Heimdex.',
+  },
+}
+
+async function submitToHubSpot(body) {
+  const portalId = process.env.HUBSPOT_PORTAL_ID
+  const formGuid = process.env.HUBSPOT_FORM_GUID
+  if (!portalId || !formGuid) return
+
+  const fields = [
+    ['firstname', body.name],
+    ['company', body.company],
+    ['jobtitle', body.jobTitle],
+    ['phone', body.phone],
+    ['email', body.email],
+    ['message', body.message],
+  ]
+    .filter(([, v]) => typeof v === 'string' && v.trim())
+    .map(([name, v]) => ({ objectTypeId: '0-1', name, value: v.trim() }))
+
+  const text = body.lang === 'en' ? CONSENT_TEXT.en : CONSENT_TEXT.ko
+  const consent = {
+    consentToProcess: true, // the caller only submits when the client sent privacyAgreed === true
+    text: text.process,
+  }
+  const subscriptionTypeId = Number(process.env.HUBSPOT_MARKETING_SUBSCRIPTION_TYPE_ID)
+  if (subscriptionTypeId) {
+    consent.communications = [
+      {
+        value: body.marketingAgreed === true,
+        subscriptionTypeId,
+        text: text.marketing,
+      },
+    ]
+  }
+
+  const context = {}
+  if (typeof body.pageUri === 'string' && /^https?:\/\//.test(body.pageUri)) {
+    context.pageUri = body.pageUri.slice(0, 1000)
+  }
+  if (typeof body.pageName === 'string') context.pageName = body.pageName.slice(0, 200)
+
+  try {
+    const hsRes = await fetch(
+      `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          submittedAt: Date.now(),
+          fields,
+          context,
+          legalConsentOptions: { consent },
+        }),
+        signal: AbortSignal.timeout(HUBSPOT_TIMEOUT_MS),
+      },
+    )
+    if (!hsRes.ok) {
+      // Log only error types + correlation id: the body can echo submitted values (PII)
+      const err = await hsRes.json().catch(() => null)
+      console.error(
+        'HubSpot submit failed:',
+        hsRes.status,
+        err?.correlationId,
+        (err?.errors ?? []).map((e) => e.errorType).join(','),
+      )
+    }
+  } catch (error) {
+    console.error('HubSpot submit error:', error?.name, error?.message)
+  }
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -108,13 +196,14 @@ export default async function handler(req, res) {
 \`\`\`
 이름: ${sanitizeForSlack(body.name)}
 회사명: ${sanitizeForSlack(body.company) || '-'}
+직함: ${sanitizeForSlack(body.jobTitle) || '-'}
 이메일: ${sanitizeForSlack(body.email)}
 연락처: ${sanitizeForSlack(body.phone)}
 
 문의내용:
 ${sanitizeForSlack(body.message) || '(내용 없음)'}
 
-마케팅 수신 동의: ${body.marketingAgreed ? '동의' : '미동의'}
+마케팅 수신 동의: ${body.marketingAgreed === true ? '동의' : '미동의'}
 접수시간: ${submittedAt}
 \`\`\``,
     }
@@ -123,12 +212,19 @@ ${sanitizeForSlack(body.message) || '(내용 없음)'}
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(slackMessage),
+      signal: AbortSignal.timeout(5000),
     })
 
     if (!slackRes.ok) {
       console.error('Slack webhook failed:', slackRes.status)
       return res.status(502).json({ error: '전송 실패' })
     }
+
+    // After Slack, so a Slack 502 + user retry doesn't double the HubSpot auto-reply.
+    // Awaited because Vercel freezes the function once the response is sent; never throws.
+    // Only when the client sent the required privacy consent. It is client-asserted, so this guards
+    // stale/honest clients, not forgery (abuse is bounded by the rate limit; CAPTCHA is a follow-up).
+    if (body.privacyAgreed === true) await submitToHubSpot(body)
 
     return res.status(200).json({ success: true })
   } catch (error) {
