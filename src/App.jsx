@@ -48,7 +48,6 @@ function isNotFoundPath(pathname) {
   const p = stripLangPrefix(pathname).replace(/^\/ko(?=\/|$)/, '') || '/'
   return (
     p !== '/' &&
-    p !== '/blog' &&
     !p.startsWith('/product') &&
     !p.startsWith('/contact') &&
     !p.startsWith('/policy')
@@ -83,8 +82,6 @@ export default function App() {
                 <Route path={`${p}/product`} element={<Solution />} />
                 <Route path={`${p}/contact`} element={<Contact />} />
                 <Route path={`${p}/policy`} element={<Policy />} />
-                {/* Placeholder so the blog nav link doesn't 404 (also opens externally) */}
-                <Route path={`${p}/blog`} element={<Home />} />
               </Fragment>
             ))}
             {/* Catch-all: redirect old/unknown URLs to the closest current page */}

@@ -2,19 +2,19 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "trailingSlash": false,
   "installCommand": "npm install",
+  "redirects": [
+    { "source": "/ko", "destination": "/", "permanent": true },
+    { "source": "/ko/:path*", "destination": "/:path*", "permanent": true }
+  ],
   "rewrites": [
-    {
-      "source": "/en",
-      "destination": "/en/index.html"
-    },
-    {
-      "source": "/en/(.*)",
-      "destination": "/en/index.html"
-    },
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/product", "destination": "/product/index.html" },
+    { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/policy", "destination": "/policy/index.html" },
+    { "source": "/en", "destination": "/en/index.html" },
+    { "source": "/en/product", "destination": "/en/product/index.html" },
+    { "source": "/en/contact", "destination": "/en/contact/index.html" },
+    { "source": "/en/policy", "destination": "/en/policy/index.html" }
   ]
 }

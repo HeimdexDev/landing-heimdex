@@ -1,4 +1,6 @@
-import { Component, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Component, Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { useClientReady } from '../lib/useClientReady.js'
+import { useIsomorphicLayoutEffect } from '../lib/useIsomorphicLayoutEffect.js'
 import { useSearchParams } from 'react-router-dom'
 import Link from '../i18n/Link.jsx'
 import {
@@ -393,6 +395,8 @@ function SolutionDemo({ tab }) {
   // The vlog tab is heimlog's product, not this dashboard, so it draws heimlog's
   // own 새 프로젝트 screen inside the same frame — a dark app, hence the ground.
   const heimlog = tab === 'vlog'
+  // The lazy demo has no server markup, so it mounts after hydration.
+  const clientReady = useClientReady()
   if (!cfg && !heimlog) return null
   const en = lang === 'en'
   return (
@@ -408,11 +412,13 @@ function SolutionDemo({ tab }) {
             animation timeline restarts with the new content. */}
         {heimlog ? (
           // No fallback UI: the frame's own dark ground is the loading state.
-          <DemoBoundary>
-            <Suspense fallback={null}>
-              <HeimlogDemo key={tab} />
-            </Suspense>
-          </DemoBoundary>
+          clientReady && (
+            <DemoBoundary>
+              <Suspense fallback={null}>
+                <HeimlogDemo key={tab} />
+              </Suspense>
+            </DemoBoundary>
+          )
         ) : (
         <HeroAppMockup
           key={tab + lang}
@@ -499,7 +505,9 @@ function FaqAccordion({ items }) {
 export default function Solution() {
   const { lang, t } = useLang()
   const [params, setParams] = useSearchParams()
-  const tab = SOLUTIONS[params.get('tab')] ? params.get('tab') : TABS[0].id
+  // The prerendered page is the default tab; a ?tab= link switches right after hydration.
+  const clientReady = useClientReady()
+  const tab = clientReady && SOLUTIONS[params.get('tab')] ? params.get('tab') : TABS[0].id
   const data = (lang === 'en' ? SOLUTIONS_EN : SOLUTIONS)[tab]
   // Tabs migrated to the new layout expose a `faq` array.
   const isNew = Array.isArray(data.faq)
@@ -507,7 +515,7 @@ export default function Solution() {
   // Sliding tab indicator — tracks the active pill's box and animates between tabs
   const tabsRef = useRef(null)
   const [pill, setPill] = useState({ left: 0, top: 0, width: 0, height: 0 })
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const measure = () => {
       const el = tabsRef.current?.querySelector('[data-active="true"]')
       if (el)
