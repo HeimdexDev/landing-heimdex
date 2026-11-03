@@ -1074,6 +1074,8 @@ export const EN = {
     "emailPh": "Enter your email address.",
     "company": "Company",
     "companyPh": "Enter your company name.",
+    "jobTitle": "Job title",
+    "jobTitlePh": "Enter your job title.",
     "message": "Message",
     "messagePh": "Tell us what you need.",
     "consentTitle": "Consent to collection and use of personal data",

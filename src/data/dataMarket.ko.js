@@ -370,6 +370,8 @@ export const KO = {
     emailPh: '이메일 주소를 입력해주세요.',
     company: '회사명',
     companyPh: '회사명을 입력해주세요.',
+    jobTitle: '직함',
+    jobTitlePh: '직함을 입력해주세요.',
     message: '문의 내용',
     messagePh: '내용을 입력해주세요.',
     consentTitle: '개인정보 수집 및 이용에 관한 동의',
