@@ -4,16 +4,22 @@
 // Two HubSpot forms, set up by sales:
 //   quick    — the email-only card: email only, no auto-reply.
 //   detailed — the full form: every answer below, and HubSpot sends the receipt auto-reply.
-// Not secret (any HubSpot embed exposes them). Env vars override them; HubSpot is still only
-// called where HUBSPOT_PORTAL_ID is set (production), so previews create no contacts.
+// Not secret (any HubSpot embed exposes them); env vars override them. The override names are
+// new on purpose: the older HUBSPOT_SAMPLE_FORM_GUID pointed at a form without these fields.
 export const SAMPLE_FORM_GUIDS = {
   quick: process.env.HUBSPOT_SAMPLE_QUICK_FORM_GUID || '225641c1-bf9c-4e5a-a79b-49e80fb06ee4',
-  detailed: process.env.HUBSPOT_SAMPLE_FORM_GUID || '2a7cb4a8-a100-45ba-b2f4-a196ffc908a0',
+  detailed: process.env.HUBSPOT_SAMPLE_DETAILED_FORM_GUID || '2a7cb4a8-a100-45ba-b2f4-a196ffc908a0',
 }
+
+// The GUIDs are built in, so env scoping alone no longer keeps previews quiet: only the production
+// deployment may create HubSpot contacts or trigger the receipt auto-reply.
+export const sampleHubSpotEnabled = () => process.env.VERCEL_ENV === 'production'
 
 // The forms send the label the visitor saw (KO or EN); HubSpot's choice properties only store
 // their internal values. Labels must match src/data/dataMarket.{ko,en}.js exactly —
 // scripts/check-hubspot-options.mjs fails the build when a label has no entry here.
+// When a label is renamed, ADD the new one and keep the old one: browsers still running the old
+// bundle keep sending it for a while.
 export const SAMPLE_OPTION_VALUES = {
   collections: {
     multi_speaker_dialogue: ['다화자 대화 (음성 + 영상)', 'Multi-Speaker Conversation (Audio + Video)'],

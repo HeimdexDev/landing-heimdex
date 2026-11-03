@@ -9,6 +9,8 @@ import { EN } from '../src/data/dataMarket.en.js'
 import { SAMPLE_OPTION_VALUES } from '../api/_hubspotSample.js'
 
 // What the form offers, built the way SampleForm builds it (EN falls back to KO when absent).
+// Deliberately a superset of the client's item-by-item merge: it can only fail too eagerly, never
+// let an unmapped label through.
 function options(L) {
   const f = L.request?.form ?? {}
   const fb = KO.request.form

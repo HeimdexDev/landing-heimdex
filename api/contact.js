@@ -1,7 +1,7 @@
 // Vercel Serverless Function — POST /api/contact
 // Forwards contact-form submissions to the Slack CRM channel. (same approach as the playground CRM)
 
-import { SAMPLE_FORM_GUIDS, sampleFields } from './_hubspotSample.js'
+import { SAMPLE_FORM_GUIDS, sampleFields, sampleHubSpotEnabled } from './_hubspotSample.js'
 
 /* ── IP-based rate limit (5 req / 10 min, best-effort) ──
    NOTE: the in-memory Map is isolated/reset per Vercel instance, so it is not a full defense.
@@ -44,9 +44,10 @@ const EMAIL_RE = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>".]{2,}$/
 const MAX_LEN = { name: 100, email: 254, phone: 30, company: 200, jobTitle: 100, message: 2000 }
 
 /* ── HubSpot Forms API (creates the contact + triggers the HubSpot auto-reply workflow) ──
-   Inert unless HUBSPOT_PORTAL_ID and HUBSPOT_FORM_GUID are set. Scope them to Vercel PRODUCTION
+   Contact form: inert unless HUBSPOT_PORTAL_ID and HUBSPOT_FORM_GUID are set. Scope them to Vercel PRODUCTION
    only, or Preview deployments create real contacts and send real mail. Marketing consent is sent only when the subscription type id is set.
-   Data-marketplace sample requests go to their own two forms (see api/_hubspotSample.js).
+   Data-marketplace sample requests go to their own two forms (see api/_hubspotSample.js), and only
+   from the production deployment (VERCEL_ENV) plus HUBSPOT_PORTAL_ID.
    The HubSpot form accepts unknown field names and malformed emails silently, so validation stays
    ours (above). */
 const HUBSPOT_TIMEOUT_MS = 3000
@@ -195,7 +196,7 @@ ${lines.join('\n')}
   // quick (email-only card) and detailed requests go to separate forms; only the detailed one has an
   // auto-reply. The email-only card has no consent UI yet, so it sends no consent record.
   const quick = body.quick === true
-  await submitToHubSpot(
+  if (sampleHubSpotEnabled()) await submitToHubSpot(
     {
       lang: body.lang,
       marketingAgreed: body.marketingAgreed,
