@@ -1,6 +1,8 @@
 // Vercel Serverless Function — POST /api/contact
 // Forwards contact-form submissions to the Slack CRM channel. (same approach as the playground CRM)
 
+import { SAMPLE_FORM_GUIDS, sampleFields, sampleHubSpotEnabled } from './_hubspotSample.js'
+
 /* ── IP-based rate limit (5 req / 10 min, best-effort) ──
    NOTE: the in-memory Map is isolated/reset per Vercel instance, so it is not a full defense.
    For durable protection, move to Vercel KV/Upstash. First-line bot blocking is the honeypot. */
@@ -42,10 +44,10 @@ const EMAIL_RE = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>".]{2,}$/
 const MAX_LEN = { name: 100, email: 254, phone: 30, company: 200, jobTitle: 100, message: 2000 }
 
 /* ── HubSpot Forms API (creates the contact + triggers the HubSpot auto-reply workflow) ──
-   Inert unless HUBSPOT_PORTAL_ID and HUBSPOT_FORM_GUID are set. Scope them to Vercel PRODUCTION
+   Contact form: inert unless HUBSPOT_PORTAL_ID and HUBSPOT_FORM_GUID are set. Scope them to Vercel PRODUCTION
    only, or Preview deployments create real contacts and send real mail. Marketing consent is sent only when the subscription type id is set.
-   Data-marketplace sample requests use HUBSPOT_SAMPLE_FORM_GUID when set (so they can have their own
-   form + auto-reply), else the contact form.
+   Data-marketplace sample requests go to their own two forms (see api/_hubspotSample.js), and only
+   from the production deployment (VERCEL_ENV) plus HUBSPOT_PORTAL_ID.
    The HubSpot form accepts unknown field names and malformed emails silently, so validation stays
    ours (above). */
 const HUBSPOT_TIMEOUT_MS = 3000
@@ -66,18 +68,24 @@ const CONSENT_TEXT = {
 // consented: the visitor ticked the required privacy checkbox. When false (the data marketplace's
 // email-only card has no consent UI yet) no legalConsentOptions are sent at all, so HubSpot never
 // holds a consent record the visitor didn't give.
-async function submitToHubSpot(body, { formGuid = process.env.HUBSPOT_FORM_GUID, consented = true } = {}) {
+// fields: [HubSpot field name, value] pairs; defaults to the contact form's fields.
+async function submitToHubSpot(
+  body,
+  { formGuid = process.env.HUBSPOT_FORM_GUID, consented = true, fields: pairs } = {},
+) {
   const portalId = process.env.HUBSPOT_PORTAL_ID
   if (!portalId || !formGuid) return
 
-  const fields = [
-    ['firstname', body.name],
-    ['company', body.company],
-    ['jobtitle', body.jobTitle],
-    ['phone', body.phone],
-    ['email', body.email],
-    ['message', body.message],
-  ]
+  const fields = (
+    pairs ?? [
+      ['firstname', body.name],
+      ['company', body.company],
+      ['jobtitle', body.jobTitle],
+      ['phone', body.phone],
+      ['email', body.email],
+      ['message', body.message],
+    ]
+  )
     .filter(([, v]) => typeof v === 'string' && v.trim())
     .map(([name, v]) => ({ objectTypeId: '0-1', name, value: v.trim() }))
 
@@ -184,29 +192,21 @@ ${lines.join('\n')}
     return res.status(502).json({ error: '전송 실패' })
   }
 
-  // HubSpot after Slack, same as the contact path (a Slack 502 + retry must not double it). The
-  // form has no fields for the sample answers, so they travel in `message`.
-  const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
-  const answers = SAMPLE_FIELDS.filter(([key]) => !['name', 'company', 'email'].includes(key))
-    .map(([key, label]) => {
-      const raw = body[key]
-      const value = Array.isArray(raw) ? raw.filter((v) => typeof v === 'string').join(', ') : raw
-      return `${label}: ${str(value, 500) || '-'}`
-    })
-  await submitToHubSpot(
+  // HubSpot after Slack, same as the contact path (a Slack 502 + retry must not double it).
+  // quick (email-only card) and detailed requests go to separate forms; only the detailed one has an
+  // auto-reply. The email-only card has no consent UI yet, so it sends no consent record.
+  const quick = body.quick === true
+  if (sampleHubSpotEnabled()) await submitToHubSpot(
     {
-      name: str(body.name, MAX_LEN.name),
-      company: str(body.company, MAX_LEN.company),
-      email,
-      message: [`[데이터 샘플 요청]${body.quick === true ? ' (메일만)' : ''}`, ...answers].join('\n').slice(0, MAX_LEN.message),
       lang: body.lang,
       marketingAgreed: body.marketingAgreed,
       pageUri: body.pageUri,
       pageName: body.pageName,
     },
     {
-      formGuid: process.env.HUBSPOT_SAMPLE_FORM_GUID || process.env.HUBSPOT_FORM_GUID,
-      consented: body.privacyAgreed === true,
+      formGuid: quick ? SAMPLE_FORM_GUIDS.quick : SAMPLE_FORM_GUIDS.detailed,
+      consented: !quick && body.privacyAgreed === true,
+      fields: sampleFields(body, email),
     },
   )
   return res.status(200).json({ success: true })
