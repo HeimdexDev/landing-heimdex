@@ -44,6 +44,8 @@ const MAX_LEN = { name: 100, email: 254, phone: 30, company: 200, jobTitle: 100,
 /* ── HubSpot Forms API (creates the contact + triggers the HubSpot auto-reply workflow) ──
    Inert unless HUBSPOT_PORTAL_ID and HUBSPOT_FORM_GUID are set. Scope them to Vercel PRODUCTION
    only, or Preview deployments create real contacts and send real mail. Marketing consent is sent only when the subscription type id is set.
+   Data-marketplace sample requests use HUBSPOT_SAMPLE_FORM_GUID when set (so they can have their own
+   form + auto-reply), else the contact form.
    The HubSpot form accepts unknown field names and malformed emails silently, so validation stays
    ours (above). */
 const HUBSPOT_TIMEOUT_MS = 3000
@@ -57,13 +59,15 @@ const CONSENT_TEXT = {
   },
   en: {
     process: 'I agree to the Privacy Policy.',
-    marketing: 'I agree to receive marketing information from Heimdex.',
+    marketing: 'I agree to receive marketing updates from HEIMDEX.',
   },
 }
 
-async function submitToHubSpot(body) {
+// consented: the visitor ticked the required privacy checkbox. When false (the data marketplace's
+// email-only card has no consent UI yet) no legalConsentOptions are sent at all, so HubSpot never
+// holds a consent record the visitor didn't give.
+async function submitToHubSpot(body, { formGuid = process.env.HUBSPOT_FORM_GUID, consented = true } = {}) {
   const portalId = process.env.HUBSPOT_PORTAL_ID
-  const formGuid = process.env.HUBSPOT_FORM_GUID
   if (!portalId || !formGuid) return
 
   const fields = [
@@ -79,7 +83,7 @@ async function submitToHubSpot(body) {
 
   const text = body.lang === 'en' ? CONSENT_TEXT.en : CONSENT_TEXT.ko
   const consent = {
-    consentToProcess: true, // the caller only submits when the client sent privacyAgreed === true
+    consentToProcess: true, // only sent when consented (client sent privacyAgreed === true)
     text: text.process,
   }
   const subscriptionTypeId = Number(process.env.HUBSPOT_MARKETING_SUBSCRIPTION_TYPE_ID)
@@ -109,7 +113,7 @@ async function submitToHubSpot(body) {
           submittedAt: Date.now(),
           fields,
           context,
-          legalConsentOptions: { consent },
+          ...(consented ? { legalConsentOptions: { consent } } : {}),
         }),
         signal: AbortSignal.timeout(HUBSPOT_TIMEOUT_MS),
       },
@@ -163,13 +167,14 @@ async function handleSample(body, res) {
   const slackRes = await fetch(webhookUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    signal: AbortSignal.timeout(5000),
     body: JSON.stringify({
-      text: `*[DATA] 샘플 요청*${body.quick ? ' (메일만)' : ''}
+      text: `*[DATA] 샘플 요청*${body.quick === true ? ' (메일만)' : ''}
 
 \`\`\`
 ${lines.join('\n')}
 
-마케팅 수신 동의: ${body.marketingAgreed ? '동의' : '미동의'}
+마케팅 수신 동의: ${body.marketingAgreed === true ? '동의' : '미동의'}
 접수시간: ${submittedAt}
 \`\`\``,
     }),
@@ -178,6 +183,32 @@ ${lines.join('\n')}
     console.error('Slack webhook failed:', slackRes.status)
     return res.status(502).json({ error: '전송 실패' })
   }
+
+  // HubSpot after Slack, same as the contact path (a Slack 502 + retry must not double it). The
+  // form has no fields for the sample answers, so they travel in `message`.
+  const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
+  const answers = SAMPLE_FIELDS.filter(([key]) => !['name', 'company', 'email'].includes(key))
+    .map(([key, label]) => {
+      const raw = body[key]
+      const value = Array.isArray(raw) ? raw.filter((v) => typeof v === 'string').join(', ') : raw
+      return `${label}: ${str(value, 500) || '-'}`
+    })
+  await submitToHubSpot(
+    {
+      name: str(body.name, MAX_LEN.name),
+      company: str(body.company, MAX_LEN.company),
+      email,
+      message: [`[데이터 샘플 요청]${body.quick === true ? ' (메일만)' : ''}`, ...answers].join('\n').slice(0, MAX_LEN.message),
+      lang: body.lang,
+      marketingAgreed: body.marketingAgreed,
+      pageUri: body.pageUri,
+      pageName: body.pageName,
+    },
+    {
+      formGuid: process.env.HUBSPOT_SAMPLE_FORM_GUID || process.env.HUBSPOT_FORM_GUID,
+      consented: body.privacyAgreed === true,
+    },
+  )
   return res.status(200).json({ success: true })
 }
 

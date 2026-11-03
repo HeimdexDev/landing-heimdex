@@ -9,7 +9,7 @@ import { A, Chip, ConsentRow, IconTile, MarketingConsent, NumberBadge, inputCls 
 // /request page: intro (segments · flow · sample package), the email-only quick
 // card, and the full 9-question form.
 
-const EMAIL_RE = /^\S+@\S+\.\S{2,}$/
+const EMAIL_RE = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>".]{2,}$/ // same as api/contact.js
 
 // POSTs to the same /api/contact endpoint as the demo form, tagged kind:'sample'
 // (the API accepts it with only an e-mail).
@@ -17,7 +17,13 @@ async function sendSample(payload) {
   const res = await fetch('/api/contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ kind: 'sample', ...payload }),
+    // lang/page context let /api/contact forward the lead to HubSpot like the contact form.
+    body: JSON.stringify({
+      kind: 'sample',
+      ...payload,
+      pageUri: window.location.href,
+      pageName: document.title,
+    }),
   })
   if (!res.ok) throw new Error('send failed')
 }
@@ -94,7 +100,7 @@ export function QuickRequest({ accentButton = false }) {
     setBusy(true)
     setErr('')
     try {
-      await sendSample({ email: email.trim(), quick: true })
+      await sendSample({ email: email.trim(), quick: true, lang })
       navigate(localizePath(REQUEST_DONE_PATH, lang), { state: { summary: email.trim() } })
     } catch {
       setErr(c.form.error)
@@ -207,6 +213,8 @@ export function SampleForm({ initialCollections = [], mode = 0 }) {
         license: license !== null ? c.licenses[license] : '',
         timeline: timeline !== null ? c.timelines[timeline] : '',
         marketingAgreed: marketing,
+        privacyAgreed: agree,
+        lang,
       })
       navigate(localizePath(REQUEST_DONE_PATH, lang), { state: { summary } })
     } catch {
