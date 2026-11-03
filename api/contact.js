@@ -240,7 +240,7 @@ export default async function handler(req, res) {
     }
 
     // Data-marketplace sample request (/request, /data): only a work e-mail is required.
-    if (body.kind === 'sample') return handleSample(body, res)
+    if (body.kind === 'sample') return await handleSample(body, res)
 
     const { name, email, phone } = body
 
