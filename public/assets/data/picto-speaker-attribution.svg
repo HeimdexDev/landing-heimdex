@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / speaker-attribution" clip-path="url(#clip0_0_620)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+
+
+
+
+
+<g transform="translate(1.98 4.62) scale(0.9111)"><path id="Vector_2" d="M25 32C25 34.7614 22.7614 37 20 37C17.2386 37 15 34.7614 15 32C15 29.2386 17.2386 27 20 27C22.7614 27 25 29.2386 25 32Z" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_3" d="M11 48C12 43 15.5 40 20 40C24.5 40 28 43 29 48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_4" d="M42 37C44.7614 37 47 34.7614 47 32C47 29.2386 44.7614 27 42 27C39.2386 27 37 29.2386 37 32C37 34.7614 39.2386 37 42 37Z" fill="#3991FF"></path><path id="Vector_5" d="M33 48C34 43 37.5 40 42 40C46.5 40 50 43 51 48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_6" d="M53 11H38C36.3431 11 35 12.3431 35 14V21C35 22.6569 36.3431 24 38 24H53C54.6569 24 56 22.6569 56 21V14C56 12.3431 54.6569 11 53 11Z" fill="#3991FF"></path><path id="Vector_7" d="M39 24L41 27L43 24H39Z" fill="#3991FF"></path><path id="Vector_8" d="M41 17.5H50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_620">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>

@@ -41,6 +41,58 @@ function sanitizeForSlack(str) {
 const EMAIL_RE = /^\S+@\S+\.\S{2,}$/
 const MAX_LEN = { name: 100, email: 254, phone: 30, company: 200, message: 2000 }
 
+const SAMPLE_FIELDS = [
+  ['mode', '요청 유형'],
+  ['name', '이름'],
+  ['company', '회사'],
+  ['email', '회사 메일'],
+  ['collections', '컬렉션'],
+  ['scene', '찾는 장면'],
+  ['model', '학습 모델'],
+  ['gap', '부족한 점'],
+  ['volume', '필요 물량'],
+  ['format', '선호 형식'],
+  ['license', '라이선스'],
+  ['timeline', '일정'],
+]
+
+async function handleSample(body, res) {
+  const email = typeof body.email === 'string' ? body.email.trim() : ''
+  if (!EMAIL_RE.test(email) || email.length > MAX_LEN.email) {
+    return res.status(400).json({ error: '유효한 이메일을 입력해주세요.' })
+  }
+  const webhookUrl = process.env.SLACK_CRM_WEBHOOK_URL
+  if (!webhookUrl) {
+    console.error('SLACK_CRM_WEBHOOK_URL is not configured')
+    return res.status(500).json({ error: '서버 설정 오류' })
+  }
+  const lines = SAMPLE_FIELDS.map(([key, label]) => {
+    const raw = body[key]
+    const value = Array.isArray(raw) ? raw.filter((v) => typeof v === 'string').join(', ') : raw
+    return `${label}: ${sanitizeForSlack(typeof value === 'string' ? value.slice(0, 2000) : '') || '-'}`
+  })
+  const submittedAt = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
+  const slackRes = await fetch(webhookUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      text: `*[DATA] 샘플 요청*${body.quick ? ' (메일만)' : ''}
+
+\`\`\`
+${lines.join('\n')}
+
+마케팅 수신 동의: ${body.marketingAgreed ? '동의' : '미동의'}
+접수시간: ${submittedAt}
+\`\`\``,
+    }),
+  })
+  if (!slackRes.ok) {
+    console.error('Slack webhook failed:', slackRes.status)
+    return res.status(502).json({ error: '전송 실패' })
+  }
+  return res.status(200).json({ success: true })
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
@@ -67,6 +119,9 @@ export default async function handler(req, res) {
     if (typeof body.website === 'string' && body.website.trim() !== '') {
       return res.status(200).json({ success: true })
     }
+
+    // Data-marketplace sample request (/request, /data): only a work e-mail is required.
+    if (body.kind === 'sample') return handleSample(body, res)
 
     const { name, email, phone } = body
 

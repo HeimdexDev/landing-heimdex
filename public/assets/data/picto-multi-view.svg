@@ -1,0 +1,19 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / multi-view" clip-path="url(#clip0_0_623)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+
+
+
+
+
+
+
+<g transform="translate(8.09 9.95) scale(0.7473)"><path id="Vector_2" d="M7 31H13C14.1046 31 15 31.8954 15 33V37C15 38.1046 14.1046 39 13 39H7C5.89543 39 5 38.1046 5 37V33C5 31.8954 5.89543 31 7 31Z" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_3" d="M15 33.5L18 31.5V38.5L15 36.5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_4" d="M29 7H35C36.1046 7 37 7.89543 37 9V13C37 14.1046 36.1046 15 35 15H29C27.8954 15 27 14.1046 27 13V9C27 7.89543 27.8954 7 29 7Z" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_5" d="M29.5 15L32 18L34.5 15" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_6" d="M51 31H57C58.1046 31 59 31.8954 59 33V37C59 38.1046 58.1046 39 57 39H51C49.8954 39 49 38.1046 49 37V33C49 31.8954 49.8954 31 51 31Z" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_7" d="M49 33.5L46 31.5V38.5L49 36.5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_8" d="M32 39C34.7614 39 37 36.7614 37 34C37 31.2386 34.7614 29 32 29C29.2386 29 27 31.2386 27 34C27 36.7614 29.2386 39 32 39Z" fill="#3991FF"></path><path id="Vector_9" d="M24.5 52C25.5 47 28 44 32 44C36 44 38.5 47 39.5 52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_10" d="M21 35H21.375M24 35H23.625M32 22V22.5M32 26V25.5M43 35H42.625M40 35H40.375" stroke-width="2" stroke-linecap="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_623">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>

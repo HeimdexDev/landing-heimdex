@@ -1,7 +1,7 @@
 import Link from '../i18n/Link.jsx'
 import { ArrowUpRight } from 'lucide-react'
 import { useLang } from '../i18n/LanguageContext.jsx'
-import { NetworkGraph } from './Home.jsx'
+import NetworkGraph from '../components/NetworkGraph.jsx'
 import SpaceField from '../components/SpaceField.jsx'
 
 // 404 — same dark-navy background as the home hero + reusing the constellation interaction

@@ -44,11 +44,11 @@ export default function FloatingActions() {
         <Link
           to="/contact"
           aria-label={t('문의하기', 'Contact us')}
-          className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-navy-500 shadow-[2px_2px_20px_0_rgba(0,0,0,0.25)] transition-transform hover:-translate-y-0.5"
+          className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-primary-500 shadow-[2px_2px_20px_0_rgba(0,0,0,0.25)] transition-transform hover:-translate-y-0.5"
         >
           <MessageSquareText size={24} className="text-white" />
         </Link>
-        <span className="text-xs font-semibold tracking-[-0.3px] text-navy-500 max-lg:hidden">{t('문의하기', 'Contact')}</span>
+        <span className="text-xs font-semibold tracking-[-0.3px] text-primary-500 max-lg:hidden">{t('문의하기', 'Contact')}</span>
       </div>
     </div>
   )

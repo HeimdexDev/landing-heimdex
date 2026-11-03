@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / natural-motion" clip-path="url(#clip0_0_590)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+
+
+
+<g transform="translate(5.75 2.74) scale(0.9722)"><path id="Vector_2" d="M37 17.5C39.4853 17.5 41.5 15.4853 41.5 13C41.5 10.5147 39.4853 8.5 37 8.5C34.5147 8.5 32.5 10.5147 32.5 13C32.5 15.4853 34.5147 17.5 37 17.5Z" fill="#3991FF"></path><path id="Vector_3" d="M34.5 20.5L30 33" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_4" d="M47 23L42 27.5L33.5 23L25.5 25.5L21.5 21.5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_5" d="M35 50.5L37 40.5L30 33L23 40.5H15" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_6" opacity="0.5" d="M9 27H16M7 33H14" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_590">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>

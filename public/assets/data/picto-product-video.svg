@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / product-video" clip-path="url(#clip0_0_545)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+
+
+<g transform="translate(6.40 6.99) scale(0.7792)"><path id="Vector_2" d="M12 13H43C45.7614 13 48 15.2386 48 18V37C48 39.7614 45.7614 42 43 42H12C9.23858 42 7 39.7614 7 37V18C7 15.2386 9.23858 13 12 13Z" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_3" d="M23 21V34L34 27.5L23 21Z" fill="#3991FF"></path><path id="Vector_4" d="M41 38L50 34.5L59 38V48L50 51.5L41 48V38Z" fill="#3991FF"></path><path id="Vector_5" d="M41 38L50 41.5M50 41.5L59 38M50 41.5V51.5" stroke-width="1.6" stroke-linejoin="round" stroke="white" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_545">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>

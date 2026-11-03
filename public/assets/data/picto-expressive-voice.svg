@@ -1,0 +1,12 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / expressive-voice" clip-path="url(#clip0_0_582)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+<g transform="translate(-3.18 0.12) scale(1.0995)"><path id="Vector_2" d="M32 11C35.3137 11 38 13.6863 38 17V27C38 30.3137 35.3137 33 32 33C28.6863 33 26 30.3137 26 27V17C26 13.6863 28.6863 11 32 11Z" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_3" d="M20 27C20 30.1826 21.2643 33.2348 23.5147 35.4853C25.7652 37.7357 28.8174 39 32 39M32 39C35.1826 39 38.2348 37.7357 40.4853 35.4853C42.7357 33.2348 44 30.1826 44 27M32 39V47M32 47H26M32 47H38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_582">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>

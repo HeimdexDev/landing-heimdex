@@ -1,0 +1,12 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / overlap-diarization" clip-path="url(#clip0_0_590)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+<g transform="translate(6.25 4.64) scale(0.8046)"><path id="Vector_2" d="M7 34C11 34 11 24 15 24C19 24 19 44 23 44C27 44 27 30 31 30C35 30 35 38 39 38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_3" d="M25 30C29 30 29 42 33 42C37 42 37 24 41 24C45 24 45 38 49 38C53 38 53 32 57 32" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_590">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
