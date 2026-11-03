@@ -1,0 +1,4 @@
+# Netlify equivalent of vercel.json's rewrites. Prerendered pages are real files
+# and win; anything else falls back to the SPA shell (see scripts/prerender.mjs).
+/en/*  /en/_shell.html  200
+/*     /_shell.html     200

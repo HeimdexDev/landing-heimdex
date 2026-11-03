@@ -1,0 +1,18 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / sim-verified" clip-path="url(#clip0_0_555)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+
+
+
+
+
+
+<g transform="translate(5.20 4.34) scale(0.8537)"><path id="Vector_2" d="M19 18H35C38.866 18 42 21.134 42 25V35C42 38.866 38.866 42 35 42H19C15.134 42 12 38.866 12 35V25C12 21.134 15.134 18 19 18Z" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_3" d="M27 18V13" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_4" d="M27 13.2C28.215 13.2 29.2 12.215 29.2 11C29.2 9.78497 28.215 8.8 27 8.8C25.785 8.8 24.8 9.78497 24.8 11C24.8 12.215 25.785 13.2 27 13.2Z" fill="#3991FF"></path><path id="Vector_5" d="M21.5 31.6C22.9359 31.6 24.1 30.4359 24.1 29C24.1 27.5641 22.9359 26.4 21.5 26.4C20.0641 26.4 18.9 27.5641 18.9 29C18.9 30.4359 20.0641 31.6 21.5 31.6Z" fill="#3991FF"></path><path id="Vector_6" d="M32.5 31.6C33.9359 31.6 35.1 30.4359 35.1 29C35.1 27.5641 33.9359 26.4 32.5 26.4C31.0641 26.4 29.9 27.5641 29.9 29C29.9 30.4359 31.0641 31.6 32.5 31.6Z" fill="#3991FF"></path><path id="Vector_7" d="M22.5 35.5H31.5M8 27V34M46 27V34" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_8" d="M46 56C51.5228 56 56 51.5228 56 46C56 40.4772 51.5228 36 46 36C40.4772 36 36 40.4772 36 46C36 51.5228 40.4772 56 46 56Z" fill="#3991FF"></path><path id="Vector_9" d="M41.5 46L44.5 49L50 43" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="white" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_555">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>

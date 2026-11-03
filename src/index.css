@@ -34,8 +34,8 @@ html {
 body {
   margin: 0;
   font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
-  background: #fcfcff;
-  color: #272833;
+  background: #ffffff;
+  color: #191f28;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Hangul counts as CJK, so the default `word-break: normal` lets a line end
@@ -210,6 +210,41 @@ a {
   .btn-outline {
     @apply inline-flex items-center justify-center gap-1 rounded-lg border border-navy-500 px-6 py-5 text-base font-semibold text-navy-500 transition-colors hover:bg-navy-500/5;
   }
+
+  /* v1.2 buttons (palette 04), toss.im feel: soft 14px corners, no outlines —
+     the secondary button is a grey fill — and a slight press-in on click. */
+  .hx-btn {
+    @apply inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[14px] px-7 py-4 text-[17px] font-semibold tracking-[-0.2px] transition-[background-color,transform,box-shadow] duration-200 active:scale-[0.97] max-sm:px-5 max-sm:py-3.5 max-sm:text-[16px];
+  }
+  .hx-btn-sm {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-[10px] px-4 py-2 text-[15px] font-semibold transition-[background-color,transform] duration-200 active:scale-[0.96];
+  }
+  .hx-primary {
+    @apply bg-primary-500 text-white hover:bg-primary-600;
+  }
+  .hx-ink {
+    @apply bg-ink text-white hover:bg-black;
+  }
+  .hx-line {
+    @apply bg-mist text-ink-soft hover:bg-[#E5E8EB];
+  }
+  /* On the dark CTA band */
+  .hx-on-dark {
+    @apply bg-white text-hx hover:bg-primary-50;
+  }
+  .hx-line-dark {
+    @apply bg-white/10 text-white hover:bg-white/[0.16];
+  }
+  /* Small section eyebrow above an h2 */
+  .hx-eyebrow {
+    @apply text-[17px] font-bold tracking-[-0.3px] text-primary-500 max-sm:text-[15px];
+  }
+  .hx-h2 {
+    @apply text-[42px] font-bold leading-[1.32] tracking-[-0.03em] text-ink max-md:text-[34px] max-sm:text-[27px];
+  }
+  .hx-section {
+    @apply px-[60px] max-lg:px-8 max-sm:px-5;
+  }
 }
 
 /* The heimlog upload mockup fills its clip list on mount — the demo's one beat.
@@ -251,4 +286,28 @@ a {
   .hl-indeterminate {
     animation: none;
   }
+}
+
+/* Data marketplace hero ribbon — each band breathes on its own loop. */
+@keyframes hx-ribbon-a {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-10px) scaleY(1.18); }
+}
+@keyframes hx-ribbon-b {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(8px) scaleY(0.82); }
+}
+@keyframes hx-ribbon-c {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-6px) scaleY(1.3); }
+}
+.hx-ribbon-wave {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: hx-ribbon-a 4.2s ease-in-out infinite;
+}
+.hx-ribbon-wave-2 { animation-name: hx-ribbon-b; animation-duration: 5.4s; animation-delay: -1.2s; }
+.hx-ribbon-wave-3 { animation-name: hx-ribbon-c; animation-duration: 6.6s; animation-delay: -2.6s; }
+@media (prefers-reduced-motion: reduce) {
+  .hx-ribbon-wave { animation: none; }
 }

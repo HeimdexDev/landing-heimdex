@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / turn-taking" clip-path="url(#clip0_0_530)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+
+
+
+
+<g transform="translate(3.96 2.17) scale(0.8917)"><path id="Vector_2" d="M14 12H31C33.7614 12 36 14.2386 36 17V24C36 26.7614 33.7614 29 31 29H14C11.2386 29 9 26.7614 9 24V17C9 14.2386 11.2386 12 14 12Z" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_3" d="M15 29L13 35L20 29" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_4" d="M50 33H33C30.2386 33 28 35.2386 28 38V45C28 47.7614 30.2386 50 33 50H50C52.7614 50 55 47.7614 55 45V38C55 35.2386 52.7614 33 50 33Z" fill="#3991FF"></path><path id="Vector_5" d="M47 50L50 56L42 50H47Z" fill="#3991FF"></path><path id="Vector_6" d="M15 20.5H30M34 41.5H49" stroke-width="2" stroke-linecap="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_7" d="M34 41.5H49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_530">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>

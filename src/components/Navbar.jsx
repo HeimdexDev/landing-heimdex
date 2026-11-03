@@ -1,426 +1,651 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Link from '../i18n/Link.jsx'
-import { Menu, X, ChevronDown } from 'lucide-react'
-import { useLang } from '../i18n/LanguageContext.jsx'
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Briefcase,
+  Building2,
+  ChevronDown,
+  Clapperboard,
+  Database,
+  Handshake,
+  Mic,
+  PersonStanding,
+  Presentation,
+  Search,
+  Send,
+  Users,
+  Video,
+  Globe,
+  FlaskConical,
+  GraduationCap,
+  Menu,
+  PenLine,
+  Scale,
+  ShoppingBag,
+  X,
+} from 'lucide-react'
+import { useLang, stripLangPrefix } from '../i18n/LanguageContext.jsx'
+import { DATA_PATH, REQUEST_PATH, collectionPath, useDataCopy } from '../data/dataMarket.js'
+import { SHOW_COMPANY_LINKS } from '../data/flags.js'
+import {
+  INDUSTRIES,
+  HEIMLOG_APP,
+  blogUrl,
+  industryPath,
+} from '../data/industries.js'
 
-const NAV = [
-  { key: 'home', label: '홈', en: 'Home', to: '/' },
-  { key: 'product', label: '제품', en: 'Product', to: '/product' },
-  { key: 'blog', label: '블로그', en: 'Blog', href: 'https://blog.heimdex.co/', external: true },
-  { key: 'contact', label: '문의', en: 'Contact', to: '/contact' },
+// GNB per homepage-wireframe 01 (문서 4.1):
+//   로고 | 제품▾ · 도입 사례 · 블로그↗ · 회사▾ | KO/EN | [도입 문의] [하임로그 시작하기]
+// 제품 opens a mega-menu split by audience (비즈니스용 / 산업별 / 개인용) rather
+// than "B2B/B2C"; 블로그 hovers into one entry per readership; 회사 is a dropdown.
+
+export const INDUSTRY_ICONS = {
+  commerce: ShoppingBag,
+  media: Clapperboard,
+  education: GraduationCap,
+  legal: Scale,
+  research: FlaskConical,
+}
+
+const BLOG = [
+  {
+    key: 'business',
+    label: 'Business 블로그',
+    en: 'Business blog',
+    caption: '도입 검토 · 고객 사례 · 산업 동향 · 기술 해설',
+    captionEn: 'Evaluation · customer stories · trends · tech explainers',
+    icon: Briefcase,
+  },
+  {
+    key: 'creators',
+    label: 'Creators 블로그',
+    en: 'Creators blog',
+    caption: '브이로그 제작 가이드 · 편집 팁 · 하임로그 사용법',
+    captionEn: 'Vlog guides · editing tips · how to use heimlog',
+    icon: PenLine,
+  },
+  {
+    key: 'company',
+    label: 'Company',
+    en: 'Company',
+    caption: '소식 · 브랜드 노트 · 팀 문화',
+    captionEn: 'News · brand notes · team culture',
+    icon: Building2,
+  },
 ]
 
-// Industry solutions shown in the "Product" mega-menu (label + caption).
-const PRODUCT_MENU = [
-  {
-    label: '브이로그 크리에이터',
-    en: 'Vlog Creators',
-    caption: '쌓여 있던 영상, 30분 만에 브이로그로',
-    captionEn: 'Piled-up footage, a vlog in 30 minutes',
-    to: '/product?tab=vlog',
-  },
-  {
-    label: '로펌·수사',
-    en: 'Legal & Investigation',
-    caption: '방대한 영상 증거에서 결정적 단서만',
-    captionEn: 'The decisive clue from vast video evidence',
-    to: '/product?tab=legal',
-  },
-  {
-    label: '마케터·PD',
-    en: 'Marketers & Producers',
-    caption: '검색 한 줄로 바로 숏폼 제작까지',
-    captionEn: 'From a single search to ready-made short-form',
-    to: '/product?tab=creative',
-  },
-  {
-    label: '데이터·연구',
-    en: 'Data & Research',
-    caption: '연구 인사이트를 더 빠르고, 정확하게',
-    captionEn: 'Research insights, faster and more precise',
-    to: '/product?tab=research',
-  },
+const COMPANY = [
+  { label: '소개', en: 'About', caption: '하임덱스가 만드는 표준', captionEn: 'The standard Heimdex is building', to: '/company/about' },
+  { label: '소식', en: 'News', caption: '투자 · 수상 · 선정 · 방송', captionEn: 'Funding · awards · selections · media', to: '/company/news' },
+  { label: '브랜드', en: 'Brand', caption: '로고 · BX 가이드', captionEn: 'Logo · BX guide', to: '/company/brand' },
+  { label: '채용', en: 'Careers', caption: '하임덱스 크루 되기', captionEn: 'Join the Heimdex crew', to: '/company/careers' },
 ]
 
-export default function Navbar() {
-  const { pathname } = useLocation()
-  const { lang, setLang, t } = useLang()
-  const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen] = useState(false)
-  const [productOpen, setProductOpen] = useState(false)
-  const [mobileProductOpen, setMobileProductOpen] = useState(false)
-  const closeTimer = useRef(null)
+const HEIMLOG_LINKS = [
+  { label: '하임로그 소개', en: 'About heimlog', to: '/heimlog' },
+  { label: '요금제 · 크레딧', en: 'Pricing & credits', to: '/heimlog/pricing' },
+  { label: '사용 가이드', en: 'User guide', to: '/heimlog/guide' },
+]
 
-  // The GNB sits transparent on top of full-bleed heroes (home + product) until
-  // the user scrolls, then turns solid white. Home's hero is dark so its text
-  // goes white (heroLook); the product hero is light so text stays dark.
-  const atTop = !scrolled
-  // The 404 page (any unknown path) uses the same dark hero as home, so the
-  // header should behave exactly like it does on '/'.
-  const isNotFound =
-    pathname !== '/' &&
-    pathname !== '/blog' &&
-    !pathname.startsWith('/product') &&
-    !pathname.startsWith('/contact') &&
-    !pathname.startsWith('/policy')
-  const isDarkHero = pathname === '/' || isNotFound
-  const onHeroBg =
-    isDarkHero || pathname.startsWith('/product') || pathname.startsWith('/contact')
-  // Transparent over heroes, but go solid when the (light) product menu opens on a
-  // non-home page so the header and the white dropdown read as one continuous surface.
-  const transparent = atTop && onHeroBg && !(productOpen && !isDarkHero)
-  const heroLook = atTop && isDarkHero
-  // Mobile full-screen menu uses each page's topmost hero color, independent of
-  // scroll position: dark hero (home + 404) = deep navy, other pages = light hero top.
-  const menuDark = isDarkHero
-  // While the menu is open the header row matches the menu's theme.
-  const headerWhite = open ? menuDark : heroLook
-
-  // Debounced open/close so moving the cursor across the small gap between the
-  // "Product" trigger and the dropdown (which lives outside the header) doesn't flicker.
-  const openMenu = () => {
-    clearTimeout(closeTimer.current)
-    setProductOpen(true)
-  }
-  const closeMenu = () => {
-    clearTimeout(closeTimer.current)
-    closeTimer.current = setTimeout(() => setProductOpen(false), 120)
-  }
-  const closeNow = () => {
-    clearTimeout(closeTimer.current)
-    setProductOpen(false)
-  }
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // Close menus whenever the route changes.
-  useEffect(() => {
-    setOpen(false)
-    setProductOpen(false)
-    setMobileProductOpen(false)
-  }, [pathname])
-
-  const isActive = (to) =>
-    to === '/' ? pathname === '/' : pathname.startsWith(to)
-
-  const symbol = headerWhite ? '/assets/logo-mark-white.svg' : '/assets/logo-symbol.svg'
-  const wordmark = headerWhite ? '/assets/logo-wordmark-white.svg' : '/assets/logo-wordmark.svg'
-
+function Caret({ open }) {
   return (
-    <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 flex flex-col items-center backdrop-blur-[12px] transition-colors duration-300 ${
-          open
-            ? menuDark
-              ? 'bg-[#02060f]'
-              : 'bg-[#f4f8fe]'
-            : transparent
-              ? heroLook
-                ? 'bg-[#02060f]/80'
-                : 'bg-transparent'
-              : 'bg-white/80'
-        }`}
-      >
-        <div className="relative z-10 flex h-20 w-full max-w-page items-center justify-between px-[60px] max-lg:px-5">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="flex flex-1 items-center gap-[6px]"
-            onMouseEnter={closeNow}
-          >
-            <img src={symbol} alt="" className="h-[28px] w-[26px]" />
-            <img src={wordmark} alt="heimdex" className="h-[19px] w-[92px]" />
-          </Link>
+    <ChevronDown
+      size={14}
+      strokeWidth={2.4}
+      className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+    />
+  )
+}
 
-          {/* Center nav */}
-          <nav className="flex items-center gap-3 max-lg:hidden">
-            {NAV.map((item) => {
-              const active = !item.external && isActive(item.to)
-              const cls = `flex items-center justify-center px-[18px] py-3 text-[17px] leading-[1.4] tracking-[-0.4px] transition-colors ${
-                heroLook ? 'text-white' : 'text-grayscale-800'
-              } ${
-                active
-                  ? `font-semibold ${heroLook ? 'border-b-2 border-white' : 'border-b-2 border-navy-500'}`
-                  : 'font-medium'
-              }`
-              return item.external ? (
-                <a
-                  key={item.key}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cls}
-                  onMouseEnter={closeNow}
-                >
-                  {lang === 'en' ? item.en : item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.key}
-                  to={item.to}
-                  className={cls}
-                  onMouseEnter={item.key === 'product' ? openMenu : closeNow}
-                  onMouseLeave={item.key === 'product' ? closeMenu : undefined}
-                >
-                  {lang === 'en' ? item.en : item.label}
-                </Link>
+// Square icon tile used in front of menu rows.
+function Tile({ icon: Icon, tone = 'neutral' }) {
+  const tones = {
+    neutral: 'bg-[#F2F4F6] text-ink',
+    cyan: 'bg-primary-50 text-primary-500',
+  }
+  return (
+    <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${tones[tone]}`}>
+      <Icon size={18} strokeWidth={1.8} />
+    </span>
+  )
+}
+
+// Three flat columns split by hairlines — 비즈니스용 · 산업별 · 개인용 — each
+// opened by the same small heading, so nothing competes but the items.
+function ProductMenu({ lang, t, close }) {
+  const en = lang === 'en'
+  const head = 'mb-5 text-[12px] font-semibold tracking-[0.02em] text-ink-mute'
+  return (
+    <div className="mx-auto w-full max-w-[1200px] py-9 max-xl:px-8">
+      <div className="grid grid-cols-[1fr_1.55fr_1fr] divide-x divide-line">
+        {/* 비즈니스용 */}
+        <div className="pr-10">
+          <p className={head}>{t('비즈니스용', 'For business')}</p>
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-hx">
+            <img src="/assets/logo-mark-white.svg" alt="" className="h-[18px] w-[18px]" />
+          </span>
+          <p className="mt-4 font-product text-[20px] font-bold leading-tight text-hx">HEIMDEX</p>
+          <p className="mt-1.5 text-[14px] leading-[1.6] text-ink-sub">
+            {t('쌓인 영상 아카이브에서 장면을 찾고, 지키고, 다시 만들어요', 'Find, protect and remake scenes from your archive')}
+          </p>
+          <p className="mt-3 text-[13px] text-ink-mute">{t('팀 · 기업 · 기관', 'Teams · companies · institutions')}</p>
+        </div>
+
+        {/* 산업별 */}
+        <div className="px-10">
+          <p className={head}>{t('산업별', 'By industry')}</p>
+          <ul className="grid grid-cols-2 gap-x-6 gap-y-1">
+            {INDUSTRIES.map((ind) => {
+              const Icon = INDUSTRY_ICONS[ind.slug]
+              return (
+                <li key={ind.slug}>
+                  <Link
+                    to={industryPath(ind.slug)}
+                    onClick={close}
+                    className="group -mx-3 block rounded-xl px-3 py-2.5 transition-colors hover:bg-mist"
+                  >
+                    <span className="flex items-center gap-2 text-[15px] font-semibold text-ink">
+                      <Icon size={16} strokeWidth={1.9} className="text-ink-mute transition-colors group-hover:text-primary-500" />
+                      {en ? ind.nameEn : ind.name}
+                    </span>
+                    <span className="mt-0.5 block truncate pl-6 text-[13px] text-ink-sub">
+                      {en ? ind.menuCaptionEn : ind.menuCaption}
+                    </span>
+                  </Link>
+                </li>
               )
             })}
-          </nav>
+          </ul>
+        </div>
 
-          {/* Right action — the language toggle alone. 웹에서 체험하기 moved to
-              the product page's tab row, beside the industry it applies to. */}
-          <div className="flex flex-1 items-center justify-end gap-1 max-lg:hidden">
-            {/* KOR / ENG language toggle */}
-            <div
-              onMouseEnter={closeNow}
-              className={`flex items-center gap-2.5 pl-4 text-[14px] font-semibold ${
-                heroLook ? 'text-white' : 'text-grayscale-800'
-              }`}
-            >
-              <button
-                type="button"
-                onClick={() => setLang('ko')}
-                className={`transition-opacity ${lang === 'ko' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-              >
-                KOR
-              </button>
-              <span className={heroLook ? 'text-white/30' : 'text-grayscale-300'}>|</span>
-              <button
-                type="button"
-                onClick={() => setLang('en')}
-                className={`transition-opacity ${lang === 'en' ? 'opacity-100' : 'opacity-40 hover:opacity-70'}`}
-              >
-                ENG
-              </button>
-            </div>
-          </div>
+        {/* 개인용 — the whole column opens the heimlog app */}
+        <a href={HEIMLOG_APP} target="_blank" rel="noopener noreferrer" onClick={close} className="group block pl-10">
+          <p className={head}>{t('개인용', 'For individuals')}</p>
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-heimlog-cream">
+            <img src="/assets/heimlog-mark.svg" alt="" className="h-[18px] w-[18px]" />
+          </span>
+          <span className="mt-4 flex items-center gap-2">
+            <span className="text-[20px] font-bold leading-tight text-ink transition-colors group-hover:text-heimlog-ink">
+              {t('하임로그', 'heimlog')}
+            </span>
+            <span className="rounded-full bg-heimlog px-2 py-0.5 text-[11px] font-semibold text-heimlog-on">{t('무료로 시작', 'Start free')}</span>
+          </span>
+          <span className="mt-1.5 block text-[14px] leading-[1.6] text-ink-sub">
+            {t('찍어둔 여행 · 일상 영상을 AI가 브이로그로 자동 편집해요', 'AI edits your travel and daily clips into a vlog')}
+          </span>
+          <span className="mt-3 block text-[13px] text-ink-mute">{t('크리에이터 · 브이로거', 'Creators · vloggers')}</span>
+          <span className="mt-5 inline-block text-[14px] font-semibold text-heimlog-ink">{t('하임로그 바로가기', 'Open heimlog')}</span>
+        </a>
+      </div>
+    </div>
+  )
+}
 
-          {/* Hamburger (mobile/tablet only) */}
+// 데이터 마켓플레이스 mega-menu — same three-column build, heading and line icons
+// as the 제품 menu (ProductMenu): overview · collections · request.
+const COLLECTION_ICONS = {
+  'multi-speaker': Users,
+  'speaker-separated': Mic,
+  multicam: Video,
+  motion: PersonStanding,
+  presenter: Presentation,
+}
+
+function DataMegaMenu({ t, close }) {
+  const d = useDataCopy()
+  const head = 'mb-5 text-[12px] font-semibold tracking-[0.02em] text-ink-mute'
+  const item = 'group -mx-3 block rounded-xl px-3 py-2.5 transition-colors hover:bg-mist'
+  const actions = [
+    { icon: Send, to: REQUEST_PATH, label: d.gnb.sample, caption: t('2영업일 안에 샘플 구성안 회신', 'Proposed sample within 2 business days') },
+    { icon: Search, to: `${REQUEST_PATH}?mode=1`, label: t('맞춤 수집 요청', 'Custom collection'), caption: t('필요한 장면을 문장으로 요청', 'Describe the scene you need') },
+    { icon: Handshake, to: '/contact', label: t('파트너 문의', 'Partner with us'), caption: t('아카이브를 보유한 제작사 · 방송사', 'For producers and broadcasters with archives') },
+  ]
+  return (
+    <div className="mx-auto w-full max-w-[1200px] py-9 max-xl:px-8">
+      <div className="grid grid-cols-[1fr_1.55fr_1fr] divide-x divide-line">
+        <Link to={DATA_PATH} onClick={close} className="group block pr-10">
+          <p className={head}>{d.gnb.label}</p>
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-white">
+            <Database size={18} strokeWidth={1.9} />
+          </span>
+          <span className="mt-4 flex items-center gap-2">
+            <span className="text-[20px] font-bold leading-tight text-hx">{d.gnb.label}</span>
+            <span className="rounded-[4px] bg-accent px-[5px] py-px text-[12px] font-bold leading-[15px] text-white">{d.gnb.isNew}</span>
+          </span>
+          <span className="mt-1.5 block text-[14px] leading-[1.6] text-ink-sub">
+            {t('방송에 나가지 않은 촬영 원본을 화자별 트랙과 멀티캠 그대로 제공해요', 'Unaired production footage with per-speaker tracks and multi-cam intact')}
+          </span>
+          <span className="mt-3 block text-[13px] text-ink-mute">{t('AI 학습 데이터 · 비독점 · 기간 한정', 'AI training data · non-exclusive · fixed term')}</span>
+        </Link>
+
+        <div className="px-10">
+          <p className={head}>{t('컬렉션', 'Collections')}</p>
+          <ul className="grid grid-cols-2 gap-x-6 gap-y-1">
+            {d.collections.map((c) => {
+              const Icon = COLLECTION_ICONS[c.slug] ?? Database
+              return (
+                <li key={c.slug}>
+                  <Link to={collectionPath(c.slug)} onClick={close} className={item}>
+                    <span className="flex items-center gap-2 text-[15px] font-semibold text-ink">
+                      <Icon size={16} strokeWidth={1.9} className="shrink-0 text-ink-mute transition-colors group-hover:text-primary-500" />
+                      <span className="truncate">{c.name}</span>
+                    </span>
+                    <span className="mt-0.5 block truncate pl-6 text-[13px] text-ink-sub">{c.desc}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+
+        <div className="pl-10">
+          <p className={head}>{t('샘플 · 문의', 'Samples · contact')}</p>
+          <ul className="flex flex-col gap-1">
+            {actions.map(({ icon: Icon, to, label, caption }) => (
+              <li key={to}>
+                <Link to={to} onClick={close} className={item}>
+                  <span className="flex items-center gap-2 text-[15px] font-semibold text-ink">
+                    <Icon size={16} strokeWidth={1.9} className="shrink-0 text-ink-mute transition-colors group-hover:text-primary-500" />
+                    {label}
+                  </span>
+                  <span className="mt-0.5 block truncate pl-6 text-[13px] text-ink-sub">{caption}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CompanyMenu({ lang, close }) {
+  return (
+    <div className="w-[300px] p-2">
+      {COMPANY.map((c) => (
+        <Link
+          key={c.to}
+          to={c.to}
+          onClick={close}
+          className="block rounded-xl px-4 py-3 transition-colors hover:bg-ink/[0.04]"
+        >
+          <span className="block text-[15px] font-semibold text-ink">{lang === 'en' ? c.en : c.label}</span>
+          <span className="block text-[13px] text-ink-sub">{lang === 'en' ? c.captionEn : c.caption}</span>
+        </Link>
+      ))}
+    </div>
+  )
+}
+
+function LangToggle({ className = '' }) {
+  const { lang, setLang } = useLang()
+  return (
+    <div className={`flex items-center gap-1.5 text-[14px] ${className}`}>
+      {['ko', 'en'].map((l, i) => (
+        <span key={l} className="flex items-center gap-1.5">
+          {i > 0 && <span className="text-ink-sub/50">/</span>}
           <button
             type="button"
-            aria-label={open ? t('메뉴 닫기', 'Close menu') : t('메뉴 열기', 'Open menu')}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-            className={`relative hidden h-7 w-7 items-center justify-center max-lg:flex ${
-              headerWhite ? 'text-white' : 'text-grayscale-800'
-            }`}
+            onClick={() => setLang(l)}
+            aria-pressed={lang === l}
+            className={lang === l ? 'font-semibold text-ink' : 'text-ink-sub hover:text-ink'}
           >
-            <Menu
-              className={`absolute h-7 w-7 transition-all duration-300 ease-out ${
-                open ? 'rotate-90 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100'
-              }`}
-            />
-            <X
-              className={`absolute h-7 w-7 transition-all duration-300 ease-out ${
-                open ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'
-              }`}
-            />
+            {l.toUpperCase()}
           </button>
-        </div>
-      </header>
+        </span>
+      ))}
+    </div>
+  )
+}
 
-      {/* Mobile menu — full-screen drawer. Lives OUTSIDE the header so its
-          fixed inset-0 is relative to the VIEWPORT; the header's backdrop-filter
-          would otherwise contain it to the 80px header box. The header (z-50)
-          stays above so the close (X) button remains tappable. */}
-      {open && (
-        <div
-          className={`fixed inset-0 z-40 flex flex-col lg:hidden ${
-            menuDark ? 'bg-[#02060f] text-white' : 'bg-[#f4f8fe] text-grayscale-800'
-          }`}
-        >
-            <div className="flex h-full w-full flex-col px-5 pb-12 pt-24">
-              <nav className="flex flex-col">
-                {NAV.map((item) => {
-                  const cls = `flex items-center py-4 text-[22px] font-semibold leading-[1.3] tracking-[-0.5px] ${
-                    menuDark ? 'text-white' : 'text-grayscale-800'
-                  }`
-                  // "Product" expands into the three solution sub-items.
-                  if (item.key === 'product') {
-                    return (
-                      <div key={item.key}>
-                        <button
-                          type="button"
-                          onClick={() => setMobileProductOpen((v) => !v)}
-                          className={`${cls} w-full justify-between`}
-                        >
-                          {lang === 'en' ? item.en : item.label}
-                          <ChevronDown
-                            size={24}
-                            className={`transition-transform duration-300 ease-out ${
-                              mobileProductOpen ? 'rotate-180' : ''
-                            } ${menuDark ? 'text-white/70' : 'text-grayscale-500'}`}
-                          />
-                        </button>
-                        <div
-                          className={`grid transition-all duration-300 ease-out ${
-                            mobileProductOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-                          }`}
-                        >
-                          <div className="overflow-hidden">
-                            {PRODUCT_MENU.map((m) => (
-                              <Link
-                                key={m.label}
-                                to={m.to}
-                                onClick={() => setOpen(false)}
-                                className={`flex items-center py-3 pl-4 text-[17px] font-medium tracking-[-0.4px] ${
-                                  menuDark ? 'text-[#cdd9ec]' : 'text-grayscale-500'
-                                }`}
-                              >
-                                {lang === 'en' ? m.en : m.label}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  }
-                  return item.external ? (
-                    <a
-                      key={item.key}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={cls}
-                      onClick={() => setOpen(false)}
-                    >
-                      {lang === 'en' ? item.en : item.label}
-                    </a>
-                  ) : (
-                    <Link
-                      key={item.key}
-                      to={item.to}
-                      className={cls}
-                      onClick={() => setOpen(false)}
-                    >
-                      {lang === 'en' ? item.en : item.label}
-                    </Link>
-                  )
-                })}
-              </nav>
-
-              <div className="mt-auto flex items-center justify-between">
-                {/* KOR / ENG language toggle */}
-                <div
-                  className={`flex items-center gap-2.5 text-[15px] font-semibold ${
-                    menuDark ? 'text-white' : 'text-grayscale-800'
-                  }`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setLang('ko')}
-                    className={lang === 'ko' ? 'opacity-100' : 'opacity-40'}
-                  >
-                    KOR
-                  </button>
-                  <span className={menuDark ? 'text-white/30' : 'text-grayscale-300'}>|</span>
-                  <button
-                    type="button"
-                    onClick={() => setLang('en')}
-                    className={lang === 'en' ? 'opacity-100' : 'opacity-40'}
-                  >
-                    ENG
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-      {/* Product mega-menu — sibling of the header (outside its backdrop-filter
-          root) so its own blur frosts the page behind it. The dim sits BELOW the
-          panel (not behind it) so the panel's backdrop matches the header exactly.
-          Desktop only. */}
-      <div
-        className={`fixed inset-x-0 bottom-0 top-20 z-40 hidden flex-col lg:flex ${
-          productOpen ? '' : 'pointer-events-none'
-        }`}
+// Desktop language picker — a globe icon with a small dropdown (flitto GNB).
+function LangMenu({ open, trigger, close }) {
+  const { lang, setLang, t } = useLang()
+  return (
+    <div className="relative" {...trigger}>
+      <button
+        type="button"
+        aria-label={t('언어 선택', 'Language')}
+        aria-expanded={open}
+        className="flex h-10 w-10 items-center justify-center rounded-full text-ink transition-colors hover:bg-mist"
       >
-        {/* Panel */}
-        <div
-          onMouseEnter={openMenu}
-          onMouseLeave={closeMenu}
-          className={`border-t transition-all duration-300 ${
-            heroLook
-              ? 'border-white/10 bg-[#02060f]/80 backdrop-blur-[12px]'
-              : 'border-grayscale-100 bg-white/80 backdrop-blur-[12px]'
-          } ${
-            productOpen
-              ? 'pointer-events-auto translate-y-0 opacity-100'
-              : 'pointer-events-none -translate-y-3 opacity-0'
-          }`}
-        >
-        <div className="mx-auto flex w-full max-w-page items-center gap-10 px-[48px] py-10">
-          {/* Left — blurb */}
-          <div className="w-[300px] shrink-0">
-            <p className={`text-sm leading-[1.6] ${heroLook ? 'text-[#e6eefb]' : 'text-navy-500'}`}>
-              {t(
-                <>
-                  하임덱스는 다양한 산업의 영상 가치를 극대화하는
-                  <br />
-                  솔루션을 보유하고 있습니다.
-                </>,
-                'Heimdex offers solutions that maximize the value of video across industries.',
-              )}
-            </p>
-            <p className={`mt-3 text-sm leading-[1.6] ${heroLook ? 'text-[#e6eefb]' : 'text-navy-500'}`}>
-              {t('각 산업별 사례를 통해 자세히 알아보세요.', 'Explore how it works for each industry.')}
-            </p>
-          </div>
-          {/* Right — industry cards. One row on wide screens; below xl the row
-              would squeeze each caption to two or three words per line, so they
-              fold into a 2x2 instead. */}
-          <div className="grid flex-1 grid-cols-4 gap-2 max-xl:grid-cols-2">
-            {PRODUCT_MENU.map((m) => (
-              <Link
-                key={m.label}
-                to={m.to}
-                onClick={closeNow}
-                className={`group rounded-lg p-4 transition-colors ${
-                  heroLook ? 'hover:bg-white/[0.06]' : 'hover:bg-softblue-50/40'
+        <Globe size={22} strokeWidth={1.6} />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full pt-2">
+          <div className="w-[140px] rounded-[14px] bg-white p-1.5 shadow-lift ring-1 ring-black/[0.05]">
+            {[
+              ['ko', '한국어'],
+              ['en', 'English'],
+            ].map(([l, label]) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => {
+                  setLang(l)
+                  close()
+                }}
+                aria-pressed={lang === l}
+                className={`block w-full rounded-[10px] px-3 py-2 text-left text-[15px] transition-colors hover:bg-mist ${
+                  lang === l ? 'font-semibold text-primary-500' : 'text-ink'
                 }`}
               >
-                <p
-                  className={`text-base font-semibold ${
-                    heroLook ? 'text-white' : 'text-grayscale-800'
-                  }`}
-                >
-                  {lang === 'en' ? m.en : m.label}
-                </p>
-                <p
-                  className={`mt-2 text-[12px] leading-[1.5] ${
-                    heroLook ? 'text-[#c7d6ec]' : 'text-grayscale-500'
-                  }`}
-                >
-                  {/* A caption carrying \n is written to a specific rhythm, so it
-                      breaks where the copy says; the rest wrap on their own. */}
-                  {(lang === 'en' ? m.captionEn : m.caption).split('\n').map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
-                </p>
-              </Link>
+                {label}
+              </button>
             ))}
           </div>
         </div>
+      )}
+    </div>
+  )
+}
+
+// One expandable group in the mobile drawer.
+function MobileGroup({ label, open, onToggle, children }) {
+  return (
+    <div className="border-b border-line">
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between py-4 text-[19px] font-semibold text-ink"
+      >
+        {label}
+        <ChevronDown size={20} className={`text-ink-sub transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      <div className={`grid transition-all duration-300 ${open ? 'grid-rows-[1fr] pb-4' : 'grid-rows-[0fr]'}`}>
+        <div className="overflow-hidden">{children}</div>
+      </div>
+    </div>
+  )
+}
+
+function MobileSubhead({ children }) {
+  return <p className="mb-1 mt-3 text-[12px] font-semibold text-ink-sub first:mt-0">{children}</p>
+}
+
+const mobileLink = 'block py-2 text-[16px] text-ink'
+
+export default function Navbar() {
+  const { pathname } = useLocation()
+  const { lang, t } = useLang()
+  const dataCopy = useDataCopy()
+  const [menu, setMenu] = useState(null) // 'product' | 'blog' | 'company' | null
+  const [drawer, setDrawer] = useState(false)
+  const [group, setGroup] = useState(null)
+  const timer = useRef(null)
+  const bare = stripLangPrefix(pathname)
+
+  // Debounced so crossing the gap between a trigger and its panel doesn't flicker.
+  const openMenu = (key) => {
+    clearTimeout(timer.current)
+    setMenu(key)
+  }
+  const closeSoon = () => {
+    clearTimeout(timer.current)
+    timer.current = setTimeout(() => setMenu(null), 140)
+  }
+  const closeNow = () => {
+    clearTimeout(timer.current)
+    setMenu(null)
+  }
+
+  useEffect(() => {
+    closeNow()
+    setDrawer(false)
+    setGroup(null)
+  }, [pathname])
+
+  useEffect(() => {
+    const onKey = (e) => e.key === 'Escape' && (closeNow(), setDrawer(false))
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  // Lock page scroll behind the mobile drawer.
+  useEffect(() => {
+    document.body.style.overflow = drawer ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [drawer])
+
+  const section =
+    bare.startsWith('/data') || bare.startsWith('/request')
+      ? 'data'
+      : bare.startsWith('/product') || bare.startsWith('/heimlog')
+      ? 'product'
+      : bare.startsWith('/cases')
+        ? 'cases'
+        : bare.startsWith('/company')
+          ? 'company'
+          : null
+
+  // Flat text items (Figma GNB / KO): 14px semibold; navy marks the open/current one.
+  const itemCls = (key) =>
+    `flex h-20 items-center gap-1.5 text-[14px] font-semibold tracking-[-0.03em] transition-colors ${
+      menu === key || section === key ? 'text-hx' : 'text-ink-soft hover:text-ink'
+    }`
+
+  const trigger = (key) => ({
+    onMouseEnter: () => openMenu(key),
+    onMouseLeave: closeSoon,
+    onFocus: () => openMenu(key),
+  })
+
+  return (
+    <>
+      <header className="fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur-md">
+        <div className="mx-auto flex h-20 w-full max-w-[1168px] items-center gap-[54px] max-xl:gap-8 max-xl:px-8 max-lg:px-4">
+          <Link to="/" onMouseEnter={closeNow} className="flex shrink-0 items-center gap-[6px]" aria-label="HEIMDEX">
+            <img src="/assets/logo-symbol.svg" alt="" className="h-[28px] w-[26px]" />
+            <img src="/assets/logo-wordmark.svg" alt="heimdex" className="h-[19px] w-[92px]" />
+          </Link>
+
+          <nav className="flex items-center gap-10 max-xl:gap-6 max-lg:hidden" aria-label={t('주요 메뉴', 'Main')}>
+            <button
+              type="button"
+              aria-expanded={menu === 'product'}
+              onClick={() => (menu === 'product' ? closeNow() : openMenu('product'))}
+              className={itemCls('product')}
+              {...trigger('product')}
+            >
+              {t('제품', 'Product')} <Caret open={menu === 'product'} />
+            </button>
+            <div className="relative" {...trigger('data')}>
+              <Link to={DATA_PATH} aria-expanded={menu === 'data'} className={itemCls('data')}>
+                {dataCopy.gnb.label}
+                <span className="rounded-[4px] bg-accent px-[5px] py-px text-[12px] font-bold leading-[15px] text-white">{dataCopy.gnb.isNew}</span>
+                <Caret open={menu === 'data'} />
+              </Link>
+            </div>
+            <Link to="/cases" onMouseEnter={closeNow} className={itemCls('cases')}>
+              {t('도입 사례', 'Customers')}
+            </Link>
+            <a
+              href={blogUrl('business', lang)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onMouseEnter={closeNow}
+              className={itemCls('blog')}
+            >
+              {t('블로그', 'Blog')}
+            </a>
+            {/* 회사 — hidden while SHOW_COMPANY_LINKS is false (data/flags.js) */}
+            {SHOW_COMPANY_LINKS && (
+              <div className="relative" {...trigger('company')}>
+                <button
+                  type="button"
+                  aria-expanded={menu === 'company'}
+                  onClick={() => (menu === 'company' ? closeNow() : openMenu('company'))}
+                  className={itemCls('company')}
+                >
+                  {t('회사', 'Company')} <Caret open={menu === 'company'} />
+                </button>
+                {menu === 'company' && (
+                  <div className="absolute -left-4 top-full">
+                    <div className="rounded-[20px] bg-white shadow-lift ring-1 ring-black/[0.04]">
+                      <CompanyMenu lang={lang} close={closeNow} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </nav>
+
+          <div className="ml-auto flex items-center gap-2 max-lg:hidden">
+            <LangMenu open={menu === 'lang'} trigger={trigger('lang')} close={closeNow} />
+            <Link
+              to={REQUEST_PATH}
+              onMouseEnter={closeNow}
+              className="ml-2 inline-flex h-10 items-center rounded-[8px] border border-line-strong bg-white px-4 text-[14px] font-bold tracking-[-0.03em] text-ink transition-colors hover:bg-snow active:scale-[0.97]"
+            >
+              {dataCopy.gnb.sample}
+            </Link>
+            <Link
+              to="/contact"
+              onMouseEnter={closeNow}
+              className="inline-flex h-10 items-center rounded-[8px] bg-hx px-4 text-[14px] font-bold tracking-[-0.03em] text-white transition-colors hover:bg-primary-600 active:scale-[0.97]"
+            >
+              {dataCopy.gnb.contact}
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            aria-label={drawer ? t('메뉴 닫기', 'Close menu') : t('메뉴 열기', 'Open menu')}
+            aria-expanded={drawer}
+            onClick={() => setDrawer((v) => !v)}
+            className="ml-auto hidden h-10 w-10 items-center justify-center text-ink max-lg:flex"
+          >
+            {drawer ? <X size={26} /> : <Menu size={26} />}
+          </button>
         </div>
 
-        {/* Click-catcher below the panel (no dim) — closes the menu on outside click */}
-        <div
-          aria-hidden
-          onMouseEnter={closeNow}
-          onClick={closeNow}
-          className={`flex-1 ${productOpen ? '' : 'pointer-events-none'}`}
-        />
-      </div>
+        {/* Data marketplace mega-menu — same panel as 제품 */}
+        {menu === 'data' && (
+          <div
+            className="absolute inset-x-0 top-full border-b border-black/[0.05] bg-white shadow-[0_24px_40px_-24px_rgba(0,27,55,0.12)] max-lg:hidden"
+            onMouseEnter={() => openMenu('data')}
+            onMouseLeave={closeSoon}
+          >
+            <DataMegaMenu t={t} close={closeNow} />
+          </div>
+        )}
+
+        {/* Product mega-menu — full width under the header, desktop only */}
+        {menu === 'product' && (
+          <div
+            className="absolute inset-x-0 top-full border-b border-black/[0.05] bg-white shadow-[0_24px_40px_-24px_rgba(0,27,55,0.12)] max-lg:hidden"
+            onMouseEnter={() => openMenu('product')}
+            onMouseLeave={closeSoon}
+          >
+            <ProductMenu lang={lang} t={t} close={closeNow} />
+          </div>
+        )}
+      </header>
+
+      {/* Dim the page while the mega-menu is open (wireframe "페이지 본문 — 딤 처리") */}
+      <div
+        aria-hidden
+        onClick={closeNow}
+        className={`fixed inset-0 top-20 z-40 bg-ink/30 transition-opacity duration-200 max-lg:hidden ${
+          menu === 'product' || menu === 'data' ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      />
+
+      {/* Mobile drawer */}
+      {drawer && (
+        <div className="fixed inset-0 top-20 z-40 overflow-y-auto bg-white px-4 pb-10 lg:hidden">
+          <MobileGroup
+            label={t('제품', 'Product')}
+            open={group === 'product'}
+            onToggle={() => setGroup(group === 'product' ? null : 'product')}
+          >
+            <MobileSubhead>{t('비즈니스용 · HEIMDEX', 'For business · HEIMDEX')}</MobileSubhead>
+            <Link to="/product/business" className={`${mobileLink} font-semibold`}>
+              {t('제품 개요', 'Product overview')}
+            </Link>
+            <MobileSubhead>{t('산업별', 'By industry')}</MobileSubhead>
+            {INDUSTRIES.map((ind) => (
+              <Link key={ind.slug} to={industryPath(ind.slug)} className={mobileLink}>
+                {lang === 'en' ? ind.nameEn : ind.name}
+              </Link>
+            ))}
+            <MobileSubhead>{t('개인용 · 하임로그', 'For individuals · heimlog')}</MobileSubhead>
+            {HEIMLOG_LINKS.map((l) => (
+              <Link key={l.to} to={l.to} className={mobileLink}>
+                {lang === 'en' ? l.en : l.label}
+              </Link>
+            ))}
+          </MobileGroup>
+          <MobileGroup
+            label={
+              <span className="flex items-center gap-2">
+                {dataCopy.gnb.label}
+                <span className="rounded-[4px] bg-accent px-[5px] py-px text-[12px] font-bold leading-[15px] text-white">{dataCopy.gnb.isNew}</span>
+              </span>
+            }
+            open={group === 'data'}
+            onToggle={() => setGroup(group === 'data' ? null : 'data')}
+          >
+            <Link to={DATA_PATH} className={`${mobileLink} font-semibold`}>
+              {t('마켓플레이스 전체 보기', 'Marketplace overview')}
+            </Link>
+            {dataCopy.collections.map((c) => (
+              <Link key={c.slug} to={collectionPath(c.slug)} className={mobileLink}>
+                {c.name}
+              </Link>
+            ))}
+          </MobileGroup>
+          <Link to="/cases" className="block border-b border-line py-4 text-[19px] font-semibold text-ink">
+            {t('도입 사례', 'Customers')}
+          </Link>
+          <MobileGroup
+            label={t('블로그', 'Blog')}
+            open={group === 'blog'}
+            onToggle={() => setGroup(group === 'blog' ? null : 'blog')}
+          >
+            {BLOG.map((b) => (
+              <a
+                key={b.key}
+                href={blogUrl(b.key, lang)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${mobileLink} flex items-center gap-1`}
+              >
+                {lang === 'en' ? b.en : b.label} <ArrowUpRight size={14} />
+              </a>
+            ))}
+          </MobileGroup>
+          {/* 회사 — hidden while SHOW_COMPANY_LINKS is false (data/flags.js) */}
+          {SHOW_COMPANY_LINKS && (
+            <MobileGroup
+              label={t('회사', 'Company')}
+              open={group === 'company'}
+              onToggle={() => setGroup(group === 'company' ? null : 'company')}
+            >
+              {COMPANY.map((c) => (
+                <Link key={c.to} to={c.to} className={mobileLink}>
+                  {lang === 'en' ? c.en : c.label}
+                </Link>
+              ))}
+            </MobileGroup>
+          )}
+
+          <LangToggle className="mt-6 text-[16px]" />
+          <div className="mt-6 grid grid-cols-2 gap-2">
+            <Link to={REQUEST_PATH} className="hx-btn hx-line">
+              {dataCopy.gnb.sample}
+            </Link>
+            <Link to="/contact" className="hx-btn hx-ink">
+              {dataCopy.gnb.contact}
+            </Link>
+          </div>
+        </div>
+      )}
     </>
   )
 }

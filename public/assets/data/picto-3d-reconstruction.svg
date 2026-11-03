@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / 3d-reconstruction" clip-path="url(#clip0_0_570)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+
+
+<g transform="translate(2.91 3.82) scale(0.9091)"><path id="Vector_2" d="M32 9L51 19.5V42.5L32 53L13 42.5V19.5L32 9Z" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_3" d="M13 19.5L32 30M32 30L51 19.5M32 30V53" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_4" d="M22.5 37C24.1569 37 25.5 35.6569 25.5 34C25.5 32.3431 24.1569 31 22.5 31C20.8431 31 19.5 32.3431 19.5 34C19.5 35.6569 20.8431 37 22.5 37Z" fill="#3991FF"></path><path id="Vector_5" d="M17.5 44C18.1 40.8 19.9 39 22.5 39C25.1 39 26.9 40.8 27.5 44" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_570">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,13 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pictogram / Use case / hand-product" clip-path="url(#clip0_0_598)">
+<path id="Vector" d="M46 0H18C8.05887 0 0 8.05887 0 18V46C0 55.9411 8.05887 64 18 64H46C55.9411 64 64 55.9411 64 46V18C64 8.05887 55.9411 0 46 0Z" fill="#EBF4FF"></path>
+
+
+
+<g transform="translate(7.08 5.75) scale(0.8898)"><path id="Vector_2" d="M24 12L36 7L48 12V25L36 30L24 25V12Z" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_3" d="M24 12L36 17M36 17L48 12M36 17V30" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path><path id="Vector_4" d="M8 45H16L22 41H33C35 41 35.4 44.4 33 44.4H26M16 52H35L47 44C49 42.6 47.4 39.4 45 40.6L36 45" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke="#3991FF" vector-effect="non-scaling-stroke"></path></g></g>
+<defs>
+<clipPath id="clip0_0_598">
+<rect width="64" height="64" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
