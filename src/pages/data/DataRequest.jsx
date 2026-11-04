@@ -6,7 +6,7 @@ import { A, Button, IconTile } from '../../components/data/ui.jsx'
 import { OrDivider, QuickRequest, RequestFlow, SampleForm, SamplePackage, SegmentedControl } from '../../components/data/RequestBlocks.jsx'
 
 // /request — sample request (Figma: KO / 07 샘플 요청 /request).
-// ?mode=1 opens on "맞춤 수집 요청". Nothing is pre-selected.
+// ?mode=1 opens on "맞춤 데이터 요청". Nothing is pre-selected.
 
 const COL = 'mx-auto w-full max-w-[1168px] px-5 md:px-8 xl:px-0'
 const INNER = 'xl:ml-[264px] xl:max-w-[904px]'

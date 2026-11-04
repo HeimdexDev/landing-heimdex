@@ -82,7 +82,7 @@ export default function Industry() {
                 <h3 className="mt-2 text-[24px] font-bold tracking-[-0.5px] text-ink max-sm:text-[21px]">
                   {en ? f.titleEn : f.title}
                 </h3>
-                <p className="mt-3 text-[16px] leading-[1.65] text-ink-sub">{en ? f.descEn : f.desc}</p>
+                <p className="mt-3 md:whitespace-pre-line text-[16px] leading-[1.65] text-ink-sub">{en ? f.descEn : f.desc}</p>
               </Reveal>
             ))}
           </div>
@@ -95,7 +95,7 @@ export default function Industry() {
           <Reveal className="mx-auto max-w-[800px] text-center">
             <h2 className="hx-eyebrow">{en ? `${ind.nameEn} customer story` : `${ind.name} 고객 후기`}</h2>
             <figure className="mt-6 rounded-[22px] border border-line bg-white px-10 py-9 text-left max-sm:px-6 max-sm:py-7">
-              <blockquote className="text-[21px] font-medium leading-[1.6] tracking-[-0.3px] text-ink max-sm:text-[18px]">
+              <blockquote className="md:whitespace-pre-line text-[21px] font-medium leading-[1.6] tracking-[-0.3px] text-ink max-sm:text-[18px]">
                 “{en ? quote.quoteEn : quote.quote}”
               </blockquote>
               <figcaption className="mt-4 text-[15px] text-ink-sub">— {en ? quote.whoEn : quote.who}</figcaption>

@@ -246,7 +246,7 @@ function Features() {
                     <div className="overflow-hidden">
                       <div className="pb-7 pl-[47px] max-sm:pl-0">
                         <p className="text-[14px] font-semibold text-primary-300">{lang === 'en' ? f.kindEn : f.kind}</p>
-                        <p className="mt-2 max-w-[460px] text-[16px] leading-[1.7] text-white/70">{lang === 'en' ? f.descEn : f.desc}</p>
+                        <p className="mt-2 max-w-[460px] md:whitespace-pre-line text-[16px] leading-[1.7] text-white/70">{lang === 'en' ? f.descEn : f.desc}</p>
                         <div className="mt-6 overflow-hidden rounded-2xl lg:hidden">
                           <ScaleToFit base={400} aspect={400 / 260}>
                             <Visual />
@@ -560,7 +560,7 @@ function Cases() {
                   “
                 </span>
                 <p className="mt-4 text-[13px] font-semibold text-primary-500">{en ? ind.nameEn : ind.name}</p>
-                <blockquote className="mt-2 flex-1 text-[18px] font-semibold leading-[1.7] tracking-[-0.02em] text-ink max-sm:text-[16px]">
+                <blockquote className="mt-2 flex-1 md:whitespace-pre-line text-[18px] font-semibold leading-[1.7] tracking-[-0.02em] text-ink max-sm:text-[16px]">
                   {en ? q.quoteEn : q.quote}
                 </blockquote>
                 <figcaption className="mt-8 text-right text-[14px] text-ink-mute">{en ? q.whoEn : q.who}</figcaption>

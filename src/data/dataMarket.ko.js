@@ -15,7 +15,7 @@ export const KO = {
     heroTitle: '화자별 트랙과 멀티캠 그대로',
     heroBody:
       '국내 방송 · 라이브커머스 제작사와 직접 계약한 미방영 원본입니다.\n크롤링, 권리 확인, 화자 분리, 라벨링 없이 바로 학습에 넣을 수 있게 정리해 드립니다.',
-    heroButtons: ['샘플 요청', '필요한 장면 요청'],
+    heroButtons: ['샘플 요청', '맞춤 데이터 요청'],
     heroChecks: ['제작사와 직접 계약', '비독점 · 기간 한정', '2영업일 내 샘플 회신'],
     heroVisual: { speaking: 'SPK 1 · 말하는 중', cam: 'CAM 1 · 00:12:48' },
     sectionNav: ['차별점', '컬렉션', '보유 아카이브', '하임덱스 소개', '공급 구조', '데이터 비교', '자주 묻는 질문', '샘플 요청'],
@@ -265,7 +265,7 @@ export const KO = {
   request: {
     breadcrumb: '샘플 요청',
     titleLines: ['어떤 데이터가', '부족한지 알려주세요.', '꼭 맞는 샘플을 보내드릴게요.'],
-    segments: ['기존 컬렉션 샘플', '맞춤 수집 요청'],
+    segments: ['샘플 요청', '맞춤 데이터 요청'],
     flowTitle: '요청하면 이렇게 진행돼요',
     flow: [
       '2영업일 안에 담당자가 샘플 구성안과 질문 1~2개를 메일로 보내드려요',
@@ -328,7 +328,7 @@ export const KO = {
       timelines: ['이번 달', '이번 분기', '알아보는 중'],
       consentTitle: '개인정보 수집 및 이용에 관한 동의',
       consentRequired: '개인정보 처리방침에 동의합니다.',
-      consentOptional: '하임덱스의 마케팅 정보를 수신하는 데 동의합니다.',
+      consentOptional: '하임덱스의 마케팅 정보를 수신하는\u00A0데 동의합니다.',
       required: '(필수)',
       optional: '(선택)',
       viewFull: '전문보기',
@@ -376,7 +376,7 @@ export const KO = {
     messagePh: '내용을 입력해주세요.',
     consentTitle: '개인정보 수집 및 이용에 관한 동의',
     consentRequired: '개인정보 처리방침에 동의합니다.',
-    consentOptional: '하임덱스의 마케팅 정보를 수신하는 데 동의합니다.',
+    consentOptional: '하임덱스의 마케팅 정보를 수신하는\u00A0데 동의합니다.',
     required: '(필수)',
     optional: '(선택)',
     viewFull: '전문보기',
