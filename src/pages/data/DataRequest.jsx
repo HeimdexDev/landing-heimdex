@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import Reveal from '../../components/Reveal.jsx'
 import { DATA_PATH, COLLECTION_SLUGS, collectionPath, useDataCopy } from '../../data/dataMarket.js'
@@ -6,7 +6,8 @@ import { A, Button, IconTile } from '../../components/data/ui.jsx'
 import { OrDivider, QuickRequest, RequestFlow, SampleForm, SamplePackage, SegmentedControl } from '../../components/data/RequestBlocks.jsx'
 
 // /request — sample request (Figma: KO / 07 샘플 요청 /request).
-// ?mode=1 opens on "맞춤 데이터 요청". Nothing is pre-selected.
+// ?mode=1 opens on "맞춤 데이터 요청". Nothing is pre-selected. Picking a tab
+// scrolls down to the form it switches.
 
 const COL = 'mx-auto w-full max-w-[1168px] px-5 md:px-8 xl:px-0'
 const INNER = 'xl:ml-[264px] xl:max-w-[904px]'
@@ -15,6 +16,11 @@ export function DataRequest() {
   const d = useDataCopy().request
   const [params] = useSearchParams()
   const [mode, setMode] = useState(params.get('mode') === '1' ? 1 : 0)
+  const formRef = useRef(null)
+  const pickMode = (i) => {
+    setMode(i)
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
     <div className="bg-snow pb-[160px] pt-[200px] max-lg:pt-[140px] max-sm:pb-20 max-sm:pt-[110px]">
@@ -31,7 +37,7 @@ export function DataRequest() {
               ))}
             </h1>
             <div className="mt-8">
-              <SegmentedControl options={d.segments} value={mode} onChange={setMode} />
+              <SegmentedControl options={d.segments} value={mode} onChange={pickMode} />
             </div>
           </Reveal>
           <Reveal className="mt-14 grid grid-cols-2 gap-4 max-md:grid-cols-1">
@@ -44,9 +50,11 @@ export function DataRequest() {
           <div className="my-[30px]">
             <OrDivider />
           </div>
-          <Reveal>
-            <SampleForm key={mode} mode={mode} />
-          </Reveal>
+          <div ref={formRef} className="scroll-mt-24">
+            <Reveal>
+              <SampleForm key={mode} mode={mode} />
+            </Reveal>
+          </div>
         </div>
       </div>
     </div>
