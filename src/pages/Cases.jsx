@@ -32,7 +32,7 @@ export default function Cases() {
               >
                 <div className="flex flex-col p-10 max-sm:p-6">
                   <Chip className="self-start">{en ? ind.nameEn : ind.name}</Chip>
-                  <blockquote className="mt-5 flex-1 text-[20px] font-medium leading-[1.6] text-ink max-sm:text-[17px]">
+                  <blockquote className="mt-5 flex-1 md:whitespace-pre-line text-[20px] font-medium leading-[1.6] text-ink max-sm:text-[17px]">
                     “{en ? q.quoteEn : q.quote}”
                   </blockquote>
                   <p className="mt-5 text-[15px] text-ink-sub">— {en ? q.whoEn : q.who}</p>

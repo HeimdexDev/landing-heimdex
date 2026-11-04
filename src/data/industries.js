@@ -44,7 +44,7 @@ export const INDUSTRIES = [
       {
         title: '인물 자동 분류',
         titleEn: 'Automatic people sorting',
-        desc: '출연자를 AI가 자동 분류하고, 활용이 어려운 특정 인물은 제외해 재가공 할 수 있습니다.',
+        desc: '출연자를 AI가 자동 분류하고, 활용이 어려운 특정 인물은 제외해\n재가공 할 수 있습니다.',
         descEn: 'AI sorts the people on screen, so you can leave out anyone you can’t use and re-cut the rest.',
         img: '/assets/creative/mkt-scene-6.jpg',
         pos: 'center 20%',
@@ -274,7 +274,7 @@ export const FEATURES = [
     kindEn: 'Scene search',
     menu: '말하듯 검색해 원하는 장면을 바로 찾기',
     menuEn: 'Find any scene just by describing it',
-    desc: '말하듯 입력하면 수십 시간 영상 속에서 원하는 장면을 바로 찾아요. 인물·행동·맥락까지 검색돼요.',
+    desc: '말하듯 입력하면 수십 시간 영상 속에서 원하는 장면을 바로 찾아요.\n인물·행동·맥락까지 검색돼요.',
     descEn: 'Type it the way you’d say it and find the scene in hours of footage — by person, action, even context.',
   },
   {

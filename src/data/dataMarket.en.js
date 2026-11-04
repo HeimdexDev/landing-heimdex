@@ -17,7 +17,7 @@ export const EN = {
     "heroBody": "Unaired originals licensed directly from Korean broadcast and live-commerce producers — no crawling, rights clearing, diarization or labeling needed.",
     "heroButtons": [
       "Request a sample",
-      "Request a scene"
+      "Request custom data"
     ],
     "heroChecks": [
       "Licensed from producers",
@@ -940,12 +940,13 @@ export const EN = {
   "request": {
     "breadcrumb": "Request a sample",
     "titleLines": [
-      "Tell us what you’re missing.",
-      "We’ll send a cut that fits."
+      "Tell us what data",
+      "you’re missing.",
+      "We’ll send a sample that fits."
     ],
     "segments": [
-      "Off-the-shelf sample",
-      "Custom collection"
+      "Request a sample",
+      "Request custom data"
     ],
     "flowTitle": "What happens next",
     "flow": [

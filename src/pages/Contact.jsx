@@ -212,9 +212,9 @@ export default function Contact() {
                       <div className={`grid transition-all duration-300 ease-out ${marketingOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                         <div className="overflow-hidden">
                           <div className="pt-[10px] text-[13px] font-medium leading-[1.6] tracking-[-0.03em] text-ink-sub">
-                            <p>{t('하임덱스의 서비스 업데이트 및 이벤트 정보를 수신하는 데 동의합니다.', 'I agree to receive Heimdex service updates and event information.')}</p>
+                            <p>{t('하임덱스의 서비스 업데이트 및 이벤트 정보를 수신하는\u00A0데 동의합니다.', 'I agree to receive Heimdex service updates and event information.')}</p>
                             <ul className="list-disc pl-[18px]">
-                              <li>{t('수집 항목: 이메일 주소, 휴대전화 번호', 'Items collected: email address, mobile phone number')}</li>
+                              <li>{t('수집 항목: 이메일 주소', 'Items collected: email address')}</li>
                               <li>{t('수집 목적: 신규 기능 안내, 웨비나/이벤트 초대, 맞춤형 비즈니스 솔루션 제안', 'Purpose: new feature announcements, webinar/event invitations, tailored business-solution proposals')}</li>
                               <li>{t('보유 기간: 동의 철회 시 또는 회원 탈퇴 시까지', 'Retention period: until consent is withdrawn or the account is closed')}</li>
                             </ul>

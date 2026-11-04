@@ -199,7 +199,7 @@ function DataMegaMenu({ t, close }) {
   const item = 'group -mx-3 block rounded-xl px-3 py-2.5 transition-colors hover:bg-mist'
   const actions = [
     { icon: Send, to: REQUEST_PATH, label: d.gnb.sample, caption: t('2영업일 안에 샘플 구성안 회신', 'Proposed sample within 2 business days') },
-    { icon: Search, to: `${REQUEST_PATH}?mode=1`, label: t('맞춤 수집 요청', 'Custom collection'), caption: t('필요한 장면을 문장으로 요청', 'Describe the scene you need') },
+    { icon: Search, to: `${REQUEST_PATH}?mode=1`, label: t('맞춤 데이터 요청', 'Request custom data'), caption: t('필요한 장면을 문장으로 요청', 'Describe the scene you need') },
     { icon: Handshake, to: '/contact', label: t('파트너 문의', 'Partner with us'), caption: t('아카이브를 보유한 제작사 · 방송사', 'For producers and broadcasters with archives') },
   ]
   return (
