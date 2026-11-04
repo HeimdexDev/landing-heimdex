@@ -11,7 +11,7 @@ Marketing landing page for HEIMDEX — a fast, single-page React app built with 
 - **Animated hero** — self-playing product demo (typing → zoom-out → cursor sweep) with a fluid-scaled dashboard mockup
 - **Scroll reveal** — fade-up on viewport entry via IntersectionObserver
 - **Fully responsive** — desktop layout layered with tablet/mobile (`max-lg`/`max-md`/`max-sm`) variants
-- **Vercel-ready** — auto-detected Vite build, SPA rewrites via `vercel.json`
+- **Vercel-ready** — auto-detected Vite build, literal client-route rewrites and a real 404 via `vercel.json`
 
 ## Quick Start
 
@@ -80,7 +80,7 @@ Client-side routes (React Router):
 ├── vite.config.js
 ├── tailwind.config.js         # Design tokens (navy/softblue/grayscale, fonts)
 ├── postcss.config.js
-├── vercel.json                # SPA rewrites (all routes → index.html)
+├── vercel.json                # literal rewrites for client-only routes (/blog, /heimlog); no catch-all
 └── package.json
 ```
 
@@ -98,7 +98,13 @@ Build settings (auto-detected, override if needed):
 - **Build Command:** `npm run build` (`vite build`)
 - **Output Directory:** `dist`
 
-`vercel.json` rewrites all paths to `index.html` so client-side routes work on refresh.
+### Unknown URLs answer 404
+
+`vercel.json` has **no catch-all rewrite**. Every page is a prerendered file (`scripts/prerender.mjs`); unknown URLs get `dist/404.html` with a real 404 status, noindex, no canonical. A catch-all would turn every junk URL into a 200 soft 404 that Google indexes. The only rewrites are literal ones, with and without a trailing slash, for client-only routes (`/blog`, `/heimlog`, `/en/…`) to `_shell.html`; `public/_redirects` mirrors them for Netlify. `npm run build` runs `scripts/check-soft-404.mjs`, which fails on a pattern rewrite/redirect, `trailingSlash`/`cleanUrls`, a missing rewrite for an `App.jsx` route, a 404 head that is indexable, and more; its rules are tested with `node --test scripts/`. The live status can only be seen on a deployment: curl a preview URL.
+
+- **Old `/ko/*`, `/product/*`, `/contact/*`, `/policy/*` links** now answer 404 at the host; the client still sends a visitor to the closest page, but a crawler sees no redirect. Closed as accepted (owner dropped D128), so there are no `redirects`.
+- **`/blog` and `/heimlog`** stay as client-only routes (`/heimlog` is a client redirect to `/product?tab=vlog`) and answer 200 with the shell. Closed as accepted (owner dropped D129).
+- **Case**: routes are case-sensitive. `/Product` and `/CONTACT` answered 200 under the old catch-all; they now answer 404 (the client still redirects a visitor). Accepted, not redirected.
 
 ## Design System
 

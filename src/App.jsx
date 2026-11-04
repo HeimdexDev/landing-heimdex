@@ -17,6 +17,7 @@ import Policy from './pages/Policy.jsx'
 import NotFound from './pages/NotFound.jsx'
 import SeoLinks from './i18n/SeoLinks.jsx'
 import RouteMeta from './seo/RouteMeta.jsx'
+import { isNotFoundPath } from './seo/notFound.js'
 import LanguageSuggestion from './i18n/LanguageSuggestion.jsx'
 import {
   LanguageProvider,
@@ -42,8 +43,10 @@ function ScrollToTop() {
   return null
 }
 
-// Any unknown URL (old /ko/* links, /pricing, /company still in Google) maps to
-// the closest current page — staying in the language the visitor is browsing.
+// Client-side landing for URLs the host already answered 404 (see vercel.json and
+// scripts/check-soft-404.mjs): old /ko/* links, /product/*, /contact/* and /policy/*
+// map to the closest current page in the visitor's language; everything else shows
+// NotFound. The 404 status is unchanged, so crawlers see no redirect, only people do.
 function NotFoundRedirect() {
   const { pathname } = useLocation()
   const lang = langFromPath(pathname)
@@ -54,16 +57,6 @@ function NotFoundRedirect() {
   if (path.startsWith('/product')) return go('/product')
   if (path.startsWith('/policy')) return go('/policy')
   return <NotFound />
-}
-
-// True for any path that renders the full-screen 404 page (unknown route).
-function isNotFoundPath(pathname) {
-  const p = stripLangPrefix(pathname).replace(/^\/ko(?=\/|$)/, '') || '/'
-  return (
-    p !== '/' &&
-    p !== '/blog' &&
-    !['/product', '/contact', '/policy', '/cases', '/heimlog', '/data', '/request', ...(SHOW_COMPANY_LINKS ? ['/company'] : [])].some((s) => p.startsWith(s))
-  )
 }
 
 // Header and footer are hidden on the 404 page so the space fills the viewport.
@@ -122,7 +115,7 @@ export default function App() {
                 <Route path={`${p}/blog`} element={<Home />} />
               </Fragment>
             ))}
-            {/* Catch-all: redirect old/unknown URLs to the closest current page */}
+            {/* Catch-all, client only: the host has already answered 404 for these URLs */}
             <Route path="*" element={<NotFoundRedirect />} />
           </Routes>
         </main>

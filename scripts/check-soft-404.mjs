@@ -10,28 +10,23 @@
 // Whether the host really answers 404 can only be seen on a deployment.
 import { existsSync, readFileSync } from 'node:fs'
 import { createServer } from 'vite'
+import {
+  clientOnlyRoutes,
+  lintParity,
+  lintReachability,
+  lintRedirects,
+  lintVercel,
+} from './soft-404-rules.mjs'
 
 const DIST = new URL('../dist/', import.meta.url)
 const failures = []
 const fail = (msg) => failures.push(msg)
 
 const vercel = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'))
-if ('routes' in vercel) fail('vercel.json: "routes" overrides rewrites and redirects; do not use it')
-for (const { source, destination } of vercel.rewrites ?? []) {
-  if (/[:*(?+]/.test(source)) fail(`vercel.json: pattern rewrite ${source} turns unknown URLs into 200 pages`)
-  if (!existsSync(new URL(destination.replace(/^\//, ''), DIST))) fail(`vercel.json: ${destination} is not in dist`)
-}
-
-// Netlify mirror (public/_redirects): a catch-all with status 200 is the same soft 404.
 const redirectsFile = new URL('../public/_redirects', import.meta.url)
-if (existsSync(redirectsFile)) {
-  for (const line of readFileSync(redirectsFile, 'utf8').split('\n')) {
-    const [source, , status] = line.trim().split(/\s+/)
-    if (source && !source.startsWith('#') && source.includes('*') && status === '200') {
-      fail(`public/_redirects: "${line.trim()}" answers unknown URLs with 200`)
-    }
-  }
-}
+const redirectsText = existsSync(redirectsFile) ? readFileSync(redirectsFile, 'utf8') : ''
+const inDist = (destination) => existsSync(new URL(destination.replace(/^\//, ''), DIST))
+failures.push(...lintVercel(vercel, inDist), ...lintRedirects(redirectsText), ...lintParity(vercel, redirectsText))
 
 const notFound = new URL('404.html', DIST)
 if (!existsSync(notFound)) fail('dist/404.html is missing')
@@ -43,6 +38,15 @@ else {
   if (/<link[^>]*rel="(canonical|alternate)"/.test(html)) fail('dist/404.html has a canonical or alternate link')
   if (!html.includes('페이지를 찾을 수 없어요')) fail('dist/404.html has no Korean 404 copy')
   if (!html.includes('We couldn’t find that page')) fail('dist/404.html has no English 404 copy')
+  // A shared dead link must not preview as the home page.
+  if (/property="og:url"/.test(html)) fail('dist/404.html has og:url (a shared dead link would point at a live page)')
+  const title = html.match(/<title>([^<]*)<\/title>/)?.[1]
+  for (const [attr, key] of [['property', 'og:title'], ['name', 'twitter:title']]) {
+    const v = html.match(new RegExp(`<meta\\s+${attr}="${key}"\\s+content="([^"]*)"`))?.[1]
+    if (v !== title) fail(`dist/404.html ${key} is "${v}", not the 404 title`)
+  }
+  const homeDescription = readFileSync(new URL('index.html', DIST), 'utf8').match(/name="description"\s+content="([^"]*)"/)?.[1]
+  if (homeDescription && html.includes(homeDescription)) fail('dist/404.html still carries the home description')
 }
 
 // Known routes stay served from their own prerendered files (not from a fallback).
@@ -55,6 +59,34 @@ try {
       const url = localizePath(path, lang)
       const rel = url === '/' ? 'index.html' : `${url.slice(1)}/index.html`
       if (!existsSync(new URL(rel, DIST))) fail(`${url}: no prerendered dist/${rel}`)
+    }
+  }
+
+  // Every static route in App.jsx is either prerendered (checked above) or has a literal
+  // rewrite; otherwise the route answers 404 on the host.
+  const { SHOW_COMPANY_LINKS } = await vite.ssrLoadModule('/src/data/flags.js')
+  const appSource = readFileSync(new URL('../src/App.jsx', import.meta.url), 'utf8')
+  const clientOnly = clientOnlyRoutes(appSource, PRERENDER_PATHS, SHOW_COMPANY_LINKS)
+  if (!clientOnly.length) fail('App.jsx: no client-only routes found; the route scan is broken')
+  failures.push(...lintReachability(clientOnly, vercel))
+
+  // The head the client leaves behind after boot: unknown URLs stay noindex with no
+  // canonical/hreflang, real pages keep theirs (RouteMeta and SeoLinks both apply headFor).
+  const head = await vite.ssrLoadModule('/src/seo/head.js').catch(() => null)
+  if (!head?.headFor) fail('src/seo/head.js: headFor is missing; noindex cannot survive client boot')
+  else {
+    for (const path of ['/nope-t46', '/en/nope-t46', '/a/b/c', '/en/a/b/c']) {
+      const h = head.headFor(path)
+      if (!h.noindex) fail(`${path}: client head is indexable after boot`)
+      if (h.links.length) fail(`${path}: client head keeps canonical/hreflang links`)
+      if (!h.title.includes('Page not found')) fail(`${path}: client head title is "${h.title}", not the 404 title`)
+    }
+    for (const path of ['/product', '/en/product']) {
+      const h = head.headFor(path)
+      if (h.noindex) fail(`${path}: real page lost index after the 404 head logic`)
+      if (!h.links.some((l) => l.rel === 'canonical') || h.links.filter((l) => l.rel === 'alternate').length !== 3) {
+        fail(`${path}: real page lost its canonical/hreflang links`)
+      }
     }
   }
 } finally {

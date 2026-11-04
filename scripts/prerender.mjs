@@ -29,7 +29,7 @@ const vite = await createServer({
 let failed = false
 try {
   const { render } = await vite.ssrLoadModule('/src/entry-server.jsx')
-  const { metaFor, PRERENDER_PATHS, ORIGIN } = await vite.ssrLoadModule('/src/seo/meta.js')
+  const { metaFor, NOT_FOUND, PRERENDER_PATHS, ORIGIN } = await vite.ssrLoadModule('/src/seo/meta.js')
   const { localizePath } = await vite.ssrLoadModule('/src/i18n/LanguageContext.jsx')
 
   const template = await readFile(new URL('index.html', DIST), 'utf8')
@@ -87,7 +87,14 @@ try {
   await writeFile(
     new URL('404.html', DIST),
     swap(template, [
-      [/<title>[^<]*<\/title>/, '<title>페이지를 찾을 수 없어요 · Page not found | HEIMDEX</title>', 'title'],
+      [/<title>[^<]*<\/title>/, `<title>${esc(NOT_FOUND.title)}</title>`, 'title'],
+      [/(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${esc(NOT_FOUND.description)}$2`, 'description'],
+      [/(<meta property="og:title" content=")[^"]*(")/, `$1${esc(NOT_FOUND.title)}$2`, 'og:title'],
+      [/(<meta\s+property="og:description"\s+content=")[^"]*(")/, `$1${esc(NOT_FOUND.description)}$2`, 'og:description'],
+      [/(<meta name="twitter:title" content=")[^"]*(")/, `$1${esc(NOT_FOUND.title)}$2`, 'twitter:title'],
+      [/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, `$1${esc(NOT_FOUND.description)}$2`, 'twitter:description'],
+      // No og:url: a shared dead link must not name a live page.
+      [/\s*<meta property="og:url" content="[^"]*" \/>/, '', 'og:url'],
       [/<meta name="robots" content="[^"]*" \/>/, '<meta name="robots" content="noindex, follow" />', 'robots'],
       [/<div id="root"><\/div>/, `<div id="root">${copy404}</div>`, 'root'],
     ]),

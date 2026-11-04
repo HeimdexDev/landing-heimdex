@@ -9,7 +9,15 @@
       "destination": "/_shell.html"
     },
     {
+      "source": "/blog/",
+      "destination": "/_shell.html"
+    },
+    {
       "source": "/heimlog",
+      "destination": "/_shell.html"
+    },
+    {
+      "source": "/heimlog/",
       "destination": "/_shell.html"
     },
     {
@@ -17,7 +25,15 @@
       "destination": "/en/_shell.html"
     },
     {
+      "source": "/en/blog/",
+      "destination": "/en/_shell.html"
+    },
+    {
       "source": "/en/heimlog",
+      "destination": "/en/_shell.html"
+    },
+    {
+      "source": "/en/heimlog/",
       "destination": "/en/_shell.html"
     }
   ]

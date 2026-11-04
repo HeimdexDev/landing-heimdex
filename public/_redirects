@@ -1,7 +1,13 @@
 # Netlify equivalent of vercel.json. Prerendered pages are real files and win; the
-# client-only routes fall back to the SPA shell (see scripts/prerender.mjs). There
-# is deliberately no catch-all: unknown URLs get Netlify's own 404.html.
+# client-only routes fall back to the SPA shell (see scripts/prerender.mjs), with and
+# without a trailing slash. There is deliberately no catch-all: unknown URLs get
+# Netlify's own 404.html. scripts/check-soft-404.mjs keeps this list identical to
+# the rewrites in vercel.json.
 /blog         /_shell.html     200
+/blog/        /_shell.html     200
 /heimlog      /_shell.html     200
+/heimlog/     /_shell.html     200
 /en/blog      /en/_shell.html  200
+/en/blog/     /en/_shell.html  200
 /en/heimlog   /en/_shell.html  200
+/en/heimlog/  /en/_shell.html  200
