@@ -44,7 +44,7 @@ export const INDUSTRIES = [
       {
         title: '인물 자동 분류',
         titleEn: 'Automatic people sorting',
-        desc: '출연자를 AI가 자동 분류하고, 활용이 어려운 특정 인물은 제외해\n재가공 할 수 있습니다.',
+        desc: '출연자를 AI가 자동 분류하고, 활용이 어려운 특정 인물은 제외해 재가공\n할 수 있습니다.',
         descEn: 'AI sorts the people on screen, so you can leave out anyone you can’t use and re-cut the rest.',
         img: '/assets/creative/mkt-scene-6.jpg',
         pos: 'center 20%',
@@ -52,7 +52,7 @@ export const INDUSTRIES = [
       {
         title: '내부 레퍼런스 검색',
         titleEn: 'Internal reference search',
-        desc: '컨셉·연출·제품을 말하듯 검색하면 내부 아카이브에서 최적의 레퍼런스 구간을 바로 찾아줍니다.',
+        desc: '컨셉·연출·제품을 말하듯 검색하면\n내부 아카이브에서 최적의 레퍼런스 구간을 바로 찾아줍니다.',
         descEn: 'Describe a concept, a shot or a product, and the best reference clip in your archive comes right up.',
         img: '/assets/creative/mkt-extra-1.jpg',
         pos: 'center 30%',
@@ -79,7 +79,7 @@ export const INDUSTRIES = [
       {
         title: '말하듯이 원하는 장면 검색',
         titleEn: 'Search scenes the way you talk',
-        desc: '입덕 포인트도, 밈이 될 장면도 말하는 대로 찾습니다. 수십 시간 촬영본을 돌려볼 필요 없습니다.',
+        desc: '입덕 포인트도, 밈이 될 장면도 말하는 대로 찾습니다.\n수십 시간 촬영본을 돌려볼 필요 없습니다.',
         descEn: 'Fan-favorite moments and meme-worthy scenes, found as you describe them. No scrubbing through dozens of hours.',
         img: '/assets/stage/stage-10.jpg',
         pos: 'center 40%',
@@ -129,7 +129,7 @@ export const INDUSTRIES = [
       {
         title: '전문가 답변 포털로',
         titleEn: 'An expert answer portal',
-        desc: '실제 검증된 수업 장면으로 정확하게 답변합니다. 방대한 강의 자산이 곧 질문의 답이 됩니다.',
+        desc: '실제 검증된 수업 장면으로 정확하게 답변합니다.\n방대한 강의 자산이 곧 질문의 답이 됩니다.',
         descEn: 'Answers come straight from verified class footage. Your lecture library becomes the answer to every question.',
         icon: 'answer',
       },
