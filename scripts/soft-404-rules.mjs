@@ -70,17 +70,82 @@ export function clientOnlyRoutes(appSource, prerenderPaths, showCompany) {
   )
 }
 
-// Every client-only route must be rewritten with and without a trailing slash, in both languages.
+// Every client-only route must be rewritten with and without a trailing slash, in both
+// languages, to that language's shell; no other rewrite may exist.
 export function lintReachability(routes, vercel) {
-  const sources = new Set((vercel.rewrites ?? []).map((r) => r.source))
+  const dest = new Map((vercel.rewrites ?? []).map((r) => [r.source, r.destination]))
+  const expected = new Set()
   const out = []
   for (const route of routes) {
     for (const prefix of LANG_PREFIXES) {
       for (const suffix of ['', '/']) {
         const want = `${prefix}${route}${suffix}`
-        if (!sources.has(want)) out.push(`vercel.json: no rewrite for ${want}; the route would be a 404`)
+        expected.add(want)
+        if (!dest.has(want)) out.push(`vercel.json: no rewrite for ${want}; the route would be a 404`)
+        else if (dest.get(want) !== `${prefix}/_shell.html`) out.push(`vercel.json: ${want} -> ${dest.get(want)}, not ${prefix}/_shell.html`)
+      }
+    }
+  }
+  for (const source of dest.keys()) if (!expected.has(source)) out.push(`vercel.json: unexpected rewrite ${source} answers 200 for a URL that is not a route`)
+  return out
+}
+
+// Junk URLs under a real route family or a legacy prefix; each renders NotFound.
+export const JUNK_PATHS = [
+  '/nope-t46', '/a/b/c', '/cases/nope', '/request/nope', '/heimlog/nope', '/casesfoo', '/requestfoo',
+  '/datafoo', '/heimlogfoo', '/blogfoo', '/blog/x', '/data/a/b', '/ko', '/ko/cases', '/ko/data',
+]
+
+// Routes that exist in App.jsx without a prerendered file or with a param.
+export const EXTRA_REAL_PATHS = ['/blog', '/heimlog', '/data/some-slug']
+
+// What the client head must say. Real routes (any language, slash or no slash, any
+// letter case) must not hit the 404 branch and must give the same head as their canonical
+// spelling; junk must stay noindex with no canonical/hreflang. `fns` is the real
+// { headFor, isNotFoundPath } or a mutated copy.
+export function lintHead({ headFor, isNotFoundPath }, realPaths, junkPaths) {
+  const out = []
+  for (const prefix of LANG_PREFIXES) {
+    for (const path of realPaths) {
+      const base = path === '/' ? prefix || '/' : `${prefix}${path}`
+      const want = JSON.stringify(headFor(base))
+      for (const url of [base, base === '/' ? '/' : `${base}/`, base.toUpperCase()]) {
+        if (isNotFoundPath(url)) out.push(`${url}: real route is treated as unknown (noindex, no canonical, no chrome)`)
+        else if (JSON.stringify(headFor(url)) !== want) out.push(`${url}: client head differs from ${base}`)
+      }
+      const h = headFor(base)
+      if (h.title.includes('Page not found')) out.push(`${base}: real page has the 404 title`)
+      if (h.links.length !== 4 || !h.links.some((l) => l.rel === 'canonical')) out.push(`${base}: real page lost canonical/hreflang`)
+    }
+    for (const path of junkPaths) {
+      for (const url of [`${prefix}${path}`, `${prefix}${path}/`]) {
+        const h = headFor(url)
+        if (!isNotFoundPath(url)) out.push(`${url}: junk URL is not treated as unknown`)
+        if (!h.noindex || h.links.length || !h.title.includes('Page not found')) out.push(`${url}: junk URL is indexable or keeps links after boot`)
       }
     }
   }
   return out
+}
+
+// RouteMeta and SeoLinks are the only appliers of the client head; if either stops
+// calling headFor (or App stops mounting it) the 404 head is undone after boot.
+export function lintHeadWiring({ routeMeta, seoLinks, app }) {
+  const out = []
+  if (!/\bheadFor\(/.test(routeMeta)) out.push('src/seo/RouteMeta.jsx does not call headFor')
+  if (!/\bheadFor\(/.test(seoLinks)) out.push('src/i18n/SeoLinks.jsx does not call headFor')
+  if (!/\.remove\(\)/.test(seoLinks)) out.push('src/i18n/SeoLinks.jsx never removes canonical/hreflang on an unknown URL')
+  for (const name of ['RouteMeta', 'SeoLinks']) {
+    if (!new RegExp(`<${name}\\s*/>`).test(app)) out.push(`src/App.jsx does not mount <${name} />`)
+  }
+  return out
+}
+
+// Route path expressions in App.jsx that clientOnlyRoutes cannot read: an unread route
+// could be unreachable on the host without any check noticing.
+const READABLE_PATH = [/^\{`\$\{p\}[^`$]*`\}$/, /^\{p \|\| '\/'\}$/, /^"\*"$/, /^\{`\$\{p\}\$\{cs\}`\}$/]
+export function unparsedRoutes(appSource) {
+  return [...appSource.matchAll(/<Route\s+path=(\{`[^`]*`\}|\{[^}]*\}|"[^"]*")/g)]
+    .map((m) => m[1])
+    .filter((expr) => !READABLE_PATH.some((re) => re.test(expr)))
 }

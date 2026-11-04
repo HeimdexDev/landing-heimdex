@@ -11,11 +11,16 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { createServer } from 'vite'
 import {
+  EXTRA_REAL_PATHS,
+  JUNK_PATHS,
   clientOnlyRoutes,
+  lintHead,
+  lintHeadWiring,
   lintParity,
   lintReachability,
   lintRedirects,
   lintVercel,
+  unparsedRoutes,
 } from './soft-404-rules.mjs'
 
 const DIST = new URL('../dist/', import.meta.url)
@@ -70,25 +75,21 @@ try {
   if (!clientOnly.length) fail('App.jsx: no client-only routes found; the route scan is broken')
   failures.push(...lintReachability(clientOnly, vercel))
 
+  const unread = unparsedRoutes(appSource)
+  if (unread.length) fail(`App.jsx: Route path ${unread.join(', ')} is not readable by the route scan; extend clientOnlyRoutes`)
+
   // The head the client leaves behind after boot: unknown URLs stay noindex with no
-  // canonical/hreflang, real pages keep theirs (RouteMeta and SeoLinks both apply headFor).
+  // canonical/hreflang, every real route (both languages, slash or not, any case) keeps
+  // its own, and RouteMeta/SeoLinks really apply it.
   const head = await vite.ssrLoadModule('/src/seo/head.js').catch(() => null)
-  if (!head?.headFor) fail('src/seo/head.js: headFor is missing; noindex cannot survive client boot')
+  const nf = await vite.ssrLoadModule('/src/seo/notFound.js').catch(() => null)
+  if (!head?.headFor || !nf?.isNotFoundPath) fail('src/seo: headFor/isNotFoundPath missing; noindex cannot survive client boot')
   else {
-    for (const path of ['/nope-t46', '/en/nope-t46', '/a/b/c', '/en/a/b/c']) {
-      const h = head.headFor(path)
-      if (!h.noindex) fail(`${path}: client head is indexable after boot`)
-      if (h.links.length) fail(`${path}: client head keeps canonical/hreflang links`)
-      if (!h.title.includes('Page not found')) fail(`${path}: client head title is "${h.title}", not the 404 title`)
-    }
-    for (const path of ['/product', '/en/product']) {
-      const h = head.headFor(path)
-      if (h.noindex) fail(`${path}: real page lost index after the 404 head logic`)
-      if (!h.links.some((l) => l.rel === 'canonical') || h.links.filter((l) => l.rel === 'alternate').length !== 3) {
-        fail(`${path}: real page lost its canonical/hreflang links`)
-      }
-    }
+    const junk = SHOW_COMPANY_LINKS ? JUNK_PATHS : [...JUNK_PATHS, '/company']
+    failures.push(...lintHead({ headFor: head.headFor, isNotFoundPath: nf.isNotFoundPath }, [...PRERENDER_PATHS, ...EXTRA_REAL_PATHS], junk))
   }
+  const src = (rel) => readFileSync(new URL(rel, import.meta.url), 'utf8')
+  failures.push(...lintHeadWiring({ routeMeta: src('../src/seo/RouteMeta.jsx'), seoLinks: src('../src/i18n/SeoLinks.jsx'), app: appSource }))
 } finally {
   await vite.close()
 }

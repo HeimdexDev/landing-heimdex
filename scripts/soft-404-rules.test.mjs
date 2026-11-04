@@ -8,7 +8,9 @@ import {
   lintParity,
   lintReachability,
   lintRedirects,
+  lintHeadWiring,
   lintVercel,
+  unparsedRoutes,
 } from './soft-404-rules.mjs'
 
 const read = (p) => readFileSync(new URL(p, import.meta.url), 'utf8')
@@ -46,7 +48,7 @@ test('R3: trailing-slash sources are required', () => {
   assert.equal(lintReachability(routes(), v).length, 4)
 })
 
-test('R5: catch-all redirect, trailingSlash, cleanUrls, headers are rejected', () => {
+test('R5: catch-all redirect, trailingSlash, cleanUrls are rejected', () => {
   assert.match(lintVercel({ ...vercel(), redirects: [{ source: '/(.*)', destination: '/' }] }, exists).join(), /pattern redirect/)
   assert.match(lintVercel({ ...vercel(), trailingSlash: true }, exists).join(), /"trailingSlash"/)
   assert.match(lintVercel({ ...vercel(), cleanUrls: true }, exists).join(), /"cleanUrls"/)
@@ -64,4 +66,48 @@ test('R7: sources must match between vercel.json and _redirects', () => {
   const v = vercel()
   v.rewrites.pop()
   assert.match(lintParity(v, redirects()).join(), /vercel.json lacks ".*" that public\/_redirects has/)
+})
+
+test('K1: slash-less rewrite destination must be the language shell', () => {
+  const v = vercel()
+  v.rewrites.find((r) => r.source === '/blog').destination = '/index.html'
+  v.rewrites.find((r) => r.source === '/en/blog').destination = '/_shell.html'
+  const out = lintReachability(routes(), v).join()
+  assert.match(out, /\/blog -> \/index.html/)
+  assert.match(out, /\/en\/blog -> \/_shell.html/)
+})
+
+test('K6: rewrites outside the expected set fail', () => {
+  const v = vercel()
+  v.rewrites.push({ source: '/nope', destination: '/_shell.html' })
+  assert.match(lintReachability(routes(), v).join(), /unexpected rewrite \/nope/)
+})
+
+test('K6: Route path forms the scan cannot read are reported', () => {
+  assert.deepEqual(unparsedRoutes(app), [])
+  assert.deepEqual(unparsedRoutes(app + '\n<Route path="/newpage" element={null} />'), ['"/newpage"'])
+  assert.equal(unparsedRoutes(app + '\n<Route path={`${p}${x}`} element={null} />').length, 1)
+})
+
+test('K3: RouteMeta and SeoLinks must apply headFor and App must mount both', () => {
+  const files = () => ({
+    routeMeta: read('../src/seo/RouteMeta.jsx'),
+    seoLinks: read('../src/i18n/SeoLinks.jsx'),
+    app,
+  })
+  assert.deepEqual(lintHeadWiring(files()), [])
+  const f = files()
+  f.routeMeta = f.routeMeta.replace('headFor(pathname)', 'metaFor(pathname)')
+  assert.match(lintHeadWiring(f).join(), /RouteMeta.jsx does not call headFor/)
+  const g = files()
+  g.seoLinks = g.seoLinks.replace('.remove()', '.hidden = true')
+  assert.match(lintHeadWiring(g).join(), /SeoLinks.jsx never removes/)
+  const h = files()
+  h.app = h.app.replace('<SeoLinks />', '').replace('<RouteMeta />', '')
+  assert.match(lintHeadWiring(h).join(), /App.jsx does not mount <SeoLinks \/>/)
+  assert.match(lintHeadWiring(h).join(), /App.jsx does not mount <RouteMeta \/>/)
+})
+
+test('K7: build config rejects headers', () => {
+  assert.match(lintVercel({ ...vercel(), headers: [] }, exists).join(), /"headers"/)
 })
