@@ -5,12 +5,20 @@
   "installCommand": "npm install",
   "rewrites": [
     {
-      "source": "/en/(.*)",
+      "source": "/blog",
+      "destination": "/_shell.html"
+    },
+    {
+      "source": "/heimlog",
+      "destination": "/_shell.html"
+    },
+    {
+      "source": "/en/blog",
       "destination": "/en/_shell.html"
     },
     {
-      "source": "/((?!api/).*)",
-      "destination": "/_shell.html"
+      "source": "/en/heimlog",
+      "destination": "/en/_shell.html"
     }
   ]
 }
