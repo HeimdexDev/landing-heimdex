@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/check-hubspot-options.mjs && vite build && node scripts/prerender.mjs",
+    "build": "node scripts/check-hubspot-options.mjs && vite build && node scripts/prerender.mjs && node scripts/check-soft-404.mjs && npm test",
+    "test": "node --test scripts/*.test.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

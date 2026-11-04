@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { langFromPath, stripLangPrefix } from '../i18n/LanguageContext.jsx'
-import { metaFor } from './meta.js'
+import { headFor } from './head.js'
 
 function setMeta(attr, key, content) {
   let el = document.head.querySelector(`meta[${attr}="${key}"]`)
@@ -20,7 +19,7 @@ export default function RouteMeta() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const { title, description, noindex } = metaFor(stripLangPrefix(pathname), langFromPath(pathname))
+    const { title, description, noindex } = headFor(pathname)
     document.title = title
     setMeta('name', 'description', description)
     setMeta('property', 'og:title', title)

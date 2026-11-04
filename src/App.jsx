@@ -17,12 +17,12 @@ import Policy from './pages/Policy.jsx'
 import NotFound from './pages/NotFound.jsx'
 import SeoLinks from './i18n/SeoLinks.jsx'
 import RouteMeta from './seo/RouteMeta.jsx'
+import { isNotFoundPath, redirectFamily } from './seo/notFound.js'
 import LanguageSuggestion from './i18n/LanguageSuggestion.jsx'
 import {
   LanguageProvider,
   langFromPath,
   localizePath,
-  stripLangPrefix,
 } from './i18n/LanguageContext.jsx'
 import GaPageViews from './lib/analytics/useGaPageViews.js'
 import { SHOW_COMPANY_LINKS } from './data/flags.js'
@@ -42,28 +42,15 @@ function ScrollToTop() {
   return null
 }
 
-// Any unknown URL (old /ko/* links, /pricing, /company still in Google) maps to
-// the closest current page — staying in the language the visitor is browsing.
+// Client-side landing for URLs the host already answered 404 (see vercel.json and
+// scripts/check-soft-404.mjs): /product*, /contact* and /policy* (also behind a legacy
+// /ko prefix) map to that page in the visitor's language; everything else, including
+// /ko, /ko/cases and /ko/data, shows NotFound. The 404 status is unchanged, so crawlers see no redirect, only people do.
 function NotFoundRedirect() {
   const { pathname } = useLocation()
   const lang = langFromPath(pathname)
-  // Strip the /en prefix, then any leftover legacy /ko so old links still land.
-  const path = stripLangPrefix(pathname).replace(/^\/ko(?=\/|$)/, '') || '/'
-  const go = (to) => <Navigate to={localizePath(to, lang)} replace />
-  if (path.startsWith('/contact')) return go('/contact')
-  if (path.startsWith('/product')) return go('/product')
-  if (path.startsWith('/policy')) return go('/policy')
-  return <NotFound />
-}
-
-// True for any path that renders the full-screen 404 page (unknown route).
-function isNotFoundPath(pathname) {
-  const p = stripLangPrefix(pathname).replace(/^\/ko(?=\/|$)/, '') || '/'
-  return (
-    p !== '/' &&
-    p !== '/blog' &&
-    !['/product', '/contact', '/policy', '/cases', '/heimlog', '/data', '/request', ...(SHOW_COMPANY_LINKS ? ['/company'] : [])].some((s) => p.startsWith(s))
-  )
+  const family = redirectFamily(pathname)
+  return family ? <Navigate to={localizePath(family, lang)} replace /> : <NotFound />
 }
 
 // Header and footer are hidden on the 404 page so the space fills the viewport.
@@ -122,7 +109,7 @@ export default function App() {
                 <Route path={`${p}/blog`} element={<Home />} />
               </Fragment>
             ))}
-            {/* Catch-all: redirect old/unknown URLs to the closest current page */}
+            {/* Catch-all, client only: the host has already answered 404 for these URLs */}
             <Route path="*" element={<NotFoundRedirect />} />
           </Routes>
         </main>

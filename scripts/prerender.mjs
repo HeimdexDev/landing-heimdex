@@ -10,8 +10,11 @@
 // canonical and hreflang links, and write dist/<path>/index.html. The client
 // still boots with createRoot and re-renders, so nothing at runtime changes.
 //
-// Unknown URLs fall through vercel.json to dist/_shell.html (dist/en/_shell.html
-// under /en): the untouched SPA shell, so a 404 never flashes the home page.
+// Unknown URLs get dist/404.html with a real 404 status: vercel.json must hold no
+// catch-all rewrite, or the host answers them 200 (a soft 404). The only fallbacks
+// are the literal rewrites for client-only routes (/blog, /heimlog) to _shell.html
+// (dist/en/_shell.html under /en): the untouched SPA shell, so they never flash
+// the home page. scripts/check-soft-404.mjs gates both.
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { createServer } from 'vite'
 
@@ -26,7 +29,7 @@ const vite = await createServer({
 let failed = false
 try {
   const { render } = await vite.ssrLoadModule('/src/entry-server.jsx')
-  const { metaFor, PRERENDER_PATHS, ORIGIN } = await vite.ssrLoadModule('/src/seo/meta.js')
+  const { metaFor, NOT_FOUND, PRERENDER_PATHS, ORIGIN } = await vite.ssrLoadModule('/src/seo/meta.js')
   const { localizePath } = await vite.ssrLoadModule('/src/i18n/LanguageContext.jsx')
 
   const template = await readFile(new URL('index.html', DIST), 'utf8')
@@ -71,7 +74,33 @@ try {
     ])
   }
 
-  // SPA fallback shells (empty root) for unknown URLs.
+  // 404.html: the host serves this one file, with status 404, for every unknown URL
+  // in either language, so the copy is bilingual and the page is noindex with no
+  // canonical/hreflang. The client boots with createRoot and swaps in the app's own
+  // NotFound page for the visitor's language.
+  const copy404 = `<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;background:#050d1e;color:#cdd9ec;font-family:sans-serif">
+      <p style="margin:0;font-size:64px;font-weight:700;color:#fff">404</p>
+      <p lang="ko" style="margin:0;font-size:18px">페이지를 찾을 수 없어요.</p>
+      <p lang="en" style="margin:0;font-size:18px">We couldn’t find that page.</p>
+      <p style="margin:8px 0 0"><a href="/" style="color:#fff">홈으로</a> · <a href="/en" style="color:#fff">Home</a></p>
+    </div>`
+  await writeFile(
+    new URL('404.html', DIST),
+    swap(template, [
+      [/<title>[^<]*<\/title>/, `<title>${esc(NOT_FOUND.title)}</title>`, 'title'],
+      [/(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${esc(NOT_FOUND.description)}$2`, 'description'],
+      [/(<meta property="og:title" content=")[^"]*(")/, `$1${esc(NOT_FOUND.title)}$2`, 'og:title'],
+      [/(<meta\s+property="og:description"\s+content=")[^"]*(")/, `$1${esc(NOT_FOUND.description)}$2`, 'og:description'],
+      [/(<meta name="twitter:title" content=")[^"]*(")/, `$1${esc(NOT_FOUND.title)}$2`, 'twitter:title'],
+      [/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, `$1${esc(NOT_FOUND.description)}$2`, 'twitter:description'],
+      // No og:url: a shared dead link must not name a live page.
+      [/\s*<meta property="og:url" content="[^"]*" \/>/, '', 'og:url'],
+      [/<meta name="robots" content="[^"]*" \/>/, '<meta name="robots" content="noindex, follow" />', 'robots'],
+      [/<div id="root"><\/div>/, `<div id="root">${copy404}</div>`, 'root'],
+    ]),
+  )
+
+  // SPA fallback shells (empty root) for the literal client-only rewrites.
   await writeFile(new URL('_shell.html', DIST), template)
   await mkdir(new URL('en/', DIST), { recursive: true })
   await writeFile(new URL('en/_shell.html', DIST), page('/', 'en', '').replace(/\n    <link rel="(canonical|alternate)"[^>]*>/g, ''))
@@ -113,7 +142,7 @@ ${entries.join('\n')}
 `,
   )
 
-  console.log(`[prerender] wrote ${count} pages + 2 SPA shells + sitemap.xml (${entries.length} URLs)`)
+  console.log(`[prerender] wrote ${count} pages + 404.html + 2 SPA shells + sitemap.xml (${entries.length} URLs)`)
 } catch (err) {
   console.error(err)
   failed = true
