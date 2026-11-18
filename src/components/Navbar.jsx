@@ -33,6 +33,7 @@ import {
   INDUSTRIES,
   HEIMLOG_APP,
   blogUrl,
+  blogHomeUrl,
   industryPath,
 } from '../data/industries.js'
 
@@ -465,7 +466,7 @@ export default function Navbar() {
               {t('도입 사례', 'Customers')}
             </Link>
             <a
-              href={blogUrl('business', lang)}
+              href={blogHomeUrl(lang)}
               target="_blank"
               rel="noopener noreferrer"
               onMouseEnter={closeNow}
@@ -608,6 +609,14 @@ export default function Navbar() {
             open={group === 'blog'}
             onToggle={() => setGroup(group === 'blog' ? null : 'blog')}
           >
+            <a
+              href={blogHomeUrl(lang)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${mobileLink} flex items-center gap-1`}
+            >
+              {t('블로그 홈', 'Blog home')} <ArrowUpRight size={14} />
+            </a>
             {BLOG.map((b) => (
               <a
                 key={b.key}
