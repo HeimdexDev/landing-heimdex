@@ -1,6 +1,7 @@
 import Link from '../i18n/Link.jsx'
 import { ArrowUpRight } from 'lucide-react'
 import { useLang } from '../i18n/LanguageContext.jsx'
+import { blogHomeUrl } from '../data/industries.js'
 import NetworkGraph from '../components/NetworkGraph.jsx'
 import SpaceField from '../components/SpaceField.jsx'
 
@@ -90,7 +91,7 @@ export default function NotFound() {
               에서 직접 체험하거나,
               <br />
               <a
-                href="https://blog.heimdex.co/"
+                href={blogHomeUrl(lang)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold text-white underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-white"
@@ -115,7 +116,7 @@ export default function NotFound() {
               <br />
               or catch up on the{' '}
               <a
-                href="https://blog.heimdex.co/"
+                href={blogHomeUrl(lang)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold text-white underline decoration-white/40 underline-offset-4 transition-colors hover:decoration-white"
