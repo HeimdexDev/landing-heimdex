@@ -14,6 +14,13 @@ import { SHOW_COMPANY_LINKS } from '../data/flags.js'
 
 export const ORIGIN = 'https://www.heimdex.co'
 
+// Head of an unknown URL. One bilingual text: dist/404.html is a single file that
+// answers /xyz and /en/xyz alike, and the client reuses it so the head does not change on boot.
+export const NOT_FOUND = {
+  title: '페이지를 찾을 수 없어요 · Page not found | HEIMDEX',
+  description: '페이지를 찾을 수 없어요. We couldn’t find that page.',
+}
+
 const SUFFIX = ' | HEIMDEX'
 const SUFFIX_EN = ' | HEIMDEX'
 

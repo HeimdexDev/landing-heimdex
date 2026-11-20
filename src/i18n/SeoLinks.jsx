@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { langFromPath, localizePath, stripLangPrefix } from './LanguageContext.jsx'
-
-const ORIGIN = 'https://www.heimdex.co'
+import { headFor } from '../seo/head.js'
 
 // Keep a single <link> per (rel, hreflang) and update it in place, so client-side
 // navigation doesn't pile up stale tags.
@@ -22,19 +20,17 @@ function setLink(rel, href, hreflang) {
 
 // Tells Google which URL is canonical for this page and where its other-language
 // twin lives. Without this the /en pages read as duplicates of the Korean ones.
+// Unknown URLs get no links: a canonical on a 404 would name the junk URL.
 export default function SeoLinks() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const bare = stripLangPrefix(pathname)
-    const ko = ORIGIN + bare
-    const en = ORIGIN + localizePath(bare, 'en')
-    const current = langFromPath(pathname) === 'en' ? en : ko
-
-    setLink('canonical', current)
-    setLink('alternate', ko, 'ko')
-    setLink('alternate', en, 'en')
-    setLink('alternate', ko, 'x-default')
+    const { links } = headFor(pathname)
+    if (!links.length) {
+      document.head.querySelectorAll('link[rel="canonical"], link[rel="alternate"][hreflang]').forEach((el) => el.remove())
+      return
+    }
+    for (const { rel, href, hreflang } of links) setLink(rel, href, hreflang)
   }, [pathname])
 
   return null
