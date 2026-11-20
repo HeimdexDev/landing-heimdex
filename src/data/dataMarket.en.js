@@ -386,7 +386,7 @@ export const EN = {
       "tags": [
         "Full-duplex voice",
         "Diarization",
-        "TTS"
+        "STT"
       ],
       "stats": [
         {
