@@ -4,6 +4,7 @@ import PrivacyModal from '../components/PrivacyModal.jsx'
 import Reveal from '../components/Reveal.jsx'
 import { useLang } from '../i18n/LanguageContext.jsx'
 import { useDataCopy } from '../data/dataMarket.js'
+import { trackLead } from '../lib/analytics/ga.js'
 
 function Checkbox({ checked, onChange }) {
   return (
@@ -81,6 +82,7 @@ export default function Contact() {
         }),
       })
       if (!res.ok) throw new Error('전송 실패')
+      trackLead({ formId: 'contact' })
 
       alert(
         t(

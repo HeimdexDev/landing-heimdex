@@ -6,6 +6,8 @@
 // views are emitted manually on route change (see useGaPageViews.js), so the automatic
 // page_view is disabled to avoid double-counting the initial load.
 
+import { sendLeadEvent } from './leadEvent.js'
+
 const MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID
 const LINKED_DOMAINS = ['heimdex.co', 'blog.heimdex.co']
 
@@ -42,5 +44,15 @@ export function trackPageView(path) {
     page_path: path,
     page_location: window.location.href,
     page_title: document.title,
+  })
+}
+
+// Call once, only after /api/contact answered 2xx. formId is a stable per-form slug.
+export function trackLead({ formId, kind }) {
+  sendLeadEvent({
+    measurementId: MEASUREMENT_ID,
+    win: typeof window === 'undefined' ? undefined : window,
+    formId,
+    kind,
   })
 }
