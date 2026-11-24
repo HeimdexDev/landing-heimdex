@@ -306,3 +306,5 @@ export const HEIMLOG_APP = 'https://heimlog.heimdex.co/'
 // Creators content lives on the heimlog site; the rest on blog.heimdex.co.
 export const blogUrl = (collection, lang) =>
   collection === 'creators' ? 'https://heimlog.heimdex.co/blog' : `https://blog.heimdex.co/${lang === 'en' ? 'en' : 'ko'}/${collection}/`
+// The blog's home page (all four collections). The GNB "블로그" link lands here.
+export const blogHomeUrl = (lang) => `https://blog.heimdex.co/${lang === 'en' ? 'en' : 'ko'}/`
