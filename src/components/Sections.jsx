@@ -12,7 +12,7 @@ import { BlurLines, scrollToStep, useMotion, useScrollProgress, useStep } from '
 export function SectionHead({ eyebrow, title, lead, className = '', align = 'center' }) {
   const left = align === 'left'
   return (
-    <div className={`flex flex-col ${left ? 'items-start text-left' : 'items-center text-center'} ${className}`}>
+    <div className={`flex flex-col ${left ? 'items-start text-left max-sm:items-center max-sm:text-center' : 'items-center text-center'} ${className}`}>
       {eyebrow && (
         <Reveal>
           <p className="hx-eyebrow">{eyebrow}</p>
@@ -44,15 +44,15 @@ export function Lines({ lines }) {
 export function DarkCta({ lines, sub }) {
   const { t } = useLang()
   return (
-    <section id="cta" className="hx-section flex min-h-[calc(100vh-4rem)] items-center justify-center bg-hx py-28 text-center max-sm:min-h-0 max-sm:py-24">
-      <div className="mx-auto flex max-w-[900px] flex-col items-center">
+    <section id="cta" className="hx-section bg-hx py-28 text-center max-lg:py-24 max-sm:py-16">
+      <div className="mx-auto flex max-w-[760px] flex-col items-center">
         <BlurLines
           lines={lines}
-          className="text-[56px] font-bold leading-[1.32] tracking-[-0.03em] text-white max-lg:text-[44px] max-md:text-[34px] max-sm:text-[27px]"
+          className="text-[40px] font-bold leading-[1.35] tracking-[-0.035em] text-white max-lg:text-[36px] max-md:text-[30px] max-sm:text-[24px]"
         />
         <Reveal delay={350} className="flex flex-col items-center">
-          {sub && <p className="mt-6 text-[19px] text-white/60 max-sm:text-[15px]">{sub}</p>}
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
+          {sub && <p className="mt-4 text-[17px] leading-[1.7] text-white/60 max-sm:text-[15px]">{sub}</p>}
+          <div className="mt-8 flex flex-wrap justify-center gap-3 max-sm:mt-7">
             <Link to="/contact" className="hx-btn hx-on-dark">
               {t('도입 문의하기', 'Contact sales')}
             </Link>
@@ -121,7 +121,7 @@ export function StickyShowcase({ id, head, items, className = '', visualClassNam
   return (
     <section id={id} ref={ref} className={className} style={motion ? { height: `${n * 85 + 40}vh` } : undefined}>
       <div className="hx-section py-[120px] max-sm:py-20 lg:sticky lg:top-16 lg:flex lg:h-[calc(100vh-4rem)] lg:items-center lg:py-0">
-        <div className="mx-auto grid w-full max-w-[1200px] grid-cols-[1fr_1.1fr] items-center gap-20 max-lg:grid-cols-1 max-lg:gap-12">
+        <div className="mx-auto grid w-full max-w-content grid-cols-[1fr_1.1fr] items-center gap-20 max-lg:grid-cols-1 max-lg:gap-12">
           <div>
             {head}
             <ul className="mt-10 flex flex-col gap-2 max-lg:gap-12">
@@ -215,7 +215,7 @@ export function Chip({ children, tone = 'neutral', className = '' }) {
     dark: 'bg-hx text-white',
   }
   return (
-    <span className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-[14px] font-semibold tracking-[-0.2px] ${tones[tone]} ${className}`}>
+    <span className={`inline-flex h-8 items-center rounded-full px-3.5 pb-px text-[14px] font-semibold leading-none tracking-[-0.2px] ${tones[tone]} ${className}`}>
       {children}
     </span>
   )

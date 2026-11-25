@@ -107,11 +107,11 @@ export default function Contact() {
   const d = useDataCopy().contact
   return (
     <div className="bg-snow">
-      <section className="mx-auto w-full max-w-[1168px] px-5 pb-40 pt-[200px] md:px-8 xl:px-0 max-lg:pt-[140px] max-sm:pb-20 max-sm:pt-[110px]">
+      <section className="mx-auto w-full max-w-content px-5 pt-[200px] hx-pad-b md:px-8 xl:px-0 max-lg:pt-[140px] max-sm:pt-[110px]">
         <div className="relative xl:ml-[264px] xl:max-w-[904px]">
           <p className="absolute -left-[264px] top-3 hidden text-[16px] font-medium tracking-[-0.03em] text-ink-mute xl:block">{d.breadcrumb}</p>
           <Reveal>
-            <h1 className="text-[40px] font-extrabold leading-[1.5] tracking-[-0.03em] text-ink max-md:text-[32px] max-sm:text-[26px]">
+            <h1 className="text-[40px] font-bold leading-[1.5] tracking-[-0.03em] text-ink max-md:text-[32px] max-sm:text-[26px]">
               {d.titleLines.map((l, i) => (
                 <span key={l} className="block">
                   {i > 0 && ' '}
@@ -121,7 +121,7 @@ export default function Contact() {
             </h1>
             <p className="mt-4 text-[18px] leading-[1.5] tracking-[-0.03em] text-ink-sub max-sm:text-[16px]">
               {d.bodyLines.map((l, i) => (
-                <span key={l} className="block">
+                <span key={l} className="sm:block">
                   {i > 0 && ' '}
                   {l}
                 </span>
@@ -186,14 +186,14 @@ export default function Contact() {
 
               {/* Consent */}
               <div className="mt-8 flex flex-col">
-                <h2 className="text-[18px] font-bold tracking-[-0.03em] text-ink">{d.consentTitle}</h2>
+                <h2 className="text-[18px] font-semibold tracking-[-0.03em] text-ink">{d.consentTitle}</h2>
                 <div className="mt-7 flex flex-col gap-5">
                   <div className="flex items-center justify-between gap-4 py-1.5">
                     <div className="flex items-center gap-5">
                       <Checkbox checked={agreeRequired} onChange={() => setAgreeRequired((v) => !v)} />
                       <span className="flex flex-wrap items-center gap-2 text-[16px] tracking-[-0.03em] max-sm:text-[14px]">
                         <span className="font-medium text-ink-soft">{d.consentRequired}</span>
-                        <span className="font-bold text-[#2F4B7C]">{d.required}</span>
+                        <span className="font-semibold text-[#2F4B7C]">{d.required}</span>
                       </span>
                     </div>
                     <button type="button" onClick={() => setModalOpen(true)} className="shrink-0 text-[16px] tracking-[-0.03em] text-ink-mute hover:text-ink max-sm:text-[14px]">
@@ -207,7 +207,7 @@ export default function Contact() {
                     <div className="flex flex-1 flex-col">
                       <span className="flex flex-wrap items-center gap-2 pt-0.5 text-[16px] tracking-[-0.03em] max-sm:text-[14px]">
                         <span className="font-medium text-ink-soft">{d.consentOptional}</span>
-                        <span className="font-bold text-[#2F4B7C]">{d.optional}</span>
+                        <span className="font-semibold text-[#2F4B7C]">{d.optional}</span>
                       </span>
                       <div className={`grid transition-all duration-300 ease-out ${marketingOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                         <div className="overflow-hidden">
@@ -244,7 +244,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={!canSubmit}
-                className="mt-[46px] h-12 w-full rounded-[28px] bg-hx text-[16px] font-bold tracking-[-0.03em] text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-70"
+                className="mt-[46px] h-12 w-full rounded-[28px] bg-hx text-[16px] font-semibold tracking-[-0.03em] text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {submitting ? t('전송 중...', 'Sending...') : d.submit}
               </button>

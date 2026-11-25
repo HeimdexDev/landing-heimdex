@@ -335,7 +335,7 @@ export function SplitView({ detail, title }) {
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-[6px]">
                 <img src="/assets/logo-symbol.svg" alt="" className="h-[28px] w-[26px]" />
-                <img src="/assets/logo-wordmark.svg" alt="heimdex" className="h-[19px] w-[92px]" />
+                <img src="/assets/logo-wordmark.svg" alt="Heimdex" className="h-[19px] w-[92px]" />
               </span>
               <PanelLeft size={24} className="text-[#9d9d9d]" />
             </div>

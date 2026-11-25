@@ -8,7 +8,7 @@ export const TESTIMONIALS = {
       who: '라이브커머스 8년차 PD',
       whoEn: 'Live Commerce Producer · 8 yrs',
       quote:
-        '퇴사자가 많다 보니 인수인계가 쉽지 않아요. NAS, 하드, 클라우드까지 하임덱스로 소스 찾는 시간을 아껴서 컷 편집에만 집중할 수 있어\n살 것 같습니다.',
+        '퇴사자가 많다 보니 인수인계가 쉽지\u00A0않아요. NAS, 하드, 클라우드까지 하임덱스로 소스 찾는 시간을 아껴서 컷\u00A0편집에만 집중할 수 있어\n살\u00A0것 같습니다.',
       quoteEn:
         'With high turnover, handovers are tough. Across NAS, drives and cloud, Heimdex saves so much time finding sources that I can focus purely on the edit. A lifesaver.',
     },
@@ -40,7 +40,7 @@ export const TESTIMONIALS = {
       quote:
         '로그는 깨끗한데 실제 구동이 튀면 원인 찾느라 머리 터지거든요.\n특정 동작 맥락만 치면 로그랑 일치하는 구간을 바로 하이라이트해 주니까,\n제가 놓친 미세 오류까지 다 보입니다.',
       quoteEn:
-        'The logs look clean, but when a run misbehaves, finding the cause is a headache. Type the context of a motion and it highlights the matching segment instantly — even the subtle errors I missed.',
+        'The logs look clean, but when a run misbehaves, finding the cause is a headache. Type the context of a motion and it highlights the matching segment instantly, even the subtle errors I missed.',
     },
   ],
 }

@@ -30,6 +30,13 @@
 html {
   scroll-behavior: smooth;
 }
+/* Phones/tablets: anchor jumps (#request, /#industries…) land below the fixed
+   56px header, not under it. Desktop keeps the per-section scroll-mt values. */
+@media (max-width: 1023px) {
+  html {
+    scroll-padding-top: 72px;
+  }
+}
 
 body {
   margin: 0;
@@ -237,13 +244,56 @@ a {
   }
   /* Small section eyebrow above an h2 */
   .hx-eyebrow {
-    @apply text-[17px] font-bold tracking-[-0.3px] text-primary-500 max-sm:text-[15px];
+    @apply text-[17px] font-semibold tracking-[-0.3px] text-primary-500 max-sm:text-[15px];
   }
   .hx-h2 {
     @apply text-[42px] font-bold leading-[1.32] tracking-[-0.03em] text-ink max-md:text-[34px] max-sm:text-[27px];
   }
+  /* Layout grid — the GNB sets it: content is max-w-content (1168px), with a
+     32px gutter below 1280 and 20px on phones. */
   .hx-section {
-    @apply px-[60px] max-lg:px-8 max-sm:px-5;
+    @apply px-5 md:px-8 xl:px-0;
+  }
+  /* Vertical rhythm. A section is 160/120/80px top and bottom (desktop/tablet/
+     phone); two sections on the same ground share one gap (-t on the second, or
+     -b on the first). A band is a thin strip — logo rows, one-line CTAs. */
+  .hx-pad {
+    @apply py-40 max-lg:py-[120px] max-sm:py-20;
+  }
+  .hx-pad-t {
+    @apply pt-40 max-lg:pt-[120px] max-sm:pt-20;
+  }
+  .hx-pad-b {
+    @apply pb-40 max-lg:pb-[120px] max-sm:pb-20;
+  }
+  /* First section under the fixed 80px header. */
+  .hx-hero-t {
+    @apply pt-40 max-lg:pt-32 max-sm:pt-[88px];
+  }
+  .hx-band {
+    @apply py-16 max-sm:py-12;
+  }
+
+  /* Home type scale, taken from the hero: same ink (#111 / #46484D), same
+     tracking family. Title is one step under the hero h1 (60/52/42/34). */
+  .hm-kicker {
+    @apply text-[14px] font-medium tracking-[-0.02em] text-[#46484D];
+  }
+  .hm-title {
+    @apply text-[48px] font-bold leading-[1.22] tracking-[-0.035em] text-[#111] max-xl:text-[44px] max-md:text-[36px] max-sm:text-[28px];
+  }
+  .hm-lead {
+    @apply text-[17px] leading-[1.7] text-[#46484D] max-sm:text-[15px];
+  }
+  .hm-h3 {
+    @apply text-[24px] font-bold leading-[1.35] tracking-[-0.03em] text-[#111] max-sm:text-[20px];
+  }
+  .hm-body {
+    @apply text-[16px] leading-[1.7] text-[#46484D] max-sm:text-[15px];
+  }
+  /* Chips: the hero's white button shadow, no outline */
+  .hm-chip {
+    @apply rounded-full bg-white px-3 py-1.5 text-[13px] font-medium tracking-[-0.02em] text-[#46484D] shadow-[0_1px_3px_rgba(10,34,64,0.08),0_4px_12px_-6px_rgba(10,34,64,0.14)];
   }
 }
 
@@ -310,4 +360,42 @@ a {
 .hx-ribbon-wave-3 { animation-name: hx-ribbon-c; animation-duration: 6.6s; animation-delay: -2.6s; }
 @media (prefers-reduced-motion: reduce) {
   .hx-ribbon-wave { animation: none; }
+}
+
+/* The collection pages' floating sample bar (DataDetail SampleBar) sits along
+   the bottom edge; below 1280px it would run under the floating buttons, so
+   lift them above it while it's showing. */
+@media (max-width: 1279px) {
+  body[data-sample-bar] [data-fab] {
+    bottom: 112px;
+  }
+}
+@media (max-width: 639px) {
+  body[data-sample-bar] [data-fab] {
+    bottom: 92px;
+  }
+}
+
+/* Home industries: the picked industry's panel settles in on each switch. */
+/* Scrolled-header mega-menu card: drops in under the pill */
+@keyframes hx-menu-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+.hx-menu-in {
+  animation: hx-menu-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hx-menu-in { animation: none; }
+}
+
+@keyframes hx-swap-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+.hx-swap-in {
+  animation: hx-swap-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hx-swap-in { animation: none; }
 }

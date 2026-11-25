@@ -25,6 +25,7 @@ export default function FloatingActions() {
 
   return (
     <div
+      data-fab
       className={`fixed bottom-10 right-10 z-40 flex w-[52px] flex-col items-center gap-6 transition-all duration-300 max-lg:right-5 max-sm:right-4 ${
         show ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
       }`}

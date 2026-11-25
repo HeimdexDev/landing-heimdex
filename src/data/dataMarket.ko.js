@@ -1,38 +1,37 @@
-// 데이터 마켓플레이스 — Korean copy, verbatim from Figma (homepage-wireframe ·
-// 데이터마켓플레이스 · KO). dataMarket.en.js mirrors this shape exactly.
-//
-// Values in [brackets] are placeholders the design itself carries (e.g. spec
-// tables) — replace them here once the real numbers are confirmed.
+// 데이터 마켓플레이스 — Korean copy ("HEIMDEX 데이터 페이지 카피 수정안").
+// dataMarket.en.js mirrors this shape exactly; collections live in
+// dataMarket.ko.details.js.
 
-import { KO_DETAILS } from './dataMarket.ko.details.js'
+import { KO_COLLECTIONS } from './dataMarket.ko.details.js'
 
 export const KO = {
   gnb: { label: '데이터 마켓플레이스', isNew: 'NEW', sample: '샘플 요청', contact: '문의하기' },
 
   landing: {
-    promoPill: { caption: 'NEW', body: '제품 조작 시연 영상(3인칭·설명 음성) · 화자별 대화 음성 · 멀티캠 원본' },
-    heroTitleAccent: '방송에 나가지 않은 촬영 원본',
-    heroTitle: '화자별 트랙과 멀티캠 그대로',
+    promoPill: { caption: 'NEW', body: '대화 음성 14,800시간 · 영상 33,000 시간 · 데이터셋 18종' },
+    heroTitle: '하임덱스 데이터 마켓플레이스는\n방송·공연·커머스 현장의 촬영 원본을\nAI 학습 데이터로 공급합니다.',
     heroBody:
-      '국내 방송 · 라이브커머스 제작사와 직접 계약한 미방영 원본입니다.\n크롤링, 권리 확인, 화자 분리, 라벨링 없이 바로 학습에 넣을 수 있게 정리해 드립니다.',
+      '화자별 대화 트랙 · 멀티캠 원본 · 제품 조작 시연 영상까지\n제작사와 AI 학습용 재라이선스 계약을 맺고, 출연자 전원의 AI 학습 이용 동의를 받은 데이터입니다.',
     heroButtons: ['샘플 요청', '맞춤 데이터 요청'],
-    heroChecks: ['제작사와 직접 계약', '비독점 · 기간 한정', '2영업일 내 샘플 회신'],
-    heroVisual: { speaking: 'SPK 1 · 말하는 중', cam: 'CAM 1 · 00:12:48' },
-    sectionNav: ['차별점', '컬렉션', '보유 아카이브', '하임덱스 소개', '공급 구조', '데이터 비교', '자주 묻는 질문', '샘플 요청'],
+    heroChecks: ['제작사 재라이선스 계약', '비독점 · 영구 학습 이용', '5영업일 내 샘플·견적 회신'],
+    sectionNav: ['차별점', '데이터 라이브러리', '보유 아카이브', '하임덱스 소개', '데이터 비교', '자주 묻는 질문', '샘플 요청'],
     diff: {
       eyebrow: '차별점',
-      title: '인터넷에서는 구할 수 없는 데이터예요',
+      title: '방송 제작 현장의 원본을 그대로',
+      lead: '화자별 대화 음성과 모든 카메라, 편집 전 분량까지 드립니다.',
       features: [
-        { title: '편집본이 아닌\n촬영 원본과 방송본을 함께', body: '카메라별 원본과 그 장면이 방송된 편집본을\n대응 구간과 함께 제공해요' },
-        { title: '출연자별 마이크 트랙', body: '출연자마다 마이크를 따로 달아,\n화자 라벨을 추정이 아닌 녹음에서 얻어요' },
-        { title: '설명이 붙은 손 동작', body: '쇼호스트가 제품을 다루며 말로 설명하는\n동작과 언어가 같은 타임라인을 한 번에' },
-        { title: '문장으로 찾는 아카이브', body: '키워드 태그가 아닌 장면 내용으로 색인돼 있어, 필요한 장면을 설명하면 바로 찾아 드려요.' },
+        { title: '타임코드 동기 멀티뷰 · 카메라별 원본', body: '멀티캠 4~12대로 찍은 카메라별 원본 전체를 하나의 타임코드로 동기화했어요. 통제되지 않은 촬영 조건도 그대로 담겨 있어요.' },
+        { title: '무편집 다자 대화 · 화자별 개별 트랙', body: '2인 이상 대화를 편집 없이, 화자별 마이크 트랙 그대로 드려요.\n오버랩·백채널·턴테이킹이 보존돼요.' },
+        { title: '원본-방송본 페어 · 컷별 선택 정보', body: '방송본 컷마다 어느 카메라의 몇 분 몇 초 구간을 썼는지 연결해 드려요.\n방송에 쓰이지 않은 다른 카메라 앵글과 NG 장면까지 포함돼요.' },
+        { title: '단일 세션 멀티모달 정렬', body: '같은 촬영 세션의 화자별 오디오, 멀티캠 영상, 방송 편집본을\n하나의 타임코드로 정렬했어요. 필요한 모달리티 조합만 고를 수 있어요.' },
+        { title: '실제 발화-손동작 동기화', body: '라이브커머스 1~3시간 연속 원본이에요.\n설명 발화와 손동작이 같은 타임라인에 있고, 손 클로즈업과 와이드를 동시 촬영했어요.' },
+        { title: '아카이브 검색부터 비식별 처리까지 한 번에', body: '자체 영상 검색 엔진으로 전체 아카이브에서 조건에 맞는 구간을 찾아 샘플로 회신해요.\n샷 경계, 화자별 트랙 연결, 비식별 처리까지 검수한 뒤 납품해요.' },
       ],
     },
     collections: {
-      eyebrow: '컬렉션',
-      title: '샘플이 준비돼 있어요',
-      lead: '필요한 데이터를 골라 샘플을 요청해 보세요. 카드를 누르면 자세한 구성을 볼 수 있어요.',
+      eyebrow: '데이터 라이브러리',
+      title: '4개 카테고리, 18종 데이터셋',
+      lead: '학습 목적에 맞춰 필요한 데이터셋만 골라 구성할 수 있어요. 카드를 누르면 자세한 구성을 볼 수 있어요.',
       more: '자세히 보기',
       cta: '샘플 요청',
     },
@@ -43,32 +42,22 @@ export const KO = {
       searchPlaceholder: '예: 무대 위 4인 그룹 안무, 정면 와이드 샷',
       options: [
         { title: '아카이브에서 찾기', body: '이미 보유한 영상에서 찾아 빠르게 샘플 발송' },
-        { title: '신규 맞춤 수집', body: '새로 촬영 · 수집, 일정 협의 필요' },
+        { title: '신규 맞춤 수집', body: '원하는 조건의 데이터가 없다면 파트너 제작사와 맞춤 수집. 추가 수집분은 일정 협의 필요' },
       ],
     },
     archive: {
       eyebrow: '보유 아카이브',
       title: '컬렉션 밖에도 더 많은 원본이 있어요',
-      lead: '필요한 장면을 문장으로 적으면, 색인된 아카이브에서 찾아 샘플로 보내드려요. 위 컬렉션 5종은 그중 일부예요.',
+      lead: '필요한 장면을 문장으로 적으면, 색인된 아카이브에서 찾아 샘플로 보내드려요. 위 컬렉션 외에도 조건에 맞는 구간을 찾아 드려요.',
       button: '샘플 신청',
-      license: { eyebrow: '라이선스 조건', title: '라이선스 조건', items: ['비독점', '기간 한정', '카테고리 · 언어 · 시간별 맞춤 구성'] },
+      license: { eyebrow: '라이선스 조건', title: '라이선스 조건', items: ['비독점', '영구 학습 이용', '카테고리 · 언어 · 시간별 맞춤 구성'] },
       about: {
         eyebrow: '하임덱스 소개',
         title: '하임덱스 소개',
-        body: '하임덱스는 한국 미디어 기업의 방송 · 제작 아카이브를\n색인하는 온프레미스 영상 AI를 만들어요.',
-        badges: ['NVIDIA 글로벌 협업 프로그램 (엔업 선정) 투자', 'NVIDIA Inception 선정', 'Claude Startups 선정'],
+        body: '하임덱스는 2025년 설립한 온프레미스 영상 AI 기업이에요.\n자체 영상 AI로 방송·제작사 아카이브를 검색·정제해 학습 데이터로 공급해요.',
+        badges: ['중기부 창업성장 R&D 과제', '엔비디아 글로벌 협업 R&D 과제', '특허 6건 출원'],
         backers: ['삼성화재', 'Antler'],
       },
-    },
-    supply: {
-      eyebrow: '공급 구조',
-      title: '권리는 깨끗하게,\n공급은 계속 늘어나요',
-      lead: '하임덱스는 제작사 · 방송사의 자체 서버 안에서 아카이브를 색인해요.\n원본을 옮기지 않아도 새 영상이 계속 카탈로그에 더해지고, 라이선스한 클립만 전달돼요.',
-      steps: [
-        { step: 'STEP 1', title: '원본은 제작사 서버에 그대로', chip: '온프레미스' },
-        { step: 'STEP 2', title: '하임덱스가 정리하고 라벨링', chip: '색인 · 메타데이터' },
-        { step: 'STEP 3', title: '라이선스한 클립만 전달', chip: '라이선스 클립' },
-      ],
     },
     compare: {
       eyebrow: '한 눈에 보기',
@@ -76,17 +65,17 @@ export const KO = {
       lead: '구매 검토 시 많이 비교하는 4가지 유형 기준이에요.',
       columns: ['스톡 푸티지 라이선스', '크리에이터 영상 마켓플레이스', '크라우드 맞춤 수집', '공개 데이터셋', '하임덱스'],
       rows: [
-        { label: '원천', cells: ['완성 편집본', '유튜브 업로드본\n(1캠 · 압축)', '연출된 별도 촬영', '웹 수집', '방송 전 제작 원본'] },
+        { label: '원천', cells: ['완성 편집본', '유튜브 업로드본\n(1캠 · 압축)', '연출된 별도 촬영', '웹 수집', '제작 원본\n(ISO·NG 포함) + 방송본'] },
         { label: '멀티캠 · 화자별 트랙', cells: ['없음', '없음', '비용을 들여\n별도 촬영', '없음', '있음'] },
-        { label: '장면 단위\n메타데이터', cells: ['키워드 태그 수준', '거의 없음', '요청한 항목만', '데이터셋마다\n다름', '장면 분할 · 3단계 캡션 ·\n화자 타임라인'] },
-        { label: '원하는 장면\n찾는 방식', cells: ['키워드 검색', '채널 · 카테고리', '새로 촬영\n(수주~수개월)', '직접 필터링', '문장으로 요청 →\n아카이브에서 검색'] },
-        { label: '권리 근거', cells: ['플랫폼 약관', '크리에이터 개별 동의', '참여자 동의', '불명확한 경우 많음', '제작사 직접 계약 +\n클립별 권리 기록'] },
-        { label: '한국어 · K-콘텐츠', cells: ['적음', '일부', '가능하나 고비용', '적음', '주력'] },
+        { label: '장면 단위\n메타데이터', cells: ['키워드 태그 수준', '거의 없음', '요청한 항목만', '데이터셋마다\n다름', '샷 경계 · 화자-트랙 매핑 기본,\n전사·캡션·행동 라벨은 옵션'] },
+        { label: '원하는 장면\n찾는 방식', cells: ['키워드 검색', '채널 · 카테고리', '새로 촬영\n(수주~수개월)', '직접 필터링', '말하듯 문장으로 검색'] },
+        { label: '권리 근거', cells: ['플랫폼 약관', '크리에이터 개별 동의', '참여자 동의', '불명확한 경우 많음', '제작사 재라이선스 계약 +\n세션·화자 ID 단위 동의서 매핑'] },
+        { label: '언어', cells: ['일부', '일부', '고비용', '적음', '한국어·영어·일본어·중국어,\n이외 언어도 맞춤 수집 가능'] },
       ],
     },
     partner: {
       eyebrow: '파트너 문의',
-      title: '아카이브를 보유한 제작사 · 방송사라면',
+      title: '아카이브를 보유한 제작사\u00A0·\u00A0방송사라면',
       body: '보유 영상을 옮기지 않고 AI 학습 데이터로 판매할 수 있어요.',
       button: '파트너 문의 →',
     },
@@ -98,166 +87,47 @@ export const KO = {
       items: [
         {
           q: '권리는 어떻게 증명하나요?',
-          a: '하임덱스는 방송사·제작사 등 영상 권리를 보유한 공급사와 직접 계약해 데이터를 확보해요. 공급사의 권리와 컴플라이언스를 먼저 확인하고, 법률 검토를 거친 라이선스 계약서로 사용 범위를 명확히 정해 드려요.',
+          a: '하임덱스는 방송사·제작사 등 영상 권리를 보유한 공급사와 AI 학습용 재라이선스 계약을 맺고 데이터를 확보해요.\n출연자 전원에게 AI 학습 이용 동의를 받았고, 동의서는 세션·화자 ID 단위로 매핑돼요.\n요청 시 개인정보를 가린 동의서 사본을 드리고, 권리·동의 보증 조항을 계약서에 명시해요.',
         },
         {
           q: '얼굴은 비식별화되나요?',
-          a: '네, 납품 전 얼굴 블러 등 비식별화를 기본으로 적용해요. 특정 인물의 초상·IP가 문제될 수 있는 구간은 삭제하거나 별도 처리하고, 학습 목적에 맞춰 처리 범위를 함께 정해요.',
+          a: '출연자 전원이 AI 학습 이용에 동의해 원본 그대로 납품하는 것이 기본이에요.\n필요하면 얼굴 · 화면 속 텍스트 · 로고 블러를 옵션으로 적용해 드려요.',
         },
         {
           q: '어떤 형식으로 납품하나요?',
-          a: '필요한 구간만 추출한 영상 클립과 라벨·메타데이터를 함께 드려요. 해상도, 클립 길이, 라벨 항목과 파일 형식은 학습 파이프라인에 바로 쓸 수 있도록 요청하신 규격에 맞춰 구성해요.',
+          a: '편집 전 연속 세션을 촬영 원본 규격 그대로 드려요.\n세션 폴더에 카메라별 원본, 화자별 트랙, (페어 상품은) 방송본·EDL, 매니페스트, 데이터 카드가 들어 있어요.\n클라우드나 외장 드라이브로 보내드려요.',
         },
         {
           q: '샘플은 얼마나 빨리 받을 수 있나요?',
-          a: '필요한 데이터 조건을 알려주시면 보유 물량을 확인한 뒤 영업일 기준 3~5일 안에 샘플을 보내드려요. 샘플로 품질과 규격을 먼저 확인하신 뒤 본 계약을 진행하시면 돼요.',
+          a: '상호 NDA 후 5영업일 안에 샘플 팩과 견적을 회신해요. 샘플 팩은 무료이며 음성은 평가용 1시간, 영상은 세션 1개예요.',
         },
         {
           q: '원하는 조건으로 따로 수집해 주나요?',
-          a: '네, 맞춤 제작이 가능해요. 장면 유형, 인물·동작, 촬영 시점(1인칭·3인칭), 환경 같은 조건을 알려주시면 공급사 아카이브에서 찾아 정제하고, 필요한 라벨까지 붙여 납품해 드려요.',
+          a: '네. 먼저 보유 아카이브에서 찾아 드리고, 원하는 조건의 데이터가 없다면 파트너 제작사와 맞춤 수집해요.\n맞춤 라벨 스키마는 샘플 30분으로 시범 작업한 뒤 단가를 확정해요.',
+        },
+        {
+          q: '견적은 어떻게 받나요?',
+          a: '필요한 데이터 조건을 보내 주시면 상호 NDA 후 5영업일 안에 샘플과 견적을 함께 회신해요.\n단가는 데이터 종류, 해상도, 원본-방송본 페어 여부, 물량에 따라 달라지고 물량이 많을수록 할인돼요.',
         },
       ],
     },
   },
 
-  // Detail pages. Card fields (icon, desc, tags, stats, note) feed the landing
-  // grid and the "다른 데이터셋 둘러보기" carousel.
-  collections: [
-    {
-      slug: 'multi-speaker',
-      icon: 'icon-users.svg',
-      name: '다화자 대화 (음성 + 영상)',
-      desc: '2~6명이 겹쳐 말하는 대화, 목소리마다 따로 녹음돼 말한 얼굴과 연결돼요',
-      carouselDesc: '2~6명이 겹쳐 말하는 대화, 목소리마다 따로 녹음돼 말한 얼굴과 연결돼요',
-      tags: ['음성 · 영상 생성', '립싱크', '화자 귀속'],
-      stats: [
-        { value: '50000+', label: '시간' },
-        { value: '3인 이상', label: '클립당 평균 화자 수' },
-      ],
-      problemPill: { caption: '이런 문제가 있나요?', body: '여러 사람이 나오는 장면에서 누가 말했는지 자꾸 틀리나요?' },
-      descLines: [
-        '2~6명이 겹쳐 말하는 실제 방송 장면이에요.',
-        '출연자마다 마이크를 따로 달아 모든 목소리를 별도 트랙으로 녹음했고,',
-        '목소리마다 말한 사람의 얼굴과 연결돼 있어요.',
-      ],
-      summary: {
-        problems: ['여러 명이 나오는 장면의 화자 귀속 개선', '말이 겹치는 대화로 립싱크 학습', '한국어처럼 데이터가 적은 언어로 대화 생성'],
-        receive: ['MP4 + 화자별 WAV + JSON', '장면(클립) 단위', '다운로드 링크 · 클라우드 버킷'],
-      },
-      useCases: [
-        { text: '여러 명이 나오는 장면의 화자 귀속 개선', picto: 'picto-speaker-attribution.svg' },
-        { text: '말이 겹치는 대화로 립싱크 학습', picto: 'picto-lip-sync.svg' },
-        { text: '한국어처럼 데이터가 적은 언어로 대화 생성', picto: 'picto-low-resource-language.svg' },
-      ],
-      specTables: [
-        {
-          title: '규모 · 규격',
-          rows: [
-            { label: '총 분량', value: '[보유 시간] · [클립 수]' },
-            { label: '화자 구성', value: '3~[N]명, 한국어' },
-            { label: '장르', value: '예능 · 토크 · [기타 장르]' },
-            { label: '오디오', value: '화자별 WAV, [샘플레이트], 원본 마이크 / AI 분리 표기' },
-            { label: '영상', value: '원본 해상도 MP4, [fps]' },
-          ],
-        },
-        {
-          title: '라벨',
-          rows: [
-            { label: '기본 제공', value: '전사, 화자 타임라인, 3단계 캡션, 화자 메타데이터' },
-            { label: '요청 시 추가', value: '감정, 겹침 구간 표시, 기타 요청 라벨' },
-          ],
-        },
-      ],
-      delivery: [
-        { label: '파일 형식', value: 'MP4 + 화자별 WAV + JSON' },
-        { label: '묶음 단위', value: '장면(클립) 단위' },
-        { label: '전달 방식', value: '다운로드 링크 · 클라우드 버킷 (매니페스트 포함)' },
-      ],
-      rights: [
-        { icon: 'icon-shield.svg', title: '권리 보유자와 직접 계약', body: '원본을 보유한 제작사와 직접 맺은 계약' },
-        { icon: 'icon-user.svg', title: '출연자 동의 범위', body: '출연자가 AI 학습 활용에 동의한 범위 안에서 제공' },
-        { icon: 'icon-face.svg', title: '얼굴 처리 옵션', body: '동의하지 않은 얼굴은 블러, 또는 전체 비식별화' },
-        { icon: 'icon-calendar.svg', title: '비독점 · 기간 한정', body: '계약 기간 안에서 비독점으로 사용' },
-        { icon: 'icon-ban.svg', title: '재현 금지 조항', body: '출연자의 얼굴과 목소리를 재현하는 용도로는 사용 금지' },
-      ],
-      customBand: {
-        title: '조금 다른 조건이 필요하세요?',
-        body: '화자 수, 장르, 라벨을 바꿔 맞춤 제작으로 요청할 수 있습니다.',
-        button: '이 데이터 기준으로 맞춤 요청',
-      },
-    },
-    {
-      slug: 'speaker-separated',
-      ...KO_DETAILS['speaker-separated'],
-      icon: 'icon-microphone.svg',
-      name: '화자 분리 대화 음성',
-      desc: '겹침 · 웃음 · 맞장구까지 그대로 담긴 한국어 다자 대화, 화자별 채널 제공',
-      carouselDesc: '겹침 · 웃음 · 맞장구까지 그대로 담긴 한국어 다자 대화, 화자별 채널 제공',
-      tags: ['풀듀플렉스 음성', '화자 분리', 'TTS'],
-      stats: [
-        { value: '50000+', label: '시간' },
-        { value: '3인 이상', label: '겹침 발화 비율' },
-      ],
-    },
-    {
-      slug: 'multicam',
-      ...KO_DETAILS['multicam'],
-      icon: 'icon-video.svg',
-      name: '동기화 멀티캠 원본',
-      desc: '여러 카메라로 찍은 같은 순간의 원본, 시간을 맞추고 방송 편집본과 함께',
-      carouselDesc: '여러 카메라로 찍은 같은 순간의 원본, 시간을 맞추고 방송 편집본과 함께',
-      tags: ['멀티뷰 생성', '편집 모델', '월드 모델'],
-      stats: [
-        { value: '30000+', label: '시간' },
-        { value: '8+', label: '장면당 카메라 수' },
-      ],
-    },
-    {
-      slug: 'motion',
-      ...KO_DETAILS['motion'],
-      icon: 'icon-person-standing.svg',
-      name: '전신 동작',
-      desc: '실제 제작 현장의 자연스러운 동작과 상호작용을 휴머노이드 형식으로 변환',
-      carouselDesc: '실제 제작 현장의 자연스러운 동작과 상호작용을 휴머노이드 형식으로 변환',
-      tags: ['휴머노이드 제어', '모션 생성'],
-      stats: [
-        { value: '10000+', label: '동작 시간' },
-        { value: '자유', label: '로봇 형식' },
-      ],
-    },
-    {
-      slug: 'presenter',
-      ...KO_DETAILS['presenter'],
-      icon: 'icon-shield-check.svg',
-      name: '진행자 · 제품 시연',
-      desc: '정면을 보며 제품을 소개하는 진행자 영상, 출연자 AI 학습 동의 완료',
-      carouselDesc: '정면을 보며 제품을 소개하는 진행자 영상, 출연자 AI 학습 동의 완료',
-      tags: ['아바타', '제품 영상 생성'],
-      stats: [
-        { value: '10000+', label: '시간' },
-        { value: '2인 이상', label: '출연자 수' },
-      ],
-      note: '* 동의받은 분량이 충분해지면 공개',
-    },
-  ],
+  // Collections (landing grid · detail pages · "다른 데이터셋 둘러보기" carousel).
+  // `desc` is the landing card copy, `carouselDesc` the one-liner used in the
+  // carousel / mega-menu / meta, `detailTags` the hero tags on the detail page.
+  collections: KO_COLLECTIONS,
 
   detail: {
     breadcrumb: '컬렉션',
     heroButtons: ['샘플 요청', '문의하기'],
-    problemsTitle: '이 데이터로 풀 수 있는 문제',
-    receiveTitle: '이렇게 받아요',
-    useCasesEyebrow: '학습 용도',
-    useCasesTitle: '이 데이터로 풀 수 있는 문제',
+    specTitle: '규모 · 규격',
     sampleCta: {
       eyebrow: '샘플 요청',
       title: '이 컬렉션 샘플을 받아보세요',
       body: '버튼을 누르면 샘플 요청 폼으로 이동해요.',
       buttons: ['샘플 요청', '문의하기'],
     },
-    deliveryEyebrow: '납품 형식',
-    deliveryTitle: '이렇게 받아요',
-    rightsEyebrow: '권리와 동의',
-    rightsTitle: '권리와 동의',
     carouselTitle: '다른 데이터셋 둘러보기',
     carouselMore: '자세히 보기',
   },
@@ -268,26 +138,27 @@ export const KO = {
     segments: ['샘플 요청', '맞춤 데이터 요청'],
     flowTitle: '요청하면 이렇게 진행돼요',
     flow: [
-      '2영업일 안에 담당자가 샘플 구성안과 질문 1~2개를 메일로 보내드려요',
-      '다운로드 링크, 데이터 카드, 매니페스트로 샘플 전달',
-      '샘플을 받고 1주 안에 형식 · 물량 · 단가 확정',
+      { title: '조건 요청', body: '조건 한 줄이면 돼요. 예: "3인 이상 오버랩, 화자별 원본 트랙"' },
+      { title: '샘플 팩·견적 회신 (5영업일, 상호 NDA 후)', body: '조건에 맞는 샘플 클립 · 트랙 구성·녹음 규격 · 공급 가능 분량 · 이용 범위·라이선스 조건' },
+      { title: '분량·단가 확정', body: '이용 범위와 납품 구성을 계약서에 명시해요.' },
+      { title: '납품·검수', body: '납품 후 10영업일 검수, 규격·분량이 다르면 재납품해요.' },
     ],
     packageFiles: [
-      { icon: 'file-folder.svg', name: 'sample_hx_talk_000128/', root: true },
-      { icon: 'file-video.svg', name: 'clip_0128_cam1.mp4' },
-      { icon: 'file-video.svg', name: 'clip_0128_cam2.mp4' },
-      { icon: 'file-audio-1.svg', name: 'spk_1.wav' },
-      { icon: 'file-audio-2.svg', name: 'spk_2.wav' },
-      { icon: 'file-audio-3.svg', name: 'spk_3.wav' },
-      { icon: 'file-json.svg', name: 'metadata.json' },
-      { icon: 'file-pdf.svg', name: 'data_card.pdf' },
+      { icon: 'file-folder.svg', name: 'talk_0123/', root: true },
+      { icon: 'file-audio-1.svg', name: 'audio/mic1~4.wav' },
+      { icon: 'file-audio-2.svg', name: 'audio/mix.wav' },
+      { icon: 'file-video.svg', name: 'video/CAM_A~C' },
+      { icon: 'file-json.svg', name: 'transcript.jsonl' },
+      { icon: 'file-json.svg', name: 'labels.jsonl' },
+      { icon: 'file-json.svg', name: 'manifest.parquet' },
+      { icon: 'file-pdf.svg', name: 'datacard.md' },
     ],
     quick: {
       title: '메일 주소만 남겨도 돼요',
       body: '샘플 구성안과 데이터 카드를 메일로 먼저 보내드려요.',
       placeholder: 'name@company.com',
       button: '보내기',
-      note: '회사 메일 주소로 2영업일 안에 답장드려요',
+      note: '상호 NDA 후 5영업일 안에 샘플과 견적을 회신해요',
     },
     divider: '자세히 알려주실수록 더 잘 맞는 샘플을 골라드려요',
     form: {
@@ -300,7 +171,7 @@ export const KO = {
       companyPh: '회사 이름',
       q2: '어떤 컬렉션이 필요하세요?',
       q2hint: '여러 개 고를 수 있어요',
-      // The five collections come first (from KO.collections); these are the extra chips.
+      // The collections come first (from KO.collections); these are the extra chips.
       collections: [
         '아이돌 무대 · 연습',
         '라이브커머스 쇼호스트',
@@ -333,7 +204,7 @@ export const KO = {
       optional: '(선택)',
       viewFull: '전문보기',
       submit: '샘플 요청',
-      footNote1: '2영업일 안에 답장드려요',
+      footNote1: '5영업일 안에 답장드려요',
       footNote2: '샘플은 평가용으로만 쓸 수 있고, 학습에 쓰려면 별도 계약이 필요해요. ·',
       footLink: '개인정보 처리방침',
       error: '전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
@@ -344,11 +215,11 @@ export const KO = {
 
   submitted: {
     title: '샘플 요청이 접수되었습니다.',
-    body: '2영업일 안에 샘플 계획을 담아 답장드릴게요.',
+    body: '5영업일 안에 샘플 계획을 담아 답장드릴게요.',
     summaryLabel: '보내주신 내용',
     stepsTitle: '이렇게 진행돼요',
     steps: [
-      { title: '2영업일 내 회신', body: '담당자가 요청을 확인하고 샘플 구성안과 질문 1~2개를 메일로 보내요' },
+      { title: '5영업일 내 회신', body: '담당자가 요청을 확인하고 샘플 구성안과 질문 1~2개를 메일로 보내요' },
       { title: '샘플 준비', body: '다운로드 링크 + 데이터 카드 + 매니페스트' },
       { title: '샘플 확정', body: '형식 · 물량 · 단가 확정' },
     ],

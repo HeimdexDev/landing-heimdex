@@ -1,4 +1,7 @@
 # Netlify equivalent of vercel.json's rewrites. Prerendered pages are real files
 # and win; anything else falls back to the SPA shell (see scripts/prerender.mjs).
+# 화자 분리 대화 음성 was merged into 다화자 대화.
+/data/speaker-separated     /data/multi-speaker     301
+/en/data/speaker-separated  /en/data/multi-speaker  301
 /en/*  /en/_shell.html  200
 /*     /_shell.html     200

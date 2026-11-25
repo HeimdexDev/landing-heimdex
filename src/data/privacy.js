@@ -3,7 +3,7 @@
 // list items may be a string or { t, sub: [...] } for nested bullets.
 
 export const PRIVACY = {
-  title: '하임덱스(HEIMDEX) 개인정보 처리방침',
+  title: '하임덱스(Heimdex) 개인정보 처리방침',
   intro:
     "주식회사 하임덱스(이하 ‘회사’)는 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.",
   sections: [

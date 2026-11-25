@@ -54,7 +54,7 @@ export const TITLES_EN = [
 
 export const STAGE_IMAGES = Array.from({ length: 16 }, (_, i) => `/assets/stage/stage-${i + 1}.jpg`)
 export const DEFAULT_PLACEHOLDER = '파일명이나 폴더명으로 찾아보세요 - "마케팅_쇼츠_01"'
-export const DEFAULT_PLACEHOLDER_EN = 'Search by file or folder name — "marketing_short_01"'
+export const DEFAULT_PLACEHOLDER_EN = 'Search by file or folder name: "marketing_short_01"'
 
 export const SPEAKER_COLOR = { A: '#d53b49', B: '#3fb675' }
 

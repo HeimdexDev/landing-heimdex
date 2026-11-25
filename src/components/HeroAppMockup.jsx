@@ -342,7 +342,7 @@ export default function HeroAppMockup({
                 <img src="/assets/logo-symbol.svg" alt="" className="h-[28px] w-[26px]" />
                 <img
                   src="/assets/logo-wordmark.svg"
-                  alt="heimdex"
+                  alt="Heimdex"
                   className="h-[19px] w-[92px]"
                 />
               </span>
@@ -378,8 +378,9 @@ export default function HeroAppMockup({
 
         {/* ───── Content ───── */}
         <div ref={contentRef} className="relative flex w-[1190px] flex-col items-center gap-[24px]">
-          {/* GNB — fixed + translucent glass; scrolled results blur through it */}
-          <div className="relative z-10 flex h-[80px] w-full items-center justify-between bg-grayscale-10/70 px-[32px] backdrop-blur-[6px]">
+          {/* GNB — solid, the same ground as the app, with a hairline under it, so
+              it reads as part of the window rather than a strip floating on top */}
+          <div className="relative z-10 flex h-[80px] w-full items-center justify-between border-b border-grayscale-100 bg-grayscale-10 px-[32px]">
             {/* breadcrumb — only on the detail screen */}
             <div className="flex min-w-0 items-center gap-[16px] text-[16px] tracking-[-0.4px]">
               {view === 'detail' && (

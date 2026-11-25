@@ -66,18 +66,18 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-line bg-white">
-      <div className="mx-auto w-full max-w-page px-[120px] pb-8 pt-14 max-xl:px-[60px] max-lg:px-8 max-sm:px-4">
+      <div className="mx-auto w-full max-w-content px-5 pb-8 pt-14 md:px-8 xl:px-0">
         <div className="flex justify-between gap-12 max-lg:flex-col">
           <div>
             <div className="flex items-center gap-[6px]">
               <img src="/assets/logo-symbol.svg" alt="" className="h-[28px] w-[26px]" />
-              <img src="/assets/logo-wordmark.svg" alt="heimdex" className="h-[19px] w-[92px]" />
+              <img src="/assets/logo-wordmark.svg" alt="Heimdex" className="h-[19px] w-[92px]" />
             </div>
             <p className="mt-4 font-product text-[16px] text-ink-sub">Data Stays, Insight Moves</p>
             <p className="mt-3 max-w-[340px] text-[14px] leading-[1.6] text-ink-sub">
               {t(
-                '하임덱스(HEIMDEX)는 원본 영상을 외부로 옮기지 않고 검색 · 요약 · 재편집하는 온프레미스 AI 영상 검색 솔루션입니다.',
-                'HEIMDEX is an on-premise AI video search solution that searches, summarizes and re-edits video without moving the source footage.',
+                '하임덱스(Heimdex)는 원본 영상을 외부로 옮기지 않고 검색 · 요약 · 재편집하는 온프레미스 AI 영상 검색 솔루션입니다.',
+                'Heimdex is an on-premise AI video search solution that searches, summarizes and re-edits video without moving the source footage.',
               )}
             </p>
           </div>
@@ -112,16 +112,20 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex items-center justify-between gap-4 border-t border-[#E5E8EB] pt-6 text-[14px] text-ink-sub max-md:flex-col max-md:items-start">
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          {/* Phones: copyright on its own line, links below — a wrapped row
+              would otherwise start its second line with a stray "·". */}
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 max-sm:flex-col max-sm:items-start">
             <span className="font-medium">© 2026 Heimdex. All rights reserved.</span>
-            <span aria-hidden>·</span>
-            <Link to="/policy?tab=terms" className="hover:text-ink">
-              {t('이용약관', 'Terms of Service')}
-            </Link>
-            <span aria-hidden>·</span>
-            <Link to="/policy?tab=privacy" className="hover:text-ink">
-              {t('개인정보처리방침', 'Privacy Policy')}
-            </Link>
+            <span className="flex items-center gap-x-3">
+              <span aria-hidden className="max-sm:hidden">·</span>
+              <Link to="/policy?tab=terms" className="hover:text-ink">
+                {t('이용약관', 'Terms of Service')}
+              </Link>
+              <span aria-hidden>·</span>
+              <Link to="/policy?tab=privacy" className="hover:text-ink">
+                {t('개인정보처리방침', 'Privacy Policy')}
+              </Link>
+            </span>
           </p>
           <div className="flex items-center gap-5">
             <a href="mailto:heimdex@heimdex.co" className="hover:text-ink">

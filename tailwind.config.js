@@ -33,7 +33,7 @@ export default {
         violet: { 50: '#F3F0FF', 500: '#7A5CFF' }, // heimlog (creator) accent
         // Data marketplace (Figma homepage-wireframe · 데이터마켓플레이스): bright accent
         // for eyebrows/steps, plus the page greys used by its forms and bands.
-        accent: { DEFAULT: '#3991FF', 50: '#EBF4FF', 100: '#CFE2FF' },
+        accent: { DEFAULT: '#3991FF', 50: '#EBF4FF', 100: '#CFE2FF', 600: '#2B7FEA' },
         snow: '#F7F8FA', // input fill · grey section
         ice: '#F3F6FB', // tinted band
         'line-strong': '#D1D6DB', // outline buttons · chips
@@ -98,6 +98,7 @@ export default {
       },
       maxWidth: {
         page: '1440px',
+        content: '1168px', // the GNB's content width — every page lines up to it
       },
     },
   },

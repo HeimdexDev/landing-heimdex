@@ -173,7 +173,7 @@ const mmss = (seconds) => {
 }
 
 /* ─────────────────────────── icons ───────────────────────────
-   Redrawn from heimlog's own icons.tsx: a square 20px box, viewBox 0 0 20 20 so
+   Redrawn from Heimlog's own icons.tsx: a square 20px box, viewBox 0 0 20 20 so
    the stroke weight scales with it, and every stroke `currentColor`. */
 function Icon({ size = 20, path, className }) {
   return (
@@ -251,7 +251,7 @@ function Rail({ active }) {
   return (
     <aside className="flex w-[255px] shrink-0 flex-col border-r border-[#434343] bg-[#262626] p-5">
       <div className="mb-10 flex h-[26.83px] w-full items-center justify-between">
-        <img src="/assets/vlog/logo-tight.svg" alt="heimlog" className="h-[28px] w-[124px]" />
+        <img src="/assets/vlog/logo-tight.svg" alt="Heimlog" className="h-[28px] w-[124px]" />
         <PanelLeft size={18} className="text-[#c4c4c4]" />
       </div>
 
@@ -720,7 +720,7 @@ function AnalysisView() {
 /* ───────────── AI 블러 마법사 — the editor's 블러 panel ─────────────
    PanelView titled AI 블러, the 인원수 선택 · AI 분석 · 블러 적용 breadcrumb, and
    one body per stage. The editor is a shadcn app, so
-   its tokens land on heimlog's ramp: background #262626, muted #434343, border
+   its tokens land on Heimlog's ramp: background #262626, muted #434343, border
    #434343, foreground #f5f5f5, muted-foreground #9d9d9d, primary #ff7a66. */
 
 const BLUR_STAGES = [
