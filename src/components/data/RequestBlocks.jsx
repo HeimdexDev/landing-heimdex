@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { trackLead } from '../../lib/analytics/ga.js'
 import PrivacyModal from '../PrivacyModal.jsx'
 import { useLang, localizePath } from '../../i18n/LanguageContext.jsx'
 import { REQUEST_DONE_PATH, useDataCopy } from '../../data/dataMarket.js'
@@ -13,7 +14,7 @@ const EMAIL_RE = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>".]{2,}$/ // same as api/
 
 // POSTs to the same /api/contact endpoint as the demo form, tagged kind:'sample'
 // (the API accepts it with only an e-mail).
-async function sendSample(payload) {
+async function sendSample(payload, formId) {
   const res = await fetch('/api/contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -26,6 +27,7 @@ async function sendSample(payload) {
     }),
   })
   if (!res.ok) throw new Error('send failed')
+  trackLead({ formId, kind: 'sample' })
 }
 
 export function SegmentedControl({ options, value, onChange }) {
@@ -96,11 +98,12 @@ export function QuickRequest({ accentButton = false }) {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    if (busy) return
     if (!EMAIL_RE.test(email.trim())) return setErr(c.form.needEmail)
     setBusy(true)
     setErr('')
     try {
-      await sendSample({ email: email.trim(), quick: true, lang })
+      await sendSample({ email: email.trim(), quick: true, lang }, 'data_quick')
       navigate(localizePath(REQUEST_DONE_PATH, lang), { state: { summary: email.trim() } })
     } catch {
       setErr(c.form.error)
@@ -192,6 +195,7 @@ export function SampleForm({ initialCollections = [], mode = 0 }) {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    if (busy) return
     if (!EMAIL_RE.test(f.email.trim())) return setErr(c.needEmail)
     if (!agree) return setErr(c.needConsent)
     setBusy(true)
@@ -215,7 +219,7 @@ export function SampleForm({ initialCollections = [], mode = 0 }) {
         marketingAgreed: marketing,
         privacyAgreed: agree,
         lang,
-      })
+      }, 'data_sample')
       navigate(localizePath(REQUEST_DONE_PATH, lang), { state: { summary } })
     } catch {
       setErr(c.error)
