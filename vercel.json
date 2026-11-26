@@ -3,6 +3,18 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install",
+  "redirects": [
+    {
+      "source": "/data/speaker-separated",
+      "destination": "/data/multi-speaker",
+      "permanent": true
+    },
+    {
+      "source": "/en/data/speaker-separated",
+      "destination": "/en/data/multi-speaker",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/en/(.*)",
