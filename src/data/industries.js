@@ -21,7 +21,9 @@ export const INDUSTRIES = [
     headlineEn: ['Before the broadcast ends,', 'your best-selling moment', 'is already out as a short'],
     closing: ['매출로 이어지는 순간을', '가장 빠르게'],
     closingEn: ['The moments that drive sales,', 'out the fastest'],
-    image: '/assets/creative/mkt-scene-10.jpg',
+    image: '/assets/stage/industry-commerce-v2.webp', // Figma node 4:4
+    // Product-page hero only (the main-page card keeps the photo above): the editor, Figma node 5:326
+    heroImage: '/assets/hero/editor-recut-1080.webp', // the subtitle list + preview crop, legible at half width
     imagePos: 'center 30%',
     demoTab: 'creative',
     features: [
@@ -29,7 +31,7 @@ export const INDUSTRIES = [
         title: '커머스 특화 AI 모델',
         titleEn: 'Commerce-tuned AI model',
         desc: '구매 전환이 일어나는 순간으로 숏폼을 생성하고, 시연·프로모션 등 방송 구조에 맞춰 장면을 자동 분류합니다.',
-        descEn: 'Builds short-form from the moments that convert, and sorts scenes by broadcast structure — demos, promotions and more.',
+        descEn: 'Builds short-form from the moments that convert, and sorts scenes by broadcast structure: demos, promotions and more.',
         img: '/assets/creative/mkt-scene-2.jpg',
         pos: 'center 25%',
       },
@@ -71,9 +73,9 @@ export const INDUSTRIES = [
     headline: ['하드 속 미공개 아카이브가', '역주행을 일으킵니다.'],
     headlineEn: ['Unreleased footage on your drives', 'starts climbing the charts.'],
     closing: ['놓친 장면 없이', '다시 태어나는 아카이브'],
-    closingEn: ['Not a scene missed —', 'your archive, reborn'],
-    image: '/assets/stage/stage-6.jpg',
-    imagePos: 'center 40%',
+    closingEn: ['Not a scene missed,', 'your archive, reborn'],
+    image: '/assets/stage/rights-stage-v2.webp', // Figma node 38:251
+    imagePos: 'center 60%',
     demoTab: 'creative',
     features: [
       {
@@ -123,7 +125,8 @@ export const INDUSTRIES = [
     headlineEn: ['Wake up dormant lectures', 'and take them worldwide.'],
     closing: ['기존 강의 자산을', '어디서든 다시 쓸 수 있도록'],
     closingEn: ['Your existing lectures,', 'reusable anywhere'],
-    image: null, // no lecture footage yet — drawn as a lecture mock (wireframe: "강의 영상 이미지로 교체")
+    image: '/assets/stage/industry-education.webp', // Figma node 6:2 (lecture scene)
+    imagePos: 'center 30%',
     demoTab: 'research',
     features: [
       {
@@ -151,7 +154,7 @@ export const INDUSTRIES = [
         title: '핵심 구간 자동 추출',
         titleEn: 'Key segments, auto-extracted',
         desc: '교사에게는 회고·연수 자료로, 학생에게는 맞춤 복습 클립으로, 담당자에게는 홍보 소스로 자동 추출됩니다.',
-        descEn: 'Pulled out automatically — review material for teachers, tailored recap clips for students, promo sources for staff.',
+        descEn: 'Pulled out automatically: review material for teachers, tailored recap clips for students, promo sources for staff.',
         icon: 'clips',
       },
     ],
@@ -185,7 +188,7 @@ export const INDUSTRIES = [
         title: '행동 맥락 분석',
         titleEn: 'Behavioral context analysis',
         desc: '단순한 사람·사물 식별을 넘어, 정황과 맥락까지 정밀히 분석하여 신뢰도 높은 정황 증거의 기반을 마련해 드립니다.',
-        descEn: 'Goes beyond spotting people and objects to analyze circumstances and context — a solid basis for circumstantial evidence.',
+        descEn: 'Goes beyond spotting people and objects to analyze circumstances and context, a solid basis for circumstantial evidence.',
         img: '/assets/dashcam/dashcam-4.jpg',
         pos: 'center 50%',
       },
@@ -220,7 +223,7 @@ export const INDUSTRIES = [
     headlineEn: ['Insights,', 'faster and more precise'],
     closing: ['오차 없는 데이터로', '신뢰할 수 있는 결과'],
     closingEn: ['Error-free data,', 'results you can trust'],
-    image: '/assets/research/research-vid-1.jpg',
+    image: '/assets/research/research-vid-4.jpg',
     imagePos: 'center 50%',
     demoTab: 'research',
     features: [
@@ -233,8 +236,8 @@ export const INDUSTRIES = [
         pos: 'center 40%',
       },
       {
-        title: '휴먼 에러 제로 — 연구 데이터 무결성 확보',
-        titleEn: 'Zero human error — data integrity',
+        title: '휴먼 에러 제로, 연구 데이터 무결성 확보',
+        titleEn: 'Zero human error: data integrity',
         desc: '사람이 놓칠 수 있는 장면까지 정확히 포착하여 연구의 객관성과 신뢰도를 극대화하세요.',
         descEn: 'Captures even the scenes people miss, maximizing the objectivity and reliability of your research.',
         img: '/assets/research/research-2.jpg',
@@ -244,7 +247,7 @@ export const INDUSTRIES = [
         title: '폐쇄망 기반 보안 유출 차단',
         titleEn: 'Closed-network leak protection',
         desc: '기관 내부 폐쇄망 환경에서만 구동되므로, 기술 유출이나 사내 보안 규정 위반으로부터 100% 안전합니다.',
-        descEn: 'Runs only inside your institution’s closed network — fully safe from tech leaks and internal security violations.',
+        descEn: 'Runs only inside your institution’s closed network, fully safe from tech leaks and internal security violations.',
         img: '/assets/research/research-vid-4.jpg',
         pos: 'center 50%',
       },
@@ -275,7 +278,7 @@ export const FEATURES = [
     menu: '말하듯 검색해 원하는 장면을 바로 찾기',
     menuEn: 'Find any scene just by describing it',
     desc: '말하듯 입력하면 수십 시간 영상 속에서 원하는 장면을 바로 찾아요.\n인물·행동·맥락까지 검색돼요.',
-    descEn: 'Type it the way you’d say it and find the scene in hours of footage — by person, action, even context.',
+    descEn: 'Type it the way you’d say it and find the scene in hours of footage, by person, action, even context.',
   },
   {
     slug: 'rights-monitor',

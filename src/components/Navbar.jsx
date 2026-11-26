@@ -10,9 +10,7 @@ import {
   Clapperboard,
   Database,
   Handshake,
-  Mic,
   PersonStanding,
-  Presentation,
   Search,
   Send,
   Users,
@@ -64,7 +62,7 @@ const BLOG = [
     label: 'Creators 블로그',
     en: 'Creators blog',
     caption: '브이로그 제작 가이드 · 편집 팁 · 하임로그 사용법',
-    captionEn: 'Vlog guides · editing tips · how to use heimlog',
+    captionEn: 'Vlog guides · editing tips · how to use Heimlog',
     icon: PenLine,
   },
   {
@@ -82,12 +80,6 @@ const COMPANY = [
   { label: '소식', en: 'News', caption: '투자 · 수상 · 선정 · 방송', captionEn: 'Funding · awards · selections · media', to: '/company/news' },
   { label: '브랜드', en: 'Brand', caption: '로고 · BX 가이드', captionEn: 'Logo · BX guide', to: '/company/brand' },
   { label: '채용', en: 'Careers', caption: '하임덱스 크루 되기', captionEn: 'Join the Heimdex crew', to: '/company/careers' },
-]
-
-const HEIMLOG_LINKS = [
-  { label: '하임로그 소개', en: 'About heimlog', to: '/heimlog' },
-  { label: '요금제 · 크레딧', en: 'Pricing & credits', to: '/heimlog/pricing' },
-  { label: '사용 가이드', en: 'User guide', to: '/heimlog/guide' },
 ]
 
 function Caret({ open }) {
@@ -119,7 +111,7 @@ function ProductMenu({ lang, t, close }) {
   const en = lang === 'en'
   const head = 'mb-5 text-[12px] font-semibold tracking-[0.02em] text-ink-mute'
   return (
-    <div className="mx-auto w-full max-w-[1200px] py-9 max-xl:px-8">
+    <div className="mx-auto w-full max-w-content py-9 max-xl:px-8">
       <div className="grid grid-cols-[1fr_1.55fr_1fr] divide-x divide-line">
         {/* 비즈니스용 */}
         <div className="pr-10">
@@ -127,7 +119,7 @@ function ProductMenu({ lang, t, close }) {
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-hx">
             <img src="/assets/logo-mark-white.svg" alt="" className="h-[18px] w-[18px]" />
           </span>
-          <p className="mt-4 font-product text-[20px] font-bold leading-tight text-hx">HEIMDEX</p>
+          <p className="mt-4 font-product text-[20px] font-bold leading-tight text-hx">Heimdex</p>
           <p className="mt-1.5 text-[14px] leading-[1.6] text-ink-sub">
             {t('쌓인 영상 아카이브에서 장면을 찾고, 지키고, 다시 만들어요', 'Find, protect and remake scenes from your archive')}
           </p>
@@ -164,20 +156,15 @@ function ProductMenu({ lang, t, close }) {
         {/* 개인용 — the whole column opens the heimlog app */}
         <a href={HEIMLOG_APP} target="_blank" rel="noopener noreferrer" onClick={close} className="group block pl-10">
           <p className={head}>{t('개인용', 'For individuals')}</p>
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-heimlog-cream">
-            <img src="/assets/heimlog-mark.svg" alt="" className="h-[18px] w-[18px]" />
-          </span>
-          <span className="mt-4 flex items-center gap-2">
-            <span className="text-[20px] font-bold leading-tight text-ink transition-colors group-hover:text-heimlog-ink">
-              {t('하임로그', 'heimlog')}
-            </span>
-            <span className="rounded-full bg-heimlog px-2 py-0.5 text-[11px] font-semibold text-heimlog-on">{t('무료로 시작', 'Start free')}</span>
+          <span className="flex items-center gap-2">
+            <img src="/assets/heimlog-lockup-dark.svg" alt="heimlog" width={96} height={22} className="h-[22px] w-auto" />
+            <span className="inline-flex h-5 items-center rounded-full bg-heimlog px-2 pt-px text-[11px] font-semibold leading-none text-heimlog-on">{t('무료로 시작', 'Start free')}</span>
           </span>
           <span className="mt-1.5 block text-[14px] leading-[1.6] text-ink-sub">
             {t('찍어둔 여행 · 일상 영상을 AI가 브이로그로 자동 편집해요', 'AI edits your travel and daily clips into a vlog')}
           </span>
           <span className="mt-3 block text-[13px] text-ink-mute">{t('크리에이터 · 브이로거', 'Creators · vloggers')}</span>
-          <span className="mt-5 inline-block text-[14px] font-semibold text-heimlog-ink">{t('하임로그 바로가기', 'Open heimlog')}</span>
+          <span className="mt-5 inline-block text-[14px] font-semibold text-heimlog-ink">{t('바로가기', 'Open')}</span>
         </a>
       </div>
     </div>
@@ -188,10 +175,10 @@ function ProductMenu({ lang, t, close }) {
 // as the 제품 menu (ProductMenu): overview · collections · request.
 const COLLECTION_ICONS = {
   'multi-speaker': Users,
-  'speaker-separated': Mic,
   multicam: Video,
+  'broadcast-pair': Clapperboard,
+  presenter: ShoppingBag,
   motion: PersonStanding,
-  presenter: Presentation,
 }
 
 function DataMegaMenu({ t, close }) {
@@ -199,12 +186,12 @@ function DataMegaMenu({ t, close }) {
   const head = 'mb-5 text-[12px] font-semibold tracking-[0.02em] text-ink-mute'
   const item = 'group -mx-3 block rounded-xl px-3 py-2.5 transition-colors hover:bg-mist'
   const actions = [
-    { icon: Send, to: REQUEST_PATH, label: d.gnb.sample, caption: t('2영업일 안에 샘플 구성안 회신', 'Proposed sample within 2 business days') },
+    { icon: Send, to: REQUEST_PATH, label: d.gnb.sample, caption: t('5영업일 안에 샘플 구성안 회신', 'Proposed sample within 5 business days') },
     { icon: Search, to: `${REQUEST_PATH}?mode=1`, label: t('맞춤 데이터 요청', 'Request custom data'), caption: t('필요한 장면을 문장으로 요청', 'Describe the scene you need') },
     { icon: Handshake, to: '/contact', label: t('파트너 문의', 'Partner with us'), caption: t('아카이브를 보유한 제작사 · 방송사', 'For producers and broadcasters with archives') },
   ]
   return (
-    <div className="mx-auto w-full max-w-[1200px] py-9 max-xl:px-8">
+    <div className="mx-auto w-full max-w-content py-9 max-xl:px-8">
       <div className="grid grid-cols-[1fr_1.55fr_1fr] divide-x divide-line">
         <Link to={DATA_PATH} onClick={close} className="group block pr-10">
           <p className={head}>{d.gnb.label}</p>
@@ -213,7 +200,7 @@ function DataMegaMenu({ t, close }) {
           </span>
           <span className="mt-4 flex items-center gap-2">
             <span className="text-[20px] font-bold leading-tight text-hx">{d.gnb.label}</span>
-            <span className="rounded-[4px] bg-accent px-[5px] py-px text-[12px] font-bold leading-[15px] text-white">{d.gnb.isNew}</span>
+            <span className="inline-flex h-[18px] items-center rounded-[4px] bg-accent px-[5px] text-[12px] font-bold leading-none text-white">{d.gnb.isNew}</span>
           </span>
           <span className="mt-1.5 block text-[14px] leading-[1.6] text-ink-sub">
             {t('방송에 나가지 않은 촬영 원본을 화자별 트랙과 멀티캠 그대로 제공해요', 'Unaired production footage with per-speaker tracks and multi-cam intact')}
@@ -233,7 +220,7 @@ function DataMegaMenu({ t, close }) {
                       <Icon size={16} strokeWidth={1.9} className="shrink-0 text-ink-mute transition-colors group-hover:text-primary-500" />
                       <span className="truncate">{c.name}</span>
                     </span>
-                    <span className="mt-0.5 block truncate pl-6 text-[13px] text-ink-sub">{c.desc}</span>
+                    <span className="mt-0.5 block truncate pl-6 text-[13px] text-ink-sub">{c.carouselDesc}</span>
                   </Link>
                 </li>
               )
@@ -351,7 +338,7 @@ function MobileGroup({ label, open, onToggle, children }) {
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        className="flex w-full items-center justify-between py-4 text-[19px] font-semibold text-ink"
+        className="flex min-h-[56px] w-full items-center justify-between py-2 text-left text-[17px] font-semibold text-ink"
       >
         {label}
         <ChevronDown size={20} className={`text-ink-sub transition-transform ${open ? 'rotate-180' : ''}`} />
@@ -364,10 +351,20 @@ function MobileGroup({ label, open, onToggle, children }) {
 }
 
 function MobileSubhead({ children }) {
-  return <p className="mb-1 mt-3 text-[12px] font-semibold text-ink-sub first:mt-0">{children}</p>
+  return <p className="mb-1 mt-3 text-[12px] font-semibold text-ink-mute first:mt-0">{children}</p>
 }
 
-const mobileLink = 'block py-2 text-[16px] text-ink'
+// A product row in the mobile menu: brand name, with who it's for underneath.
+function MobileProduct({ name, sub }) {
+  return (
+    <span className="flex flex-col">
+      <span className="font-product text-[18px] font-bold leading-tight">{name}</span>
+      <span className="mt-0.5 text-[12px] font-medium text-ink-mute">{sub}</span>
+    </span>
+  )
+}
+
+const mobileLink = 'block py-2 text-[15px] text-ink-soft'
 
 export default function Navbar() {
   const { pathname } = useLocation()
@@ -405,6 +402,29 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
+  // Transparent over the top of the page; once scrolled, the bar detaches into
+  // a floating frosted pill.
+  const [scrolled, setScrolled] = useState(false)
+  // Phones/tablets: the bar slides away while reading down and comes back on any
+  // scroll up, so it never sits over a section's title and lead.
+  const [tucked, setTucked] = useState(false)
+  useEffect(() => {
+    let lastY = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 8)
+      if (Math.abs(y - lastY) > 6) {
+        setTucked(y > lastY && y > 120)
+        lastY = y
+      }
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+  // Solid white while a panel hangs off the bar at the top of the page.
+  const solid = !scrolled && (drawer || menu === 'product' || menu === 'data')
+
   // Lock page scroll behind the mobile drawer.
   useEffect(() => {
     document.body.style.overflow = drawer ? 'hidden' : ''
@@ -426,9 +446,17 @@ export default function Navbar() {
 
   // Flat text items (Figma GNB / KO): 14px semibold; navy marks the open/current one.
   const itemCls = (key) =>
-    `flex h-20 items-center gap-1.5 text-[14px] font-semibold tracking-[-0.03em] transition-colors ${
+    `flex h-full items-center gap-1.5 text-[14px] font-semibold tracking-[-0.03em] transition-colors ${
       menu === key || section === key ? 'text-hx' : 'text-ink-soft hover:text-ink'
     }`
+
+  // Mega-menu panel: at the top of the page a full-width sheet under the flat
+  // bar; once the bar is a floating pill, a floating card of the same width
+  // just under it (pt-2 keeps the hover path unbroken), so the two read as one.
+  const panelWrapTop = 'absolute inset-x-0 top-full border-b border-black/[0.05] bg-white shadow-[0_24px_40px_-24px_rgba(0,27,55,0.12)] max-lg:hidden'
+  const panelWrapScrolled = 'hx-menu-in absolute inset-x-0 top-full px-4 pt-2 max-lg:hidden'
+  const panelCardScrolled = 'mx-auto max-w-[1216px] overflow-hidden rounded-[28px] bg-white shadow-[0_30px_60px_-24px_rgba(10,34,64,0.28),0_2px_6px_rgba(10,34,64,0.04)]'
+  const menuOpen = menu === 'product' || menu === 'data'
 
   const trigger = (key) => ({
     onMouseEnter: () => openMenu(key),
@@ -438,13 +466,25 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur-md">
-        <div className="mx-auto flex h-20 w-full max-w-[1168px] items-center gap-[54px] max-xl:gap-8 max-xl:px-8 max-lg:px-4">
-          <Link to="/" onMouseEnter={closeNow} className="flex shrink-0 items-center gap-[6px]" aria-label="HEIMDEX">
-            <img src="/assets/logo-symbol.svg" alt="" className="h-[28px] w-[26px]" />
-            <img src="/assets/logo-wordmark.svg" alt="heimdex" className="h-[19px] w-[92px]" />
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,padding,transform] duration-300 ${solid ? 'bg-white' : 'bg-transparent'} ${scrolled ? 'px-4 max-md:px-3' : ''} ${
+          tucked && !drawer ? 'max-lg:-translate-y-[120%]' : ''
+        }`}
+      >
+        <div
+          className={`mx-auto flex w-full items-center gap-[54px] border transition-all duration-300 ease-out max-xl:gap-8 lg:grid lg:grid-cols-[1fr_auto_1fr] ${
+            scrolled
+              ? `mt-3 h-16 max-w-[1216px] rounded-full border-transparent ${menuOpen ? 'bg-white' : 'bg-[linear-gradient(180deg,rgba(255,255,255,0.62)_0%,rgba(255,255,255,0.38)_100%)]'} px-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.75),0_12px_40px_-12px_rgba(10,34,64,0.18),0_2px_6px_rgba(10,34,64,0.04)] backdrop-blur-[20px] backdrop-saturate-[1.8] max-lg:mt-2 max-lg:h-12 max-md:px-4`
+              : 'mt-0 h-20 max-w-content rounded-none border-transparent max-xl:px-8 max-lg:h-14 max-md:px-5'
+          }`}
+        >
+          <Link to="/" onMouseEnter={closeNow} className="flex shrink-0 items-center gap-[6px] justify-self-start" aria-label="Heimdex">
+            <img src="/assets/logo-symbol.svg" alt="" className="h-[28px] w-[26px] max-lg:h-[23px] max-lg:w-[21px]" />
+            <img src="/assets/logo-wordmark.svg" alt="Heimdex" className="h-[19px] w-[92px] max-lg:h-[16px] max-lg:w-[77px]" />
           </Link>
 
+          {/* Wide screens: three-column grid (logo | menu | actions) so the menu
+              sits on the bar's centre line whatever the side widths. */}
           <nav className="flex items-center gap-10 max-xl:gap-6 max-lg:hidden" aria-label={t('주요 메뉴', 'Main')}>
             <button
               type="button"
@@ -458,7 +498,7 @@ export default function Navbar() {
             <div className="relative" {...trigger('data')}>
               <Link to={DATA_PATH} aria-expanded={menu === 'data'} className={itemCls('data')}>
                 {dataCopy.gnb.label}
-                <span className="rounded-[4px] bg-accent px-[5px] py-px text-[12px] font-bold leading-[15px] text-white">{dataCopy.gnb.isNew}</span>
+                <span className="inline-flex h-[18px] items-center rounded-[4px] bg-accent px-[5px] text-[12px] font-bold leading-none text-white">{dataCopy.gnb.isNew}</span>
                 <Caret open={menu === 'data'} />
               </Link>
             </div>
@@ -496,54 +536,83 @@ export default function Navbar() {
             )}
           </nav>
 
-          <div className="ml-auto flex items-center gap-2 max-lg:hidden">
+          <div className="ml-auto flex items-center gap-2 justify-self-end max-lg:hidden">
             <LangMenu open={menu === 'lang'} trigger={trigger('lang')} close={closeNow} />
-            <Link
-              to={REQUEST_PATH}
-              onMouseEnter={closeNow}
-              className="ml-2 inline-flex h-10 items-center rounded-[8px] border border-line-strong bg-white px-4 text-[14px] font-bold tracking-[-0.03em] text-ink transition-colors hover:bg-snow active:scale-[0.97]"
+            {/* CTAs only on the compact (scrolled) bar: at the top of the page
+                they fold away to zero width, so the full bar stays quiet. The slot
+                opens on a long ease-out; each button then drifts in from the right
+                out of a slight blur, the second a beat after the first. Leaving is
+                quicker and all at once. */}
+            <div
+              aria-hidden={!scrolled}
+              className={`-my-3 -mr-3 flex items-center gap-2 overflow-hidden py-3 pr-3 transition-[max-width,visibility] ${
+                scrolled
+                  ? 'visible max-w-[280px] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)]'
+                  : 'invisible max-w-0 duration-[450ms] ease-[cubic-bezier(0.4,0,0.2,1)]'
+              }`}
             >
-              {dataCopy.gnb.sample}
-            </Link>
-            <Link
-              to="/contact"
-              onMouseEnter={closeNow}
-              className="inline-flex h-10 items-center rounded-[8px] bg-hx px-4 text-[14px] font-bold tracking-[-0.03em] text-white transition-colors hover:bg-primary-600 active:scale-[0.97]"
-            >
-              {dataCopy.gnb.contact}
-            </Link>
+            {[
+              { to: REQUEST_PATH, label: dataCopy.gnb.sample, cls: 'ml-2 bg-white text-ink shadow-[0_1px_3px_rgba(10,34,64,0.08),0_4px_12px_-4px_rgba(10,34,64,0.12)] hover:bg-snow' },
+              { to: '/contact', label: dataCopy.gnb.contact, cls: 'bg-hx text-white hover:bg-primary-600' },
+            ].map((b, i) => (
+              <Link
+                key={b.to}
+                to={b.to}
+                onMouseEnter={closeNow}
+                tabIndex={scrolled ? undefined : -1}
+                style={{
+                  // per property, so the stagger delays the entrance but never a hover
+                  transition: scrolled
+                    ? ['opacity', 'transform', 'filter'].map((p) => `${p} 600ms cubic-bezier(0.22,1,0.36,1) ${120 + i * 70}ms`).concat('background-color 150ms').join(', ')
+                    : ['opacity', 'transform', 'filter'].map((p) => `${p} 200ms cubic-bezier(0.4,0,1,1)`).concat('background-color 150ms').join(', '),
+                }}
+                className={`inline-flex h-10 shrink-0 items-center rounded-full px-4 text-[14px] font-bold tracking-[-0.03em] active:scale-[0.97] ${b.cls} ${
+                  scrolled ? 'translate-x-0 scale-100 opacity-100 blur-0' : 'translate-x-3 scale-[0.96] opacity-0 blur-[2px]'
+                }`}
+              >
+                {b.label}
+              </Link>
+            ))}
+            </div>
           </div>
 
           <button
             type="button"
             aria-label={drawer ? t('메뉴 닫기', 'Close menu') : t('메뉴 열기', 'Open menu')}
             aria-expanded={drawer}
-            onClick={() => setDrawer((v) => !v)}
-            className="ml-auto hidden h-10 w-10 items-center justify-center text-ink max-lg:flex"
+            onClick={() => {
+              setDrawer((v) => !v)
+              setGroup(null)
+            }}
+            className="-mr-2 ml-auto hidden h-10 w-10 items-center justify-center text-ink max-lg:flex"
           >
-            {drawer ? <X size={26} /> : <Menu size={26} />}
+            {drawer ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
         {/* Data marketplace mega-menu — same panel as 제품 */}
         {menu === 'data' && (
           <div
-            className="absolute inset-x-0 top-full border-b border-black/[0.05] bg-white shadow-[0_24px_40px_-24px_rgba(0,27,55,0.12)] max-lg:hidden"
+            className={scrolled ? panelWrapScrolled : panelWrapTop}
             onMouseEnter={() => openMenu('data')}
             onMouseLeave={closeSoon}
           >
-            <DataMegaMenu t={t} close={closeNow} />
+            <div className={scrolled ? panelCardScrolled : ''}>
+              <DataMegaMenu t={t} close={closeNow} />
+            </div>
           </div>
         )}
 
         {/* Product mega-menu — full width under the header, desktop only */}
         {menu === 'product' && (
           <div
-            className="absolute inset-x-0 top-full border-b border-black/[0.05] bg-white shadow-[0_24px_40px_-24px_rgba(0,27,55,0.12)] max-lg:hidden"
+            className={scrolled ? panelWrapScrolled : panelWrapTop}
             onMouseEnter={() => openMenu('product')}
             onMouseLeave={closeSoon}
           >
-            <ProductMenu lang={lang} t={t} close={closeNow} />
+            <div className={scrolled ? panelCardScrolled : ''}>
+              <ProductMenu lang={lang} t={t} close={closeNow} />
+            </div>
           </div>
         )}
       </header>
@@ -552,56 +621,61 @@ export default function Navbar() {
       <div
         aria-hidden
         onClick={closeNow}
-        className={`fixed inset-0 top-20 z-40 bg-ink/30 transition-opacity duration-200 max-lg:hidden ${
+        className={`fixed inset-0 z-40 bg-ink/30 transition-opacity duration-200 max-lg:hidden ${scrolled ? 'top-0' : 'top-20'} ${
           menu === 'product' || menu === 'data' ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       />
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer — the two products are top-level rows of their own, and
+          every group starts closed so the whole menu fits on one screen. */}
       {drawer && (
-        <div className="fixed inset-0 top-20 z-40 overflow-y-auto bg-white px-4 pb-10 lg:hidden">
+        <div className="fixed inset-0 top-14 z-40 overflow-y-auto bg-white px-5 pb-10 lg:hidden">
           <MobileGroup
-            label={t('제품', 'Product')}
-            open={group === 'product'}
-            onToggle={() => setGroup(group === 'product' ? null : 'product')}
+            label={<MobileProduct name="Heimdex" sub={t('비즈니스용', 'For business')} />}
+            open={group === 'heimdex'}
+            onToggle={() => setGroup(group === 'heimdex' ? null : 'heimdex')}
           >
-            <MobileSubhead>{t('비즈니스용 · HEIMDEX', 'For business · HEIMDEX')}</MobileSubhead>
-            <Link to="/product/business" className={`${mobileLink} font-semibold`}>
-              {t('제품 개요', 'Product overview')}
-            </Link>
             <MobileSubhead>{t('산업별', 'By industry')}</MobileSubhead>
-            {INDUSTRIES.map((ind) => (
-              <Link key={ind.slug} to={industryPath(ind.slug)} className={mobileLink}>
-                {lang === 'en' ? ind.nameEn : ind.name}
-              </Link>
-            ))}
-            <MobileSubhead>{t('개인용 · 하임로그', 'For individuals · heimlog')}</MobileSubhead>
-            {HEIMLOG_LINKS.map((l) => (
-              <Link key={l.to} to={l.to} className={mobileLink}>
-                {lang === 'en' ? l.en : l.label}
-              </Link>
-            ))}
+            <div className="ml-1 border-l border-line pl-4">
+              {INDUSTRIES.map((ind) => (
+                <Link key={ind.slug} to={industryPath(ind.slug)} className={mobileLink}>
+                  {lang === 'en' ? ind.nameEn : ind.name}
+                </Link>
+              ))}
+            </div>
+          </MobileGroup>
+          <MobileGroup
+            label={<MobileProduct name="Heimlog" sub={t('개인 크리에이터용', 'For individual creators')} />}
+            open={group === 'heimlog'}
+            onToggle={() => setGroup(group === 'heimlog' ? null : 'heimlog')}
+          >
+            {/* Same as the desktop menu: heimlog is one way in, the app itself */}
+            <a href={HEIMLOG_APP} target="_blank" rel="noopener noreferrer" className={`${mobileLink} flex items-center gap-1`}>
+              {t('바로가기', 'Open')} <ArrowUpRight size={14} />
+            </a>
           </MobileGroup>
           <MobileGroup
             label={
               <span className="flex items-center gap-2">
                 {dataCopy.gnb.label}
-                <span className="rounded-[4px] bg-accent px-[5px] py-px text-[12px] font-bold leading-[15px] text-white">{dataCopy.gnb.isNew}</span>
+                <span className="inline-flex h-[18px] items-center rounded-[4px] bg-accent px-[5px] text-[12px] font-bold leading-none text-white">{dataCopy.gnb.isNew}</span>
               </span>
             }
             open={group === 'data'}
             onToggle={() => setGroup(group === 'data' ? null : 'data')}
           >
-            <Link to={DATA_PATH} className={`${mobileLink} font-semibold`}>
+            <Link to={DATA_PATH} className={mobileLink}>
               {t('마켓플레이스 전체 보기', 'Marketplace overview')}
             </Link>
-            {dataCopy.collections.map((c) => (
-              <Link key={c.slug} to={collectionPath(c.slug)} className={mobileLink}>
-                {c.name}
-              </Link>
-            ))}
+            <div className="ml-1 border-l border-line pl-4">
+              {dataCopy.collections.map((c) => (
+                <Link key={c.slug} to={collectionPath(c.slug)} className={mobileLink}>
+                  {c.name}
+                </Link>
+              ))}
+            </div>
           </MobileGroup>
-          <Link to="/cases" className="block border-b border-line py-4 text-[19px] font-semibold text-ink">
+          <Link to="/cases" className="flex min-h-[56px] items-center border-b border-line text-[17px] font-semibold text-ink">
             {t('도입 사례', 'Customers')}
           </Link>
           <MobileGroup
@@ -644,8 +718,8 @@ export default function Navbar() {
             </MobileGroup>
           )}
 
-          <LangToggle className="mt-6 text-[16px]" />
-          <div className="mt-6 grid grid-cols-2 gap-2">
+          <LangToggle className="mt-5 text-[15px]" />
+          <div className="mt-5 grid grid-cols-2 gap-2">
             <Link to={REQUEST_PATH} className="hx-btn hx-line">
               {dataCopy.gnb.sample}
             </Link>

@@ -22,11 +22,13 @@ export const sampleHubSpotEnabled = () => process.env.VERCEL_ENV === 'production
 // bundle keep sending it for a while.
 export const SAMPLE_OPTION_VALUES = {
   collections: {
-    multi_speaker_dialogue: ['다화자 대화 (음성 + 영상)', 'Multi-Speaker Conversation (Audio + Video)'],
+    multi_speaker_dialogue: ['다화자 대화', 'Multi-Speaker Conversation', '다화자 대화 (음성 + 영상)', 'Multi-Speaker Conversation (Audio + Video)'],
     speaker_separated_dialogue: ['화자 분리 대화 음성', 'Conversational Speech, Speaker-Separated'],
-    synced_multicam: ['동기화 멀티캠 원본', 'Synchronized Multi-Camera Originals'],
-    full_body_motion: ['전신 동작', 'Whole-Body Human Motion'],
-    host_product_demo: ['진행자 · 제품 시연', 'Presenter & Product Demo'],
+    synced_multicam: ['동기화 멀티캠', 'Synchronized Multi-Cam', '동기화 멀티캠 원본', 'Synchronized Multi-Camera Originals',
+      // TODO: 원본·방송본 페어 has no HubSpot option yet — sent as multi-cam until sales adds one.
+      '원본·방송본 페어', 'Original–Broadcast Pairs'],
+    full_body_motion: ['전신 동작', 'Whole-Body Motion', 'Whole-Body Human Motion'],
+    host_product_demo: ['라이브커머스 제품 시연', 'Live-Commerce Product Demos', '진행자 · 제품 시연', 'Presenter & Product Demo'],
     idol_stage_practice: ['아이돌 무대 · 연습', 'Idol stages · practice'],
     live_commerce_hosts: ['라이브커머스 쇼호스트', 'Live-commerce hosts'],
     b_roll_footage: ['배경 footage', 'B-roll footage'],

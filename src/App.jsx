@@ -36,7 +36,10 @@ function ScrollToTop() {
   // offset by the fixed 80px header.
   useEffect(() => {
     const target = hash && document.getElementById(hash.slice(1))
-    const top = target ? target.getBoundingClientRect().top + window.scrollY - 80 : 0
+    // Offset = html's scroll-padding-top (index.css), so it follows the header
+    // height: 80px bar on desktop, the smaller bar on phones.
+    const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 80
+    const top = target ? target.getBoundingClientRect().top + window.scrollY - pad : 0
     window.scrollTo({ top, left: 0, behavior: 'instant' })
   }, [pathname, hash])
   return null

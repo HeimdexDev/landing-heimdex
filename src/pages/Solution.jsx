@@ -197,7 +197,7 @@ const MARKETER_DETAIL_EN = {
     'In a live-commerce studio, the host holds up a vitamin C product and explains its benefits and bundle.',
   script: [
     { speaker: 'A', time: '00:00:02', text: 'Hello! Today’s product is our high-dose vitamin C.' },
-    { speaker: 'B', time: '00:00:07', text: 'Yes — the key point is that one tablet covers your full daily amount.' },
+    { speaker: 'B', time: '00:00:07', text: 'Yes, the key point is that one tablet covers your full daily amount.' },
     { speaker: 'A', time: '00:00:12', text: 'So a single tablet gives you the whole 1000mg?' },
     { speaker: 'B', time: '00:00:16', text: 'Exactly. We also blended in ingredients that boost absorption.' },
     { speaker: 'A', time: '00:00:21', text: 'How does it taste? Vitamin C can be quite sour.' },
@@ -221,7 +221,7 @@ const DEMOS = {
     query: '차량이 추돌하는 사고 장면',
     queryEn: 'Scene of a vehicle rear-end collision',
     placeholder: '장면을 설명해 검색해보세요 - "추돌 사고"',
-    placeholderEn: 'Describe a scene to search — "rear-end collision"',
+    placeholderEn: 'Describe a scene to search: "rear-end collision"',
     cardSource: 'Drive',
     pickIndex: 3,
     editor: true,
@@ -270,7 +270,7 @@ const DEMOS = {
     query: '쇼호스트가 비타민을 들어 보이며 설명하는 장면',
     queryEn: 'Scene of a host holding up a vitamin and explaining it',
     placeholder: '장면을 설명해 검색해보세요 - "비타민을 들어 보이는 장면"',
-    placeholderEn: 'Describe a scene to search — "holding up a vitamin"',
+    placeholderEn: 'Describe a scene to search: "holding up a vitamin"',
     orientation: 'vertical',
     pickIndex: 0,
     editor: false,
@@ -319,7 +319,7 @@ const DEMOS = {
     query: '로봇이 물체를 집다 놓치는 구간',
     queryEn: 'Moment a robot drops the object it was gripping',
     placeholder: '장면을 설명해 검색해보세요 - "이상 동작"',
-    placeholderEn: 'Describe a scene to search — "anomalous motion"',
+    placeholderEn: 'Describe a scene to search: "anomalous motion"',
     durRange: [3600, 10800],
     sceneToggle: true,
     // video mode → factory/lab shots; scene mode → the original robot cuts
@@ -655,8 +655,8 @@ export default function Solution() {
             </div>
 
             {/* Hero copy + image */}
-            <Reveal className="flex w-full items-center gap-[100px] max-lg:flex-col max-lg:items-start max-lg:gap-10">
-              <div className="flex flex-1 flex-col items-start gap-10">
+            <Reveal className="flex w-full items-center gap-[100px] max-lg:flex-col max-lg:items-start max-lg:gap-10 max-sm:items-center">
+              <div className="flex flex-1 flex-col items-start gap-10 max-sm:items-center max-sm:text-center">
                 <div className="flex flex-col gap-5">
                   <p className="font-product text-2xl font-bold leading-[1.4] text-navy-500 max-sm:text-xl">
                     {data.label}
@@ -712,7 +712,7 @@ export default function Solution() {
             className="flex justify-center px-[100px] pb-[120px] pt-[120px] max-lg:px-8 max-sm:px-5 max-sm:pb-[80px] max-sm:pt-[80px]"
           >
             <div className="flex w-full max-w-[1180px] items-start gap-16 max-lg:flex-col max-lg:gap-10">
-              <h2 className="w-[500px] shrink-0 break-keep text-[40px] font-bold leading-[1.4] tracking-[-1px] text-grayscale-800 max-lg:w-full max-md:text-[28px] max-sm:text-[24px]">
+              <h2 className="w-[500px] shrink-0 break-keep text-[40px] font-bold leading-[1.4] tracking-[-1px] text-grayscale-800 max-lg:w-full max-md:text-[28px] max-sm:text-center max-sm:text-[24px]">
                 {data.reasonsTitle.split('\n').map((line, i) => (
                   <span key={line} className={`block ${i === 1 ? 'text-navy-500' : ''}`}>
                     {line}
@@ -723,14 +723,15 @@ export default function Solution() {
                 {data.reasonsList.map((r, i) => (
                   <div
                     key={i}
-                    className={`flex flex-col gap-4 border-grayscale-200 p-7 max-sm:border-r-0 max-sm:p-6 ${
+                    className={`flex flex-col gap-4 border-grayscale-200 p-7 max-sm:border-r-0 max-sm:gap-3 max-sm:px-0 max-sm:py-6 ${
                       i >= 2 ? 'border-t' : ''
                     } ${i % 2 === 0 ? 'border-r' : ''} ${i === 1 ? 'max-sm:border-t' : ''}`}
                   >
                     <h3 className="text-xl font-bold leading-[1.4] tracking-[-0.5px] text-grayscale-800 max-sm:text-lg">
+                      {/* authored breaks are for the 2-col grid; one column reflows */}
                       {r.title.split('\n').map((line) => (
-                        <span key={line} className="block">
-                          {line}
+                        <span key={line} className="sm:block">
+                          {line}{' '}
                         </span>
                       ))}
                     </h3>

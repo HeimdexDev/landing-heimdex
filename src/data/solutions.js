@@ -264,7 +264,7 @@ export const SOLUTIONS_EN = {
       { step: '02', label: 'Auto Subtitles' },
       { step: '03', label: 'Auto Face Blur' },
     ],
-    reasonsTitle: 'The everyday you filmed,\nas one vlog — Heimlog',
+    reasonsTitle: 'The everyday you filmed,\nas one vlog, Heimlog',
     reasonsList: [
       {
         title: 'Leave picking the scenes\nto the AI',
@@ -280,7 +280,7 @@ export const SOLUTIONS_EN = {
       },
       {
         title: 'Faces detected\nand blurred automatically',
-        desc: 'AI analyzes the faces that appear and applies blur on its own — sparing you the repeat pass of hunting for who to hide in every scene.',
+        desc: 'AI analyzes the faces that appear and applies blur on its own, sparing you the repeat pass of hunting for who to hide in every scene.',
       },
     ],
     faq: [
@@ -290,7 +290,7 @@ export const SOLUTIONS_EN = {
       },
       {
         q: 'What editing styles can I choose from?',
-        a: 'Date-order editing, which keeps the flow of the shoot, and theme editing, which gathers the scenes you want. There are six themes — food, shopping, stays, sightseeing, scenery, and getting around — and you can pick more than one.',
+        a: 'Date-order editing, which keeps the flow of the shoot, and theme editing, which gathers the scenes you want. There are six themes (food, shopping, stays, sightseeing, scenery, and getting around) and you can pick more than one.',
       },
       {
         q: 'Can I edit the auto-generated video myself?',
@@ -298,7 +298,7 @@ export const SOLUTIONS_EN = {
       },
       {
         q: 'Are subtitles generated automatically?',
-        a: 'Yes — speech in the footage is recognized and turned into subtitles that match each scene. Turning on “advanced subtitles” keeps it stable across multiple speakers and noisy locations, and raises accuracy on proper nouns, technical terms, and fast speech.',
+        a: 'Yes, speech in the footage is recognized and turned into subtitles that match each scene. Turning on “advanced subtitles” keeps it stable across multiple speakers and noisy locations, and raises accuracy on proper nouns, technical terms, and fast speech.',
       },
       {
         q: 'Can I hide other people’s faces in the video?',
@@ -315,24 +315,24 @@ export const SOLUTIONS_EN = {
   legal: {
     label: 'for Legal',
     title: ['Legal & Investigation'],
-    subtitle: 'Scan hundreds of hours of CCTV you used to review overnight — in a single minute.',
+    subtitle: 'Scan hundreds of hours of CCTV you used to review overnight, in a single minute.',
     media: [
       { step: '01', label: 'Scene Summary · Script' },
       { step: '02', label: 'Scene Analysis · Search' },
       { step: '03', label: 'Clip Extraction · Evidence Report' },
     ],
-    reasonsTitle: 'The fastest shortcut to the\ndecisive evidence — Heimdex',
+    reasonsTitle: 'The fastest shortcut to the\ndecisive evidence, Heimdex',
     reasonsList: [
       {
         title: 'Let AI review the footage,\nyou focus on the defense',
-        desc: 'Summarize vast case records — interrogation and CCTV footage — and jump straight to any scene on the timeline.',
+        desc: 'Summarize vast case records (interrogation and CCTV footage) and jump straight to any scene on the timeline.',
       },
       {
         title: 'From drafting records to\ncourt-ready evidence clips',
         desc: 'Convert every conversation in the video into a transcript, and extract only the key evidence segments as clips, ready to use instantly.',
       },
       {
-        title: 'Beyond simple recognition —\nanalyzing the clues in behavior',
+        title: 'Beyond simple recognition,\nanalyzing the clues in behavior',
         desc: 'Going beyond identifying people and objects, it precisely analyzes context and circumstance to build a foundation for credible circumstantial evidence.',
       },
       {
@@ -340,7 +340,7 @@ export const SOLUTIONS_EN = {
         desc: 'AI automatically detects and blurs (mosaics) sensitive personal data such as third-party faces and license plates.',
       },
       {
-        title: 'Not a single byte leaves —\nairtight security',
+        title: 'Not a single byte leaves,\nairtight security',
         desc: 'A closed, local-only approach ensures sensitive evidence videos are never exposed externally.',
       },
     ],
@@ -359,11 +359,11 @@ export const SOLUTIONS_EN = {
       },
       {
         q: 'Can I use the results directly as court-ready materials?',
-        a: 'You can extract only the scenes you need as clips or auto-convert full statements into transcripts — ready to use directly as court-submission evidence.',
+        a: 'You can extract only the scenes you need as clips or auto-convert full statements into transcripts, ready to use directly as court-submission evidence.',
       },
       {
         q: 'Is blurring done automatically?',
-        a: 'Yes. AI automatically detects and blurs sensitive information such as victims, minors, and license plates — meeting privacy-protection standards with no manual work.',
+        a: 'Yes. AI automatically detects and blurs sensitive information such as victims, minors, and license plates, meeting privacy-protection standards with no manual work.',
       },
     ],
     cta: {
@@ -374,39 +374,39 @@ export const SOLUTIONS_EN = {
   creative: {
     label: 'for Creative',
     title: ['Marketers & Producers'],
-    subtitle: 'Finish a short-form in one click — now focus only on the ideas.',
+    subtitle: 'Finish a short-form in one click. Now focus only on the ideas.',
     media: [
       { step: '01', label: 'Semi-auto · Auto Short-form' },
       { step: '02', label: 'Scene Search' },
       { step: '03', label: 'Scene Summary · Script' },
     ],
-    reasonsTitle: 'The optimal choice for\ncreatives — Heimdex',
+    reasonsTitle: 'The optimal choice for\ncreatives, Heimdex',
     reasonsList: [
       {
         title: 'Search hundreds of gigs of footage\nin a second, like a Google search',
-        desc: 'No need to scrub through the original — search by dialogue, people, or action as if speaking, and find the exact timeline.',
+        desc: 'No need to scrub through the original. Search by dialogue, people, or action as if speaking, and find the exact timeline.',
       },
       {
         title: 'A viral short-form master\nin a single click',
         desc: 'Build your own short-form from selected sources, or let AI finish it for you. Stay one step ahead and claim the next viral hit.',
       },
       {
-        title: 'Zero heavy file transfers —\nsearch the moment you connect',
+        title: 'Zero heavy file transfers,\nsearch the moment you connect',
         desc: 'No need to move heavy videos. AI analyzes and indexes them right where they are.',
       },
       {
-        title: 'Keep your tools —\nseamless Premiere Pro integration',
+        title: 'Keep your tools,\nseamless Premiere Pro integration',
         desc: 'It integrates directly with Premiere Pro. Keep editing exactly the way you do now.',
       },
       {
-        title: 'Unreleased launch videos and\nembargoed sources — zero leak worries',
+        title: 'Unreleased launch videos and\nembargoed sources, zero leak worries',
         desc: 'It fundamentally blocks any risk of your valuable creative assets being exposed externally.',
       },
     ],
     faq: [
       {
         q: 'Do I have to upload videos to the Heimdex platform for search to work?',
-        a: 'No. You can keep using your existing setup — cloud, external drives, in-house servers — exactly as is. There’s no need to move files.',
+        a: 'No. You can keep using your existing setup (cloud, external drives, in-house servers) exactly as is. There’s no need to move files.',
       },
       {
         q: 'Can I adjust the level of editing when creating short-form?',
@@ -418,7 +418,7 @@ export const SOLUTIONS_EN = {
       },
       {
         q: 'Can it automatically create short-form highlighting a specific product or brand?',
-        a: 'Yes. Specify the product you want to highlight and AI automatically selects the relevant scenes to produce the short-form — ready to use without separate editing.',
+        a: 'Yes. Specify the product you want to highlight and AI automatically selects the relevant scenes to produce the short-form, ready to use without separate editing.',
       },
       {
         q: 'How many short-form videos can I make at once?',
@@ -433,13 +433,13 @@ export const SOLUTIONS_EN = {
   research: {
     label: 'for Research',
     title: ['Data & Research'],
-    subtitle: 'Verify hundreds of hours of experiment data flawlessly — without a single second of error.',
+    subtitle: 'Verify hundreds of hours of experiment data flawlessly, without a single second of error.',
     media: [
       { step: '01', label: 'Experiment Video Search' },
       { step: '02', label: 'Scene Summary · Script' },
       { step: '03', label: 'Personal-data Blur' },
     ],
-    reasonsTitle: 'The complete solution that raises the\ncredibility of research data — Heimdex',
+    reasonsTitle: 'The complete solution that raises the\ncredibility of research data, Heimdex',
     reasonsList: [
       {
         title: 'Capture specific behaviors and\nvariables with simple keywords',
@@ -450,11 +450,11 @@ export const SOLUTIONS_EN = {
         desc: 'Provide the full footage as text and section-by-section highlights as summaries, accelerating drafts of papers and reports.',
       },
       {
-        title: 'Zero human error —\nsecuring the integrity of research data',
+        title: 'Zero human error,\nsecuring the integrity of research data',
         desc: 'It precisely captures even scenes a person might miss, maximizing the objectivity and credibility of your research.',
       },
       {
-        title: 'Unreleased research assets —\nleaks blocked at the source',
+        title: 'Unreleased research assets,\nleaks blocked at the source',
         desc: 'It runs only within your institution’s closed network, keeping you 100% safe from technology leaks or internal security-policy violations.',
       },
       {
@@ -465,7 +465,7 @@ export const SOLUTIONS_EN = {
     faq: [
       {
         q: 'Is there any risk of research video data leaking externally?',
-        a: 'No. It operates in a closed, local environment, so sensitive research materials — unreleased experiment footage, clinical data — are never exposed externally.',
+        a: 'No. It operates in a closed, local environment, so sensitive research materials (unreleased experiment footage, clinical data) are never exposed externally.',
       },
       {
         q: 'How is the privacy of research participants handled?',
@@ -477,7 +477,7 @@ export const SOLUTIONS_EN = {
       },
       {
         q: 'Won’t analysis be slow for experiment videos hundreds of hours long?',
-        a: 'Because AI stores the entire video in an index format optimized for search, it processes even large-volume footage quickly — dramatically cutting the time spent reviewing from the start.',
+        a: 'Because AI stores the entire video in an index format optimized for search, it processes even large-volume footage quickly, dramatically cutting the time spent reviewing from the start.',
       },
       {
         q: 'Can the script-conversion output be used directly in papers and reports?',

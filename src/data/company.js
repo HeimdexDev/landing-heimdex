@@ -41,7 +41,7 @@ export const VALUES = [
     title: '투명성',
     titleEn: 'Transparency',
     desc: '결과가 어떻게, 왜 나왔는지 항상 알 수 있는 설명 가능한 AI를 만듭니다.',
-    descEn: 'Explainable AI — you can always see how and why a result came up.',
+    descEn: 'Explainable AI: you can always see how and why a result came up.',
   },
 ]
 
@@ -66,7 +66,7 @@ export const CAPABILITIES = [
     title: '제로 업로드 아키텍처',
     titleEn: 'Zero-upload architecture',
     desc: 'NAS · 클라우드 스토리지 · 로컬 드라이브 등 영상이 있는 곳에서 바로 처리합니다.',
-    descEn: 'Processes footage where it lives — NAS, cloud storage, local drives.',
+    descEn: 'Processes footage where it lives: NAS, cloud storage, local drives.',
   },
   {
     icon: 'alert',

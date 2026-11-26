@@ -1,0 +1,171 @@
+<!doctype html>
+<!--
+  Dev-only mobile viewer: `npm run dev`, then open http://localhost:5173/mobile-check.html
+  One page at 360 / 390 / 430px side by side. Anything that sticks out sideways is
+  outlined in red and listed under its frame. "전체 검사" runs every page.
+  Not part of the build (vite only bundles index.html), so it never ships.
+-->
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>모바일 체크</title>
+    <style>
+      :root { --ink: #191f28; --sub: #4e5968; --line: #e5e8eb; --bg: #f2f4f6; --ok: #0f9d58; --bad: #d81d2f; --accent: #3991ff; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font: 14px/1.5 Pretendard, system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+      header { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 20px; background: #fff; border-bottom: 1px solid var(--line); }
+      header b { font-size: 15px; margin-right: 6px; }
+      select, button, input { font: inherit; height: 36px; border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 0 12px; color: var(--ink); }
+      button { cursor: pointer; font-weight: 600; }
+      button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+      .seg button { border: 0; border-radius: 0; }
+      .seg button[aria-pressed='true'] { background: var(--ink); color: #fff; }
+      #summary { margin-left: auto; color: var(--sub); }
+      main { display: flex; gap: 24px; padding: 20px; overflow-x: auto; align-items: flex-start; }
+      .frame { flex: none; }
+      .frame h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-size: 14px; }
+      .badge { border-radius: 999px; padding: 2px 9px; font-size: 12px; font-weight: 700; color: #fff; background: #8b95a1; }
+      .badge.ok { background: var(--ok); }
+      .badge.bad { background: var(--bad); }
+      iframe { display: block; height: 780px; border: 0; border-radius: 18px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 12px 32px -12px rgba(10, 34, 64, 0.18); }
+      .frame ul { margin: 10px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--bad); }
+      .frame li { padding: 3px 0; word-break: break-all; cursor: pointer; }
+      #all { margin: 0 20px 24px; padding: 16px 20px; background: #fff; border-radius: 14px; display: none; }
+      #all table { border-collapse: collapse; width: 100%; font-size: 13px; }
+      #all td, #all th { padding: 6px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+      #all td.c { text-align: center; }
+      #all a { color: var(--accent); cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <b>모바일 체크</b>
+      <select id="route"></select>
+      <span class="seg" id="lang"><button data-v="" aria-pressed="true">KO</button><button data-v="/en">EN</button></span>
+      <button id="reload">새로고침</button>
+      <button id="runAll" class="primary">전체 검사</button>
+      <span id="summary"></span>
+    </header>
+    <section id="all"></section>
+    <main id="frames"></main>
+
+    <script type="module">
+      import { findOverflow } from '/scripts/mobile-overflow.js'
+
+      const WIDTHS = [360, 390, 430]
+      const ROUTES = [
+        '/', '/product', '/product?tab=vlog', '/product/business/industry/commerce', '/product/business/industry/media',
+        '/product/business/industry/education', '/product/business/industry/legal', '/product/business/industry/research',
+        '/product/business', '/product/business/scene-intelligence', '/product/business/rights-monitor', '/product/business/auto-recut',
+        '/heimlog/guide', '/heimlog/pricing', '/cases', '/contact',
+        '/data', '/data/multi-speaker', '/data/multicam', '/data/broadcast-pair', '/data/presenter', '/data/motion',
+        '/request', '/request?mode=1', '/request/done', '/policy',
+      ]
+      const $ = (s) => document.querySelector(s)
+      const sel = $('#route')
+      sel.innerHTML = ROUTES.map((r) => `<option>${r}</option>`).join('')
+      const params = new URLSearchParams(location.search)
+      if (params.get('r')) sel.value = params.get('r')
+      let lang = params.get('lang') === 'en' ? '/en' : ''
+      for (const b of document.querySelectorAll('#lang button')) b.setAttribute('aria-pressed', String(b.dataset.v === lang))
+
+      const url = (r) => (lang && r === '/' ? '/en' : lang + r)
+
+      // Check one loaded iframe; outline offenders in red inside it.
+      function check(frame) {
+        const win = frame.contentWindow
+        if (!win || !win.document.body) return null
+        for (const el of win.document.querySelectorAll('[data-mc]')) { el.style.outline = ''; el.removeAttribute('data-mc') }
+        const res = findOverflow(win)
+        for (const o of res.offenders) { o.el.style.outline = '2px solid #d81d2f'; o.el.setAttribute('data-mc', '') }
+        return res
+      }
+
+      // Scroll the page inside the frame once so lazy/reveal content is laid out.
+      async function settle(frame) {
+        const win = frame.contentWindow
+        const h = win.document.body.scrollHeight
+        for (let y = 0; y < h; y += 700) { win.scrollTo(0, y); await new Promise((r) => setTimeout(r, 25)) }
+        win.scrollTo(0, 0)
+        await new Promise((r) => setTimeout(r, 400))
+      }
+
+      function load(frame, src) {
+        return new Promise((resolve) => {
+          frame.onload = () => setTimeout(resolve, 600)
+          frame.src = src
+        })
+      }
+
+      async function show() {
+        const r = sel.value
+        history.replaceState(null, '', `?r=${encodeURIComponent(r)}${lang ? '&lang=en' : ''}`)
+        const main = $('#frames')
+        main.innerHTML = WIDTHS.map((w) => `<div class="frame"><h2>${w}px <span class="badge" id="b${w}">…</span></h2><iframe id="f${w}" style="width:${w}px"></iframe><ul id="l${w}" style="width:${w}px"></ul></div>`).join('')
+        let bad = 0
+        await Promise.all(WIDTHS.map(async (w) => {
+          const f = $(`#f${w}`)
+          await load(f, url(r))
+          await settle(f)
+          const res = check(f)
+          const n = res ? res.offenders.length : 0
+          if (n) bad++
+          const b = $(`#b${w}`)
+          b.className = `badge ${n ? 'bad' : 'ok'}`
+          b.textContent = n ? `넘침 ${n}` : '가로 스크롤 없음'
+          $(`#l${w}`).innerHTML = (res ? res.offenders : []).map((o, i) => `<li data-i="${i}">+${o.by}px · ${o.label.replace(/</g, '&lt;')}</li>`).join('')
+          $(`#l${w}`).onclick = (e) => { const i = e.target.dataset.i; if (i != null) res.offenders[i].el.scrollIntoView({ block: 'center' }) }
+          // Re-check after the user scrolls (reveal animations, carousels).
+          let t
+          f.contentWindow.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(() => check(f), 300) })
+        }))
+        $('#summary').textContent = bad ? `${bad}개 폭에서 넘침` : '세 폭 모두 통과'
+      }
+
+      async function runAll() {
+        const box = $('#all')
+        box.style.display = 'block'
+        box.innerHTML = '<p>검사 중…</p>'
+        const probe = document.createElement('div')
+        probe.style.cssText = 'position:absolute;left:-9999px;top:0'
+        document.body.appendChild(probe)
+        const rows = []
+        for (const r of ROUTES) {
+          const row = { r, cells: {} }
+          for (const w of WIDTHS) {
+            const f = document.createElement('iframe')
+            f.style.cssText = `width:${w}px;height:780px`
+            probe.appendChild(f)
+            await load(f, url(r))
+            await settle(f)
+            const res = check(f)
+            row.cells[w] = res ? res.offenders.length : -1
+            f.remove()
+          }
+          rows.push(row)
+          box.innerHTML = `<p>검사 중… ${rows.length}/${ROUTES.length}</p>`
+        }
+        probe.remove()
+        const fails = rows.filter((x) => Object.values(x.cells).some((n) => n !== 0)).length
+        box.innerHTML = `<p><b>${ROUTES.length - fails}/${ROUTES.length} 페이지 통과</b> (${lang ? 'EN' : 'KO'})</p><table><tr><th>페이지</th>${WIDTHS.map((w) => `<th>${w}</th>`).join('')}</tr>${rows
+          .map((x) => `<tr><td><a data-r="${x.r}">${x.r}</a></td>${WIDTHS.map((w) => `<td class="c">${x.cells[w] === 0 ? '✓' : `<span style="color:var(--bad)">✗ ${x.cells[w]}</span>`}</td>`).join('')}</tr>`)
+          .join('')}</table>`
+        box.onclick = (e) => { if (e.target.dataset.r) { sel.value = e.target.dataset.r; show() } }
+      }
+
+      sel.onchange = show
+      $('#reload').onclick = show
+      $('#runAll').onclick = runAll
+      $('#lang').onclick = (e) => {
+        if (e.target.dataset.v == null) return
+        lang = e.target.dataset.v
+        for (const b of document.querySelectorAll('#lang button')) b.setAttribute('aria-pressed', String(b === e.target))
+        show()
+      }
+      show()
+    </script>
+  </body>
+</html>

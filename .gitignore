@@ -26,3 +26,6 @@ tsconfig.tsbuildinfo
 
 # backups
 *.bak
+
+# npm run check:mobile -- --shots
+mobile-report/

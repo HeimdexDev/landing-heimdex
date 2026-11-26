@@ -8,11 +8,11 @@ import { useLang } from '../../i18n/LanguageContext.jsx'
 export const A = (name) => `/assets/data/${name}`
 
 const BTN = {
-  base: 'inline-flex items-center justify-center whitespace-nowrap font-bold tracking-[-0.03em] transition-[background-color,transform] duration-200 active:scale-[0.97]',
+  base: 'inline-flex items-center justify-center whitespace-nowrap pt-px font-semibold leading-none tracking-[-0.03em] transition-[background-color,transform] duration-200 active:scale-[0.97]',
   L: 'h-12 rounded-[28px] px-[18px] text-[16px]',
   M: 'h-12 rounded-[26px] px-[18px] text-[16px]',
   S: 'h-10 rounded-[8px] px-4 text-[14px]',
-  primary: 'bg-hx text-white hover:bg-primary-600',
+  primary: 'bg-accent text-white hover:bg-accent-600',
   secondary: 'border border-line-strong bg-white text-ink hover:bg-snow',
   soft: 'bg-mist text-ink hover:bg-[#E5E8EB]',
 }
@@ -39,12 +39,12 @@ export function IconTile({ icon, size = 48, iconSize = 24, radius, className = '
 }
 
 export function Eyebrow({ children, className = '' }) {
-  return <p className={`text-[14px] font-bold tracking-[-0.03em] text-accent ${className}`}>{children}</p>
+  return <p className={`text-[14px] font-semibold tracking-[-0.03em] text-accent ${className}`}>{children}</p>
 }
 
 export function H2({ children, className = '' }) {
   return (
-    <h2 className={`text-[40px] font-extrabold leading-[1.5] tracking-[-0.03em] text-ink max-md:text-[32px] max-sm:text-[26px] ${className}`}>
+    <h2 className={`text-[40px] font-bold leading-[1.5] tracking-[-0.03em] text-ink max-md:text-[32px] max-sm:text-[26px] ${className}`}>
       {children}
     </h2>
   )
@@ -58,8 +58,8 @@ export function Lead({ children, className = '' }) {
 export function Tag({ children, fill = false }) {
   return (
     <span
-      className={`inline-flex h-7 items-center rounded-[8px] px-3 text-[12px] font-semibold tracking-[-0.03em] text-ink-soft ${
-        fill ? 'bg-mist' : 'border border-line bg-white'
+      className={`inline-flex h-7 items-center rounded-[8px] px-3 text-[12px] font-semibold leading-none tracking-[-0.03em] text-ink-soft ${
+        fill ? 'bg-mist' : 'border border-line bg-white pt-px'
       }`}
     >
       {children}
@@ -74,8 +74,8 @@ export function Chip({ selected, onClick, children }) {
       type="button"
       aria-pressed={selected}
       onClick={onClick}
-      className={`inline-flex h-10 items-center rounded-[24px] px-5 text-[14px] font-semibold tracking-[-0.03em] transition-colors ${
-        selected ? 'bg-hx text-white' : 'border border-line-strong bg-white text-ink-soft hover:border-ink/40'
+      className={`inline-flex h-10 items-center rounded-[24px] px-5 text-[14px] font-semibold leading-none tracking-[-0.03em] transition-colors ${
+        selected ? 'bg-accent text-white' : 'border border-line-strong bg-white text-ink-soft hover:border-ink/40'
       }`}
     >
       {children}
@@ -85,7 +85,7 @@ export function Chip({ selected, onClick, children }) {
 
 export function NumberBadge({ n }) {
   return (
-    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-hx text-[12px] font-bold text-white">{n}</span>
+    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-hx text-[12px] font-bold leading-none text-white">{n}</span>
   )
 }
 
@@ -99,7 +99,7 @@ export function ConsentRow({ checked, onChange, label, tag, required, right }) {
       <label className="flex cursor-pointer items-center gap-5">
         <span
           className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] border-[1.5px] transition-colors ${
-            checked ? 'border-hx bg-hx' : 'border-line bg-white'
+            checked ? 'border-accent bg-accent' : 'border-line bg-white'
           }`}
         >
           {checked && (
@@ -111,7 +111,7 @@ export function ConsentRow({ checked, onChange, label, tag, required, right }) {
         <input type="checkbox" className="sr-only" checked={checked} onChange={onChange} required={required} />
         <span className="flex flex-wrap items-center gap-2 text-[16px] tracking-[-0.03em] max-sm:text-[14px]">
           <span className="font-medium text-ink-soft">{label}</span>
-          <span className="font-bold text-[#2F4B7C]">{tag}</span>
+          <span className="font-semibold text-[#2F4B7C]">{tag}</span>
         </span>
       </label>
       {right}
@@ -132,7 +132,7 @@ export function MarketingConsent({ checked, onChange, label, tag }) {
         aria-checked={checked}
         onClick={onChange}
         className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] border-[1.5px] transition-colors ${
-          checked ? 'border-hx bg-hx' : 'border-line bg-white'
+          checked ? 'border-accent bg-accent' : 'border-line bg-white'
         }`}
       >
         {checked && (
@@ -144,7 +144,7 @@ export function MarketingConsent({ checked, onChange, label, tag }) {
       <div className="flex flex-1 flex-col">
         <span className="flex flex-wrap items-center gap-2 pt-0.5 text-[16px] tracking-[-0.03em] max-sm:text-[14px]">
           <span className="font-medium text-ink-soft">{label}</span>
-          <span className="font-bold text-[#2F4B7C]">{tag}</span>
+          <span className="font-semibold text-[#2F4B7C]">{tag}</span>
         </span>
         <div className={`grid transition-all duration-300 ease-out ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
           <div className="overflow-hidden">

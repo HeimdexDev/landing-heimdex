@@ -1,5 +1,5 @@
-// 데이터 마켓플레이스 — English copy, verbatim from Figma (… · EN). Same shape as
-// dataMarket.ko.js; anything missing here falls back to Korean (see dataMarket.js).
+// 데이터 마켓플레이스 — English copy. Same shape as dataMarket.ko.js; anything
+// missing here falls back to Korean (see dataMarket.js).
 export const EN = {
   "gnb": {
     "label": "Data Marketplace",
@@ -10,60 +10,63 @@ export const EN = {
   "landing": {
     "promoPill": {
       "caption": "NEW",
-      "body": "Product demos (3rd-person, narrated) · per-speaker dialogue · multi-cam originals"
+      "body": "14,800 hours of dialogue · 33,000 hours of video · 18 datasets"
     },
-    "heroTitleAccent": "",
-    "heroTitle": "Unaired production footage,\nper-speaker tracks\nand multi-cam intact",
-    "heroBody": "Unaired originals licensed directly from Korean broadcast and live-commerce producers — no crawling, rights clearing, diarization or labeling needed.",
+    "heroTitle": "Heimdex Data Marketplace supplies on-set footage from broadcast, live shows and commerce as AI training data.",
+    "heroBody": "Per-speaker dialogue tracks, multi-cam originals and hands-on product demos,\nre-licensed from producers for AI training, with AI-training consent from every performer.",
     "heroButtons": [
       "Request a sample",
       "Request custom data"
     ],
     "heroChecks": [
-      "Licensed from producers",
-      "Non-exclusive · fixed term",
-      "Sample reply in 2 business days"
+      "Re-licensed from producers",
+      "Non-exclusive · perpetual training use",
+      "Sample & quote in 5 business days"
     ],
-    "heroVisual": {
-      "speaking": "SPK 1 · speaking",
-      "cam": "CAM 1 · 00:12:48"
-    },
     "sectionNav": [
       "Why it’s different",
-      "Collections",
+      "Data library",
       "Archive",
-      "About HEIMDEX",
-      "Supply model",
+      "About Heimdex",
       "Compare",
       "FAQ",
       "Request a sample"
     ],
     "diff": {
       "eyebrow": "Why it’s different",
-      "title": "Data you can’t find on the internet",
+      "title": "Straight from the production floor",
+      "lead": "Per-speaker dialogue, every camera, and the footage before the edit.",
       "features": [
         {
-          "title": "Camera originals,\npaired with the broadcast edit",
-          "body": "Each camera’s original comes with the broadcast edit\nand the matching segments"
+          "title": "Timecode-synced multi-view · every camera",
+          "body": "Every camera original from 4–12-camera shoots, synced to one timecode. Crowds, moving cameras, day and night exteriors, uncontrolled conditions, kept as shot."
         },
         {
-          "title": "A mic track per performer",
-          "body": "Everyone wore their own mic,\nso speaker labels come from the recording, not guesswork"
+          "title": "Unedited multi-party dialogue · a track per speaker",
+          "body": "Conversations between two or more people, unedited, with each speaker’s mic track. Overlaps, backchannels and turn-taking are preserved."
         },
         {
-          "title": "Hand actions with narration",
-          "body": "Hosts handle products while explaining them —\naction and speech on one timeline"
+          "title": "Original–broadcast pairs · per-cut selections",
+          "body": "For every broadcast cut, we link which camera and which timecode range it came from. Unused angles and NG takes are included."
         },
         {
-          "title": "Search the archive in plain language",
-          "body": "Indexed by what happens in each scene, not keyword tags. Describe the scene and we’ll find it."
+          "title": "Multimodal alignment within one session",
+          "body": "Per-speaker audio, multi-cam video and the broadcast edit of the same session, aligned to one timecode. Pick only the modalities you need."
+        },
+        {
+          "title": "Real speech synced to hand actions",
+          "body": "Continuous 1–3-hour live-commerce originals. Narration and hand actions share a timeline, with hand close-ups and wides shot together."
+        },
+        {
+          "title": "From archive search to de-identification",
+          "body": "Our own video search engine finds matching segments across the whole archive and sends them as samples. Shot boundaries, speaker-track mapping and de-identification are checked before delivery."
         }
       ]
     },
     "collections": {
-      "eyebrow": "Collections",
-      "title": "Samples ready to go",
-      "lead": "Pick the data you need and request a sample. Open a card to see what’s inside.",
+      "eyebrow": "Data library",
+      "title": "4 categories, 18 datasets",
+      "lead": "Build exactly the datasets your training goal needs. Open a card to see what’s inside.",
       "more": "View details",
       "cta": "Request a sample"
     },
@@ -79,60 +82,38 @@ export const EN = {
         },
         {
           "title": "New custom capture",
-          "body": "Shot or collected for you, timeline agreed together"
+          "body": "If the archive doesn’t have it, our partner producers capture it for you. Timeline agreed together."
         }
       ]
     },
     "archive": {
       "eyebrow": "Archive",
       "title": "There’s far more beyond these collections",
-      "lead": "Describe the scene in a sentence and we’ll search our indexed archive and send it as a sample. The five collections above are just a slice of it.",
+      "lead": "Describe the scene in a sentence and we’ll search our indexed archive and send it as a sample, beyond the collections above, too.",
       "button": "Request sample",
       "license": {
         "eyebrow": "License terms",
         "title": "License terms",
         "items": [
           "Non-exclusive",
-          "Fixed term",
-          "Custom cuts by category, language and hours"
+          "Perpetual training use",
+          "Custom mix by category · language · hours"
         ]
       },
       "about": {
-        "eyebrow": "About HEIMDEX",
-        "title": "About HEIMDEX",
-        "body": "HEIMDEX builds on-premises video AI that indexes\nbroadcast and production archives for Korean media companies.",
+        "eyebrow": "About Heimdex",
+        "title": "About Heimdex",
+        "body": "Heimdex is an on-premises video AI company founded in 2025.\nOur video AI searches and refines broadcast and production archives into training data.",
         "badges": [
-          "Backed by Antler",
-          "NVIDIA Inception member",
-          "Claude Startups program"
+          "MSS startup-growth R&D project",
+          "NVIDIA global collaboration R&D project",
+          "6 patents filed"
         ],
         "backers": [
           "Samsung Fire & Marine Insurance",
           "Antler"
         ]
       }
-    },
-    "supply": {
-      "eyebrow": "Supply model",
-      "title": "Clean rights,\na catalog that keeps growing",
-      "lead": "HEIMDEX indexes archives inside producers’ and broadcasters’ own servers.\nNew footage keeps joining the catalog without moving the originals, and only licensed clips are delivered.",
-      "steps": [
-        {
-          "step": "STEP 1",
-          "title": "Originals stay on the producer’s servers",
-          "chip": "On-premises"
-        },
-        {
-          "step": "STEP 2",
-          "title": "HEIMDEX curates and labels",
-          "chip": "Indexing · metadata"
-        },
-        {
-          "step": "STEP 3",
-          "title": "Only licensed clips are delivered",
-          "chip": "Licensed clips"
-        }
-      ]
     },
     "compare": {
       "eyebrow": "At a glance",
@@ -143,7 +124,7 @@ export const EN = {
         "Creator video marketplaces",
         "Crowdsourced custom capture",
         "Public datasets",
-        "HEIMDEX"
+        "Heimdex"
       ],
       "rows": [
         {
@@ -153,7 +134,7 @@ export const EN = {
             "YouTube uploads\n(single cam · compressed)",
             "Staged shoots",
             "Web scrapes",
-            "Pre-broadcast production originals"
+            "Production originals\n(ISO · NG included) + broadcast"
           ]
         },
         {
@@ -173,7 +154,7 @@ export const EN = {
             "Barely any",
             "Only what you specify",
             "Varies by\ndataset",
-            "Shot splits · 3-level captions ·\nspeaker timeline"
+            "Shot boundaries · speaker-track mapping standard;\ntranscripts · captions · action labels optional"
           ]
         },
         {
@@ -183,7 +164,7 @@ export const EN = {
             "Channel · category",
             "New shoot\n(weeks to months)",
             "Filter it yourself",
-            "Describe it →\nwe search the archive"
+            "Describe it in a sentence"
           ]
         },
         {
@@ -193,17 +174,17 @@ export const EN = {
             "Individual creator consent",
             "Participant consent",
             "Often unclear",
-            "Direct producer contract +\nper-clip rights record"
+            "Producer re-license +\nconsent mapped per session & speaker ID"
           ]
         },
         {
-          "label": "Korean · K-content",
+          "label": "Languages",
           "cells": [
-            "Little",
             "Some",
-            "Possible but costly",
-            "Little",
-            "Core focus"
+            "Some",
+            "Costly",
+            "Few",
+            "Korean · English · Japanese · Chinese;\nother languages by custom capture"
           ]
         }
       ]
@@ -221,24 +202,28 @@ export const EN = {
       "button": "Contact us",
       "items": [
         {
-          "q": "How are rights documented?",
-          "a": "HEIMDEX licenses footage directly from suppliers who hold the video rights, such as broadcasters and producers. We verify each supplier’s rights and compliance first, then set the scope of use clearly in a legally reviewed license agreement."
+          "q": "How do you prove the rights?",
+          "a": "We source data under AI-training re-license agreements with the broadcasters and producers who own the footage.\nEvery performer has consented to AI-training use, and consents are mapped per session and speaker ID.\nOn request we share redacted copies of the consent forms, and rights and consent warranties are written into the contract."
         },
         {
-          "q": "Are faces anonymized?",
-          "a": "Yes. Faces are blurred or otherwise anonymized by default before delivery. Segments where a specific person’s likeness or IP could be an issue are removed or handled separately, and we agree the scope of processing with you based on your training goals."
+          "q": "Are faces de-identified?",
+          "a": "Every performer has consented to AI-training use, so by default we deliver the originals as shot.\nFace, on-screen text and logo blurring are available as options."
         },
         {
-          "q": "What formats do you deliver?",
-          "a": "You get video clips cut to just the segments you need, together with labels and metadata. Resolution, clip length, label fields and file formats are set to your spec so they drop straight into your training pipeline."
+          "q": "What format is it delivered in?",
+          "a": "Continuous, unedited sessions in the original capture specs.\nEach session folder holds per-camera originals, per-speaker tracks, (for pairs) the broadcast edit and EDL, a manifest and a data card.\nDelivered via cloud or external drive."
         },
         {
           "q": "How fast can I get a sample?",
-          "a": "Tell us the data you need, and once we confirm what we hold, we send a sample within 3–5 business days. Check quality and specs on the sample first, then move on to the main contract."
+          "a": "Within 5 business days of a mutual NDA we send a sample pack and a quote. Sample packs are free: 1 hour of audio for evaluation, or one video session."
         },
         {
-          "q": "Can you collect to my spec?",
-          "a": "Yes, custom builds are available. Tell us the scene type, people and actions, camera perspective (first- or third-person) and environment, and we’ll find it in supplier archives, clean it up and deliver it with the labels you need."
+          "q": "Can you capture data to my spec?",
+          "a": "Yes. We search our archive first, and if it doesn’t have what you need, our partner producers capture it.\nCustom label schemas are piloted on a 30-minute sample before pricing is set."
+        },
+        {
+          "q": "How do I get a quote?",
+          "a": "Send us your data requirements and, after a mutual NDA, we reply with a sample and a quote within 5 business days.\nPricing depends on data type, resolution, whether you need original–broadcast pairs, and volume. Larger volumes get a discount."
         }
       ]
     }
@@ -246,669 +231,420 @@ export const EN = {
   "collections": [
     {
       "slug": "multi-speaker",
-      "name": "Multi-Speaker Conversation (Audio + Video)",
-      "desc": "2–6 people talking over each other, every voice on its own track and tied to the face that spoke it",
-      "carouselDesc": "2–6 people talking over each other, every voice on its own track and tied to the face that spoke it",
+      "name": "Multi-Speaker Conversation",
+      "count": "6 datasets",
+      "desc": "Real conversations, each speaker recorded separately.\nOverlaps, backchannels and laughter kept intact.",
+      "carouselDesc": "Unscripted real conversations, each speaker recorded on their own mic.",
       "tags": [
-        "Audio-video generation",
-        "Lip-sync",
-        "Speaker attribution"
+        "Full-duplex dialogue",
+        "ASR · diarization",
+        "Multi-speaker TTS"
       ],
       "stats": [
         {
-          "value": "50000+",
-          "label": "Hours"
+          "value": "14,800h+",
+          "label": "Dialogue hours"
         },
         {
-          "value": "3+",
-          "label": "Avg. speakers per clip"
+          "value": "2+",
+          "label": "Speakers per session"
         }
       ],
-      "problemPill": {
-        "caption": "Sound familiar?",
-        "body": "Getting speaker attribution wrong in multi-person scenes?"
-      },
       "descLines": [
-        "Real broadcast scenes where 2–6 people talk over each other.",
-        "Everyone wore their own mic, so each voice is on a separate track —",
-        "and each voice is linked to the face that spoke it."
+        "Unscripted real conversations between two or more people, with a separate mic track for each speaker.",
+        "Overlaps, backchannels and turn-taking are intact, and multi-cam video on the same timecode is available too."
       ],
-      "summary": {
-        "problems": [
-          "Fix speaker attribution in multi-person scenes",
-          "Train lip-sync on overlapping dialogue",
-          "Generate dialogue in Korean and other low-resource languages"
-        ],
-        "receive": [
-          "MP4 + per-speaker WAV + JSON",
-          "Per scene (clip)",
-          "Download link · cloud bucket"
-        ]
-      },
-      "useCases": [
-        {
-          "text": "Fix speaker attribution in multi-person scenes"
-        },
-        {
-          "text": "Train lip-sync on overlapping dialogue"
-        },
-        {
-          "text": "Generate dialogue in Korean and other low-resource languages"
-        }
-      ],
-      "specTables": [
-        {
-          "title": "Scale · specs",
-          "rows": [
-            {
-              "label": "Total volume",
-              "value": "[Hours] · [Clips]"
-            },
-            {
-              "label": "Speakers",
-              "value": "3–[N] people, Korean"
-            },
-            {
-              "label": "Genre",
-              "value": "Variety · talk · [other genres]"
-            },
-            {
-              "label": "Audio",
-              "value": "Per-speaker WAV, [sample rate], original mic / AI-separated flagged"
-            },
-            {
-              "label": "Video",
-              "value": "Original-resolution MP4, [fps]"
-            }
-          ]
-        },
-        {
-          "title": "Labels",
-          "rows": [
-            {
-              "label": "Included",
-              "value": "Transcript, speaker timeline, 3-level captions, speaker metadata"
-            },
-            {
-              "label": "On request",
-              "value": "Emotion, overlap markers, other custom labels"
-            }
-          ]
-        }
+      "detailTags": [
+        "Full-duplex dialogue",
+        "Speech recognition · diarization",
+        "Multi-speaker TTS",
+        "Lip sync · speaker attribution"
       ],
       "delivery": [
         {
-          "label": "File format",
-          "value": "MP4 + per-speaker WAV + JSON"
+          "label": "Files",
+          "value": "Per-speaker WAV + on-set mix (optional: video)"
         },
         {
-          "label": "Bundle unit",
-          "value": "Per scene (clip)"
+          "label": "Bundle",
+          "value": "Continuous unedited sessions"
         },
         {
-          "label": "Delivery method",
-          "value": "Download link · cloud bucket (manifest included)"
+          "label": "Delivery",
+          "value": "Cloud · external drive"
         }
       ],
-      "rights": [
+      "spec": [
         {
-          "title": "Direct contract with the rights holder",
-          "body": "Contracted directly with the producer who owns the originals"
+          "label": "Total volume",
+          "value": "14,800 hours (dialogue hours) · ~11,930 sessions · ~5,750 speakers"
         },
         {
-          "title": "Performer consent scope",
-          "body": "Within the scope of performers’ consent for AI training"
+          "label": "Languages",
+          "value": "Korean 8,900h · English 2,900h · Japanese 1,800h · Chinese 1,200h"
         },
         {
-          "title": "Face handling options",
-          "body": "Blur non-consenting faces or fully anonymize"
+          "label": "Speakers",
+          "value": "2 or more (2–9 per session)"
         },
         {
-          "title": "Non-exclusive · fixed term",
-          "body": "Non-exclusive use within the contract term"
+          "label": "Genres",
+          "value": "Talk shows · podcasts · 1:1 interviews · studio variety · idol-produced content · reality / observational"
         },
         {
-          "title": "No-replication clause",
-          "body": "No replicating performers’ faces or voices"
+          "label": "Audio",
+          "value": "Per-speaker mic tracks, 48kHz/24-bit WAV + on-set mix track"
+        },
+        {
+          "label": "Dialogue traits",
+          "value": "Overlaps · backchannels · laughter · pauses, unedited"
+        },
+        {
+          "label": "Video (optional)",
+          "value": "Multi-cam 1080p–4K, original capture codec, same timecode as the audio. Every session for studio variety and reality; other genres only where multi-cam was shot"
+        },
+        {
+          "label": "Labels · included",
+          "value": "Speaker–mic track mapping (shot boundaries when video is included)"
+        },
+        {
+          "label": "Labels · add-on (paid)",
+          "value": "Transcripts · verbatim transcripts · dialogue events (overlap · backchannel · laughter · pause · repair) · speaker metadata · PII handling · scene captions"
         }
       ],
+      "specNote": "Dialogue hours = time during which conversation actually runs. Multiple speaker tracks are counted once.",
       "customBand": {
-        "title": "Need something slightly different?",
-        "body": "Change the speaker count, genre or labels and request a custom build.",
-        "button": "Request a custom version"
-      }
-    },
-    {
-      "slug": "speaker-separated",
-      "name": "Conversational Speech, Speaker-Separated",
-      "desc": "Natural Korean multi-party dialogue with overlaps, laughter and backchannels, one channel per speaker",
-      "carouselDesc": "Natural Korean multi-party dialogue with overlaps, laughter and backchannels, one channel per speaker",
-      "tags": [
-        "Full-duplex voice",
-        "Diarization",
-        "TTS"
-      ],
-      "stats": [
-        {
-          "value": "50000+",
-          "label": "Hours"
-        },
-        {
-          "value": "3+",
-          "label": "Overlap ratio"
-        }
-      ],
-      "problemPill": {
-        "caption": "Sound familiar?",
-        "body": "Need real back-and-forth conversation, not read speech?"
-      },
-      "descLines": [
-        "Unscripted Korean multi-party conversation.",
-        "Overlaps, laughter and backchannels are all there,",
-        "with one channel per speaker."
-      ],
-      "summary": {
-        "problems": [
-          "Train full-duplex voice models on real turn-taking",
-          "Diarize even overlapping speech",
-          "Expressive voices, not read-aloud speech"
-        ],
-        "receive": [
-          "Per-speaker WAV + JSON transcript",
-          "Per conversation session",
-          "Download link · cloud bucket"
-        ]
-      },
-      "useCases": [
-        {
-          "text": "Train full-duplex voice models on real turn-taking"
-        },
-        {
-          "text": "Diarize even overlapping speech"
-        },
-        {
-          "text": "Expressive voices, not read-aloud speech"
-        }
-      ],
-      "specTables": [
-        {
-          "title": "Scale · specs",
-          "rows": [
-            {
-              "label": "Total volume",
-              "value": "[Hours] · [Clips]"
-            },
-            {
-              "label": "Speakers",
-              "value": "2–6 people, Korean"
-            },
-            {
-              "label": "Genre",
-              "value": "Talk show · variety · radio · [other genres]"
-            },
-            {
-              "label": "Audio",
-              "value": "Per-speaker WAV, 48 kHz, one channel per speaker"
-            },
-            {
-              "label": "Conversation",
-              "value": "Overlap ratio · laughter and backchannel events marked"
-            }
-          ]
-        },
-        {
-          "title": "Labels",
-          "rows": [
-            {
-              "label": "Included",
-              "value": "Transcript, speaker timeline, overlap segments, laughter and backchannel events"
-            },
-            {
-              "label": "On request",
-              "value": "Emotion, other custom labels"
-            }
-          ]
-        }
-      ],
-      "delivery": [
-        {
-          "label": "File format",
-          "value": "Per-speaker WAV + JSON transcript"
-        },
-        {
-          "label": "Bundle unit",
-          "value": "Per conversation session"
-        },
-        {
-          "label": "Delivery method",
-          "value": "Download link · cloud bucket (manifest included)"
-        }
-      ],
-      "rights": [
-        {
-          "title": "Direct contract with the rights holder",
-          "body": "Contracted directly with the producer who owns the originals"
-        },
-        {
-          "title": "Performer consent scope",
-          "body": "Within the scope of performers’ consent to use their voice for AI training"
-        },
-        {
-          "title": "Face handling options",
-          "body": "Blur non-consenting faces or fully anonymize"
-        },
-        {
-          "title": "Non-exclusive · fixed term",
-          "body": "Non-exclusive use within the contract term"
-        },
-        {
-          "title": "No-replication clause",
-          "body": "No replicating performers’ faces or voices"
-        }
-      ],
-      "customBand": {
-        "title": "Need something slightly different?",
-        "body": "Change the speaker count, genre or labels and request a custom build.",
-        "button": "Request a custom version"
+        "title": "Need something a little different?",
+        "body": "Change the speaker count, language, genre, video and labels in a custom request.",
+        "button": "Request custom data based on this"
       }
     },
     {
       "slug": "multicam",
-      "name": "Synchronized Multi-Camera Originals",
-      "desc": "The same moment from several cameras, time-aligned, paired with the broadcast edit",
-      "carouselDesc": "The same moment from several cameras, time-aligned, paired with the broadcast edit",
+      "name": "Synchronized Multi-Cam",
+      "count": "5 datasets",
+      "desc": "The same moment shot on 4–12 cameras at once.\nEvery camera is aligned to timecode.",
+      "carouselDesc": "Originals of the same moment shot on 4–12 cameras at once.",
       "tags": [
         "Multi-view generation",
-        "Editing models",
+        "Camera control",
         "World models"
       ],
       "stats": [
         {
-          "value": "30000+",
-          "label": "Hours"
+          "value": "13,600h+",
+          "label": "Camera hours"
         },
         {
-          "value": "8+",
+          "value": "4–12",
           "label": "Cameras per scene"
         }
       ],
-      "problemPill": {
-        "caption": "Sound familiar?",
-        "body": "Short on real-world multi-camera data?"
-      },
       "descLines": [
-        "Originals of the same moment from several cameras, time-aligned.",
-        "Each is paired with the edit that actually aired."
+        "Originals of the same moment shot on 4–12 cameras at once.",
+        "Every camera is synced to one timecode, with crowds, moving cameras and real lighting kept as shot."
       ],
-      "summary": {
-        "problems": [
-          "Generate consistent video across viewpoints",
-          "Learn editing decisions from original → broadcast pairs",
-          "Reconstruct people in 3D from multiple angles"
-        ],
-        "receive": [
-          "Per-camera MP4 + broadcast edit MP4 + JSON",
-          "Per scene (camera bundle)",
-          "Download link · cloud bucket"
-        ]
-      },
-      "useCases": [
-        {
-          "text": "Generate consistent video across viewpoints"
-        },
-        {
-          "text": "Learn editing decisions from original → broadcast pairs"
-        },
-        {
-          "text": "Reconstruct people in 3D from multiple angles"
-        }
-      ],
-      "specTables": [
-        {
-          "title": "Scale · specs",
-          "rows": [
-            {
-              "label": "Total volume",
-              "value": "[Hours] · [Clips]"
-            },
-            {
-              "label": "People",
-              "value": "1–6+ people, Korean"
-            },
-            {
-              "label": "Genre",
-              "value": "Talk show · variety · music stage · live broadcast"
-            },
-            {
-              "label": "Cameras",
-              "value": "3–9+ per scene, aligned to a shared timecode"
-            },
-            {
-              "label": "Video",
-              "value": "Per-camera original MP4 + broadcast edit, 1080p – 4K"
-            }
-          ]
-        },
-        {
-          "title": "Labels",
-          "rows": [
-            {
-              "label": "Included",
-              "value": "Camera ID, shared timecode, segments used on air, 3-level captions"
-            },
-            {
-              "label": "On request",
-              "value": "Camera motion, other custom labels"
-            }
-          ]
-        }
+      "detailTags": [
+        "Multi-view generation",
+        "Camera control",
+        "World models"
       ],
       "delivery": [
         {
-          "label": "File format",
-          "value": "Per-camera MP4 + broadcast edit MP4 + JSON"
+          "label": "Files",
+          "value": "Per-camera original video"
         },
         {
-          "label": "Bundle unit",
-          "value": "Per scene (camera bundle)"
+          "label": "Bundle",
+          "value": "Continuous unedited sessions"
         },
         {
-          "label": "Delivery method",
-          "value": "Download link · cloud bucket (manifest included)"
+          "label": "Delivery",
+          "value": "Cloud · external drive"
         }
       ],
-      "rights": [
+      "spec": [
         {
-          "title": "Direct contract with the rights holder",
-          "body": "Contracted directly with the producer who owns the originals"
+          "label": "Total volume",
+          "value": "13,600 camera hours · ~2,900 filmed hours"
         },
         {
-          "title": "Performer consent scope",
-          "body": "Within the scope of performers’ consent to use their likeness for AI training"
+          "label": "Datasets",
+          "value": "Stage performances · studio variety · travel / location · outdoor variety · live-commerce studio (5)"
         },
         {
-          "title": "Face handling options",
-          "body": "Blur non-consenting faces or fully anonymize"
+          "label": "Cameras",
+          "value": "4–12 per scene (locked-off · handheld · drone · jib), aligned to one timecode"
         },
         {
-          "title": "Non-exclusive · fixed term",
-          "body": "Non-exclusive use within the contract term"
+          "label": "People",
+          "value": "Scenes with several people (4–9-member stage groups, 2–8 variety hosts and guests, etc.)"
         },
         {
-          "title": "No-replication clause",
-          "body": "No replicating performers’ faces or voices"
+          "label": "Video",
+          "value": "1080p–4K (stage 4K 60fps, studio 4K 30fps), original capture codec"
+        },
+        {
+          "label": "Picture",
+          "value": "Clean originals before captions and logos"
+        },
+        {
+          "label": "Labels · included",
+          "value": "Shot boundaries"
+        },
+        {
+          "label": "Labels · add-on (paid)",
+          "value": "Shot labels (shot type · camera movement) · scene captions · hand and body keypoints · de-identification"
+        }
+      ],
+      "specNote": "Camera hours = hours recorded by every camera added together; filmed hours = each moment counted once.",
+      "customBand": {
+        "title": "Need something a little different?",
+        "body": "Change the camera count, genre, resolution and labels in a custom request.",
+        "button": "Request custom data based on this"
+      }
+    },
+    {
+      "slug": "broadcast-pair",
+      "name": "Original–Broadcast Pairs",
+      "count": "3 datasets",
+      "desc": "The aired edit, paired with every camera original behind it.",
+      "carouselDesc": "The broadcast edit paired with every camera original.",
+      "tags": [
+        "Auto-editing",
+        "Highlights · short-form",
+        "Scene understanding"
+      ],
+      "stats": [
+        {
+          "value": "12,400h+",
+          "label": "Camera hours"
+        },
+        {
+          "value": "EDL included",
+          "label": "Music shows · studio variety"
+        }
+      ],
+      "descLines": [
+        "The broadcast edit, paired with every camera original that shot the scene.",
+        "Each cut carries which camera and which range it used (EDL), and unused angles and NG takes are included."
+      ],
+      "detailTags": [
+        "Auto-editing",
+        "Highlights · short-form",
+        "Scene understanding"
+      ],
+      "delivery": [
+        {
+          "label": "Files",
+          "value": "Per-camera originals + broadcast edit + edit data"
+        },
+        {
+          "label": "Bundle",
+          "value": "Continuous unedited sessions"
+        },
+        {
+          "label": "Delivery",
+          "value": "Cloud · external drive"
+        }
+      ],
+      "spec": [
+        {
+          "label": "Total volume",
+          "value": "12,400 camera hours · ~4,240 filmed hours"
+        },
+        {
+          "label": "Datasets (3)",
+          "value": "Music-show stage originals + broadcast, 4,200h (6–12 cameras, 4K 60fps)\nStudio variety originals + broadcast, 5,200h (4–8 cameras, 4K 30fps)\nInserts & scenery originals, 3,000h (1–2 cameras, 1080p–4K, places without people · unaired)"
+        },
+        {
+          "label": "Edit data",
+          "value": "For every broadcast cut, the camera used and the source in/out points (EDL) · included for music shows and studio variety"
+        },
+        {
+          "label": "Sync",
+          "value": "All cameras and the broadcast edit on one timecode; every camera records continuously"
+        },
+        {
+          "label": "Picture",
+          "value": "Clean originals before captions and logos, original capture codec"
+        },
+        {
+          "label": "Labels · included",
+          "value": "Shot boundaries · edit data (EDL)"
+        },
+        {
+          "label": "Labels · add-on (paid)",
+          "value": "Shot labels (shot type · camera movement) · scene captions · de-identification"
+        }
+      ],
+      "specNote": "Camera hours = hours recorded by every camera added together; filmed hours = each moment counted once.",
+      "customBand": {
+        "title": "Need something a little different?",
+        "body": "Change the genre, camera count, resolution and labels in a custom request.",
+        "button": "Request custom data based on this"
+      }
+    },
+    {
+      "slug": "presenter",
+      "name": "Live-Commerce Product Demos",
+      "count": "4 datasets",
+      "desc": "Broadcast originals of hosts explaining products with their words and hands.",
+      "carouselDesc": "Broadcast originals capturing product narration and hand actions together.",
+      "tags": [
+        "Vision-language-action (VLA)",
+        "Object manipulation",
+        "Virtual hosts"
+      ],
+      "stats": [
+        {
+          "value": "7,000h+",
+          "label": "Camera hours"
+        },
+        {
+          "value": "1–2",
+          "label": "Hosts"
+        }
+      ],
+      "descLines": [
+        "Live-commerce originals with narration and hand actions on the same timecode.",
+        "Continuous 1–3-hour sessions, with hand close-ups and wides shot at the same time."
+      ],
+      "detailTags": [
+        "Vision-language-action (VLA)",
+        "Object manipulation",
+        "Virtual hosts"
+      ],
+      "delivery": [
+        {
+          "label": "Files",
+          "value": "Per-camera video + host mic WAV"
+        },
+        {
+          "label": "Bundle",
+          "value": "Continuous unedited sessions"
+        },
+        {
+          "label": "Delivery",
+          "value": "Cloud · external drive"
+        }
+      ],
+      "spec": [
+        {
+          "label": "Total volume",
+          "value": "7,000 camera hours · ~3,150 filmed hours"
+        },
+        {
+          "label": "Datasets",
+          "value": "Host-led selling · viewer Q&A live · product demo close-ups · multi-angle product shots (4)"
+        },
+        {
+          "label": "Performers",
+          "value": "Hosts · sellers · 1–2 guests, all consented to AI training"
+        },
+        {
+          "label": "Products",
+          "value": "Beauty · food · fashion · household · small appliances"
+        },
+        {
+          "label": "Cameras",
+          "value": "1–3 (hand close-up + full host shot, 360° product turntable)"
+        },
+        {
+          "label": "Video · audio",
+          "value": "1080p 30fps–4K, original capture codec · host mic 48kHz/24-bit WAV, same timecode"
+        },
+        {
+          "label": "Labels · included",
+          "value": "Shot boundaries"
+        },
+        {
+          "label": "Labels · add-on (paid)",
+          "value": "Action segments (start/end · action name · target object · hand used) · hand and body keypoints · transcripts · scene captions · de-identification"
         }
       ],
       "customBand": {
-        "title": "Need something slightly different?",
-        "body": "Change the speaker count, genre or labels and request a custom build.",
-        "button": "Request a custom version"
+        "title": "Need something a little different?",
+        "body": "Change the product type, camera setup and labels in a custom request.",
+        "button": "Request custom data based on this"
       }
     },
     {
       "slug": "motion",
-      "name": "Whole-Body Human Motion",
-      "desc": "Natural motion and interaction from real productions, retargeted to humanoid format",
-      "carouselDesc": "Natural motion and interaction from real productions, retargeted to humanoid format",
+      "name": "Whole-Body Motion",
+      "desc": "Natural movement and interaction from real productions, converted to humanoid formats.",
+      "carouselDesc": "Movement from real shoots, converted to humanoid formats.",
       "tags": [
         "Humanoid control",
         "Motion generation"
       ],
       "stats": [
         {
-          "value": "10000+",
+          "value": "10,000h+",
           "label": "Motion hours"
         },
         {
-          "value": "Flexible",
+          "value": "Any",
           "label": "Robot format"
         }
       ],
-      "problemPill": {
-        "caption": "Sound familiar?",
-        "body": "Studio mocap not giving you natural motion?"
-      },
       "descLines": [
-        "Natural motion and person-to-person interaction from real productions,",
-        "retargeted to humanoid format and verified in simulation."
+        "Natural movement and person-to-person interaction from real shoots.",
+        "Retargeted to humanoid formats and verified in simulation."
       ],
-      "summary": {
-        "problems": [
-          "Natural, unscripted motion studio capture misses",
-          "Interaction between multiple people",
-          "Retargeted and verified in simulation"
-        ],
-        "receive": [
-          "MP4 + motion files (BVH · NPZ) + robot-format CSV",
-          "Per motion clip",
-          "Download link · cloud bucket"
-        ]
-      },
-      "useCases": [
-        {
-          "text": "Natural, unscripted motion studio capture misses"
-        },
-        {
-          "text": "Interaction between multiple people"
-        },
-        {
-          "text": "Retargeted and verified in simulation"
-        }
-      ],
-      "specTables": [
-        {
-          "title": "Scale · specs",
-          "rows": [
-            {
-              "label": "Total volume",
-              "value": "[Hours] · [Clips]"
-            },
-            {
-              "label": "People",
-              "value": "1 · 2 · 3+ people"
-            },
-            {
-              "label": "Motion types",
-              "value": "Dance · walking · locomotion · interaction · other"
-            },
-            {
-              "label": "Motion",
-              "value": "BVH · NPZ + robot-format CSV (Unitree G1, etc.)"
-            },
-            {
-              "label": "Video",
-              "value": "Original MP4 1080p – 4K, 1–4+ cameras"
-            }
-          ]
-        },
-        {
-          "title": "Labels",
-          "rows": [
-            {
-              "label": "Included",
-              "value": "Motion type, text description, simulation pass/fail, source clip ID"
-            },
-            {
-              "label": "On request",
-              "value": "Other robot formats, other custom labels"
-            }
-          ]
-        }
+      "detailTags": [
+        "Humanoid control",
+        "Motion generation"
       ],
       "delivery": [
         {
-          "label": "File format",
-          "value": "MP4 + motion files (BVH · NPZ) + robot-format CSV"
+          "label": "Files",
+          "value": "Video + motion files (BVH · NPZ) + robot-format CSV"
         },
         {
-          "label": "Bundle unit",
+          "label": "Bundle",
           "value": "Per motion clip"
         },
         {
-          "label": "Delivery method",
-          "value": "Download link · cloud bucket (manifest included)"
+          "label": "Delivery",
+          "value": "Cloud · external drive"
         }
       ],
-      "rights": [
+      "spec": [
         {
-          "title": "Direct contract with the rights holder",
-          "body": "Contracted directly with the producer who owns the originals"
+          "label": "Total volume",
+          "value": "10,000+ hours (motion hours)"
         },
         {
-          "title": "Performer consent scope",
-          "body": "Within the scope of performers’ consent to use their motion data for AI training"
+          "label": "People",
+          "value": "1 · 2 · 3 or more"
         },
         {
-          "title": "Face handling options",
-          "body": "Blur non-consenting faces or fully anonymize"
+          "label": "Motion types",
+          "value": "Dance · walking · locomotion · interaction · other"
         },
         {
-          "title": "Non-exclusive · fixed term",
-          "body": "Non-exclusive use within the contract term"
+          "label": "Motion",
+          "value": "BVH · NPZ + robot-format CSV (Unitree G1, etc.)"
         },
         {
-          "title": "No-replication clause",
-          "body": "No replicating performers’ faces or voices"
+          "label": "Video",
+          "value": "Originals 1080p–4K, 1–4+ cameras, original capture codec"
+        },
+        {
+          "label": "Labels · included",
+          "value": "Motion type · text description · simulation pass/fail · source clip ID"
+        },
+        {
+          "label": "Labels · add-on",
+          "value": "Other robot formats · other requested labels"
         }
       ],
       "customBand": {
-        "title": "Need something slightly different?",
-        "body": "Change the speaker count, genre or labels and request a custom build.",
-        "button": "Request a custom version"
+        "title": "Need something a little different?",
+        "body": "Change the people, motion types, robot format and labels in a custom request.",
+        "button": "Request custom data based on this"
       }
-    },
-    {
-      "slug": "presenter",
-      "name": "Presenter & Product Demo",
-      "desc": "Front-facing presenters explaining products, with performer consent for AI training",
-      "carouselDesc": "Front-facing presenters explaining products, with performer consent for AI training",
-      "tags": [
-        "Avatar",
-        "Product video generation"
-      ],
-      "stats": [
-        {
-          "value": "10000+",
-          "label": "Hours"
-        },
-        {
-          "value": "2+",
-          "label": "Presenters"
-        }
-      ],
-      "problemPill": {
-        "caption": "Sound familiar?",
-        "body": "Need presenter footage with consent on file?"
-      },
-      "descLines": [
-        "Front-facing presenters handling and explaining products.",
-        "Every performer consented to AI training, and the consent form is linked to each clip."
-      ],
-      "summary": {
-        "problems": [
-          "Learn hand–product interaction",
-          "Generate front-facing presenter video, consent on file",
-          "Generate product videos"
-        ],
-        "receive": [
-          "MP4 + JSON (consent form ID included)",
-          "Per clip",
-          "Download link · cloud bucket"
-        ]
-      },
-      "useCases": [
-        {
-          "text": "Learn hand–product interaction"
-        },
-        {
-          "text": "Generate front-facing presenter video, consent on file"
-        },
-        {
-          "text": "Generate product videos"
-        }
-      ],
-      "specTables": [
-        {
-          "title": "Scale · specs",
-          "rows": [
-            {
-              "label": "Total volume",
-              "value": "[Hours] · [Clips]"
-            },
-            {
-              "label": "Presenters",
-              "value": "1 · 2 · 3+ people, all consented to AI training"
-            },
-            {
-              "label": "Product types",
-              "value": "Beauty · food · electronics · other"
-            },
-            {
-              "label": "Location",
-              "value": "Studio · store · outdoor"
-            },
-            {
-              "label": "Video",
-              "value": "Original MP4 1080p – 4K, 1–3+ cameras"
-            }
-          ]
-        },
-        {
-          "title": "Labels",
-          "rows": [
-            {
-              "label": "Included",
-              "value": "Product type, hand–product contact segments, consent form ID, 3-level captions"
-            },
-            {
-              "label": "On request",
-              "value": "On-screen text segments, other custom labels"
-            }
-          ]
-        }
-      ],
-      "delivery": [
-        {
-          "label": "File format",
-          "value": "MP4 + JSON (consent form ID included)"
-        },
-        {
-          "label": "Bundle unit",
-          "value": "Per clip"
-        },
-        {
-          "label": "Delivery method",
-          "value": "Download link · cloud bucket (manifest included)"
-        }
-      ],
-      "rights": [
-        {
-          "title": "Direct contract with the rights holder",
-          "body": "Contracted directly with the producer who owns the originals"
-        },
-        {
-          "title": "Performer consent scope",
-          "body": "AI-training consent kept on file for every performer and linked to each clip"
-        },
-        {
-          "title": "Face handling options",
-          "body": "Blur non-consenting faces or fully anonymize"
-        },
-        {
-          "title": "Non-exclusive · fixed term",
-          "body": "Non-exclusive use within the contract term"
-        },
-        {
-          "title": "No-replication clause",
-          "body": "No replicating performers’ faces or voices"
-        }
-      ],
-      "customBand": {
-        "title": "Need something slightly different?",
-        "body": "Change the speaker count, genre or labels and request a custom build.",
-        "button": "Request a custom version"
-      },
-      "note": "※ Shown once enough consented footage is secured"
     }
   ],
   "detail": {
@@ -917,10 +653,7 @@ export const EN = {
       "Request a sample",
       "Contact us"
     ],
-    "problemsTitle": "Problems this data solves",
-    "receiveTitle": "How you receive it",
-    "useCasesEyebrow": "Use cases",
-    "useCasesTitle": "Problems this data solves",
+    "specTitle": "Scale · specs",
     "sampleCta": {
       "eyebrow": "Request a sample",
       "title": "Get a sample of this collection",
@@ -930,10 +663,6 @@ export const EN = {
         "Contact us"
       ]
     },
-    "deliveryEyebrow": "Delivery",
-    "deliveryTitle": "How you receive it",
-    "rightsEyebrow": "Rights & consent",
-    "rightsTitle": "Rights & consent",
     "carouselTitle": "Browse other datasets",
     "carouselMore": "View details"
   },
@@ -950,16 +679,29 @@ export const EN = {
     ],
     "flowTitle": "What happens next",
     "flow": [
-      "We reply by email within 2 business days — a proposed sample plus 1–2 follow-up questions",
-      "Sample delivery: download link + data card + manifest",
-      "Within a week of the sample, we confirm format, volume and pricing"
+      {
+        "title": "Send your requirements",
+        "body": "One line is enough. e.g. “3+ speakers overlapping, per-speaker original tracks”"
+      },
+      {
+        "title": "Sample pack & quote (5 business days, after mutual NDA)",
+        "body": "Matching sample clips · track layout and recording specs · available volume · usage scope and license terms"
+      },
+      {
+        "title": "Confirm volume & pricing",
+        "body": "Usage scope and delivery contents are written into the contract."
+      },
+      {
+        "title": "Delivery & acceptance",
+        "body": "10 business days to review after delivery; we redeliver if specs or volume differ."
+      }
     ],
     "quick": {
       "title": "Just leave your work email",
       "body": "We’ll email you a proposed sample and the data card first.",
       "placeholder": "name@company.com",
       "button": "Send",
-      "note": "Work email only · we reply within 2 business days"
+      "note": "Sample and quote within 5 business days of a mutual NDA"
     },
     "divider": "Or tell us more and we’ll pick a closer match",
     "form": {
@@ -1020,10 +762,10 @@ export const EN = {
       ],
       "consentTitle": "Consent to collection and use of personal data",
       "consentRequired": "I agree to the Privacy Policy.",
-      "consentOptional": "I agree to receive marketing updates from HEIMDEX.",
+      "consentOptional": "I agree to receive marketing updates from Heimdex.",
       "viewFull": "View full text",
       "submit": "Request a sample",
-      "footNote1": "We reply within 2 business days",
+      "footNote1": "We reply within 5 business days",
       "footNote2": "Samples are for evaluation only; training use requires a separate agreement.",
       "footLink": "Privacy policy",
       "required": "(Required)",
@@ -1035,12 +777,12 @@ export const EN = {
   },
   "submitted": {
     "title": "Your sample request is in.",
-    "body": "We’ll reply within 2 business days with a sample plan.",
+    "body": "We’ll reply within 5 business days with a sample plan.",
     "summaryLabel": "Your request",
     "stepsTitle": "What happens next",
     "steps": [
       {
-        "title": "Reply within 2 business days",
+        "title": "Reply within 5 business days",
         "body": "We confirm your request by email with a proposed sample and 1–2 follow-up questions"
       },
       {
@@ -1065,7 +807,7 @@ export const EN = {
     ],
     "bodyLines": [
       "In a 15-minute call we’ll find where your video workflow loses time",
-      "and estimate how much HEIMDEX can save you."
+      "and estimate how much Heimdex can save you."
     ],
     "name": "Name",
     "namePh": "Enter your name.",
@@ -1081,7 +823,7 @@ export const EN = {
     "messagePh": "Tell us what you need.",
     "consentTitle": "Consent to collection and use of personal data",
     "consentRequired": "I agree to the Privacy Policy.",
-    "consentOptional": "I agree to receive marketing updates from HEIMDEX.",
+    "consentOptional": "I agree to receive marketing updates from Heimdex.",
     "viewFull": "View full text",
     "submit": "Book a demo",
     "required": "(Required)",

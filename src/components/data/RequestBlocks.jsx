@@ -38,7 +38,7 @@ export function SegmentedControl({ options, value, onChange }) {
           role="tab"
           aria-selected={value === i}
           onClick={() => onChange(i)}
-          className={`h-10 rounded-[9px] px-[18px] text-[14px] font-bold tracking-[-0.03em] transition-colors ${
+          className={`h-10 rounded-[9px] px-[18px] text-[14px] font-semibold tracking-[-0.03em] transition-colors ${
             value === i ? 'bg-white text-hx shadow-[0_1px_2px_rgba(10,34,64,0.06)]' : 'text-ink-sub hover:text-ink'
           }`}
         >
@@ -53,12 +53,15 @@ export function RequestFlow() {
   const c = useDataCopy().request
   return (
     <div className="border-t border-line pt-[19px]">
-      <p className="text-[14px] font-bold tracking-[-0.03em] text-ink-sub">{c.flowTitle}</p>
-      <ol className="mt-6 flex flex-col gap-6">
+      <p className="text-[14px] font-semibold tracking-[-0.03em] text-ink-sub">{c.flowTitle}</p>
+      <ol className="mt-6 flex flex-col gap-5">
         {c.flow.map((s, i) => (
-          <li key={s} className="flex items-start gap-[14px]">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-50 text-[12px] font-bold text-accent">{i + 1}</span>
-            <span className="pt-1 text-[14px] tracking-[-0.03em] text-ink-sub">{s}</span>
+          <li key={s.title} className="flex items-start gap-[14px]">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-50 pt-px text-[12px] font-bold leading-none text-accent">{i + 1}</span>
+            <span className="pt-1">
+              <span className="block text-[14px] font-semibold tracking-[-0.03em] text-ink">{s.title}</span>
+              <span className="mt-1 block text-[13px] leading-[1.5] tracking-[-0.03em] text-ink-sub">{s.body}</span>
+            </span>
           </li>
         ))}
       </ol>
@@ -72,7 +75,7 @@ export function SamplePackage() {
   const [root, ...rest] = files
   return (
     <div className="rounded-[20px] border border-line bg-white px-6 py-[23px]">
-      <p className="flex items-center gap-2.5 text-[14px] font-bold tracking-[-0.03em] text-ink">
+      <p className="flex items-center gap-2.5 text-[14px] font-semibold tracking-[-0.03em] text-ink">
         <img src={A(root.icon)} alt="" width="18" height="18" /> {root.name}
       </p>
       <ul className="ml-2 mt-1.5 border-l border-[#E9EDF2] pl-4">
@@ -86,7 +89,7 @@ export function SamplePackage() {
   )
 }
 
-export function QuickRequest({ accentButton = false }) {
+export function QuickRequest() {
   const c = useDataCopy().request
   const { lang } = useLang()
   const navigate = useNavigate()
@@ -114,7 +117,7 @@ export function QuickRequest({ accentButton = false }) {
       <div className="flex items-center gap-[11px]">
         <IconTile icon={A('icon-send.svg')} iconSize={22} className="m-[5px]" />
         <div>
-          <p className="text-[20px] font-extrabold tracking-[-0.03em] text-ink max-sm:text-[18px]">{c.quick.title}</p>
+          <p className="text-[20px] font-semibold tracking-[-0.03em] text-ink max-sm:text-[18px]">{c.quick.title}</p>
           <p className="mt-1.5 text-[14px] tracking-[-0.03em] text-ink-sub">{c.quick.body}</p>
         </div>
       </div>
@@ -125,14 +128,12 @@ export function QuickRequest({ accentButton = false }) {
           onChange={(e) => setEmail(e.target.value)}
           placeholder={c.quick.placeholder}
           aria-label={c.form.email}
-          className={`${inputCls} h-14 flex-1`}
+          className={`${inputCls} h-14 min-w-0 flex-1 max-sm:flex-none`}
         />
         <button
           type="submit"
           disabled={busy}
-          className={`h-14 shrink-0 rounded-[28px] px-[26px] text-[16px] font-bold tracking-[-0.03em] text-white transition-colors disabled:opacity-60 ${
-            accentButton ? 'bg-accent hover:bg-[#2B7FEA]' : 'bg-hx hover:bg-primary-600'
-          }`}
+          className="h-14 shrink-0 rounded-[28px] bg-accent px-[26px] text-[16px] font-semibold tracking-[-0.03em] text-white transition-colors hover:bg-accent-600 disabled:opacity-60"
         >
           {c.quick.button}
         </button>
@@ -153,15 +154,24 @@ export function OrDivider() {
   )
 }
 
-function Question({ n, title, hint, children, className = '' }) {
+// Hint and answers sit under the title text, not under the number badge
+// (24px badge + 10px gap = 34px).
+function Question({ n, title, hint, required, children, className = '' }) {
   return (
     <fieldset className={className}>
       <legend className="flex items-center gap-2.5">
         <NumberBadge n={n} />
-        <span className="text-[18px] font-extrabold tracking-[-0.03em] text-ink">{title}</span>
+        <span className="text-[18px] font-semibold tracking-[-0.03em] text-ink">
+          {title}
+          {required && (
+            <span aria-hidden="true" className="ml-0.5 text-accent">
+              *
+            </span>
+          )}
+        </span>
       </legend>
       {hint && <p className="ml-[34px] mt-[5px] text-[14px] tracking-[-0.03em] text-ink-mute">{hint}</p>}
-      <div className="mt-[17px]">{children}</div>
+      <div className="ml-[34px] mt-[17px]">{children}</div>
     </fieldset>
   )
 }
@@ -230,7 +240,7 @@ export function SampleForm({ initialCollections = [], mode = 0 }) {
       onSubmit={onSubmit}
       className="flex flex-col gap-[45px] rounded-[24px] bg-white px-11 pb-12 pt-10 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.5)] max-md:px-6 max-sm:px-5"
     >
-      <Question n={1} title={c.basic}>
+      <Question n={1} title={c.basic} required>
         <div className="grid grid-cols-3 gap-3 max-md:grid-cols-1">
           {[
             ['name', c.name, c.namePh, 'text'],
@@ -245,7 +255,7 @@ export function SampleForm({ initialCollections = [], mode = 0 }) {
         </div>
       </Question>
 
-      <Question n={2} title={c.q2} hint={c.q2hint}>
+      <Question n={2} title={c.q2} hint={c.q2hint} required>
         <div className="flex flex-wrap gap-x-2 gap-y-3">
           {chips.map((label, i) => (
             <Chip key={label} selected={cols.includes(i)} onClick={() => setCols((s) => toggle(s, i))}>
@@ -309,7 +319,7 @@ export function SampleForm({ initialCollections = [], mode = 0 }) {
       </div>
 
       <div className="border-t border-line pt-7">
-        <p className="text-[18px] font-bold tracking-[-0.03em] text-ink">{c.consentTitle}</p>
+        <p className="text-[18px] font-semibold tracking-[-0.03em] text-ink">{c.consentTitle}</p>
         <div className="mt-[18px] flex flex-col gap-2.5">
           <ConsentRow
             checked={agree}
@@ -328,7 +338,7 @@ export function SampleForm({ initialCollections = [], mode = 0 }) {
         <button
           type="submit"
           disabled={busy}
-          className="mt-6 h-[55px] w-full rounded-[28px] bg-hx text-[16px] font-bold tracking-[-0.03em] text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-6 h-[55px] w-full rounded-[28px] bg-accent text-[16px] font-semibold tracking-[-0.03em] text-white transition-colors hover:bg-accent-600 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {c.submit}
         </button>

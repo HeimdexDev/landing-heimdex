@@ -2,7 +2,7 @@
 // block types: { p } · { ol } · { ul } ; list item may be string or { t, sub: [...] }
 
 export const TERMS = {
-  title: '하임덱스(HEIMDEX) 서비스 이용약관',
+  title: '하임덱스(Heimdex) 서비스 이용약관',
   intro: '',
   sections: [
     {

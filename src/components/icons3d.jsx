@@ -44,89 +44,96 @@ export function IconSearch3d({ size = 48, className }) {
   )
 }
 
+// The three security icons share one recipe so they read as a set: a light
+// silver body, the same brand-blue badge in the bottom-right corner, and a
+// white glyph in the badge that carries the meaning.
+const SILVER = ['#F4F7FB', '#9DB2CB']
+function Badge({ id, children }) {
+  return (
+    <>
+      <circle cx="36" cy="36" r="9" fill={`url(#${id})`} stroke="#fff" strokeWidth="2.5" />
+      {children}
+    </>
+  )
+}
+function Grad({ id, from, to, x1 = 4, y1 = 4, x2 = 44, y2 = 44 }) {
+  return (
+    <linearGradient id={id} x1={x1} y1={y1} x2={x2} y2={y2} gradientUnits="userSpaceOnUse">
+      <stop stopColor={from} />
+      <stop offset="1" stopColor={to} />
+    </linearGradient>
+  )
+}
+const BADGE = ['#6AAEFF', '#2B7FEA']
+
+// Cloud with a "no" badge — nothing gets uploaded.
 export function IconNoCloud3d({ size = 48, className }) {
-  const id = useIds('cloud', 'badge')
+  const id = useIds('body', 'badge')
   return (
     <Svg size={size} className={className}>
       <defs>
-        <linearGradient id={id.cloud} x1="6" y1="10" x2="40" y2="38">
-          <stop stopColor="#DCE6F1" />
-          <stop offset="1" stopColor="#5F86B0" />
-        </linearGradient>
-        <linearGradient id={id.badge} x1="28" y1="28" x2="44" y2="44">
-          <stop stopColor="#FF7B7B" />
-          <stop offset="1" stopColor="#F04452" />
-        </linearGradient>
+        <Grad id={id.body} from={SILVER[0]} to={SILVER[1]} x1={6} y1={10} x2={40} y2={38} />
+        <Grad id={id.badge} from={BADGE[0]} to={BADGE[1]} x1={28} y1={28} x2={44} y2={44} />
       </defs>
-      <path
-        d="M13 36h21.5a9 9 0 0 0 1.4-17.9A12 12 0 0 0 12.7 20.3 7.9 7.9 0 0 0 13 36z"
-        fill={`url(#${id.cloud})`}
-      />
-      <ellipse cx="20" cy="20" rx="6" ry="3" transform="rotate(-25 20 20)" fill="#fff" opacity="0.7" />
-      <circle cx="36" cy="36" r="9" fill={`url(#${id.badge})`} stroke="#fff" strokeWidth="2.5" />
-      <path d="M32 40l8-8" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+      <path d="M13 36h21.5a9 9 0 0 0 1.4-17.9A12 12 0 0 0 12.7 20.3 7.9 7.9 0 0 0 13 36z" fill={`url(#${id.body})`} />
+      <ellipse cx="20" cy="20" rx="6" ry="3" transform="rotate(-25 20 20)" fill="#fff" opacity="0.8" />
+      <Badge id={id.badge}>
+        <circle cx="36" cy="36" r="4.6" stroke="#fff" strokeWidth="2.2" />
+        <path d="M32.8 39.2l6.4-6.4" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" />
+      </Badge>
     </Svg>
   )
 }
 
+// Two rack units with a check badge — runs on your own servers.
 export function IconServer3d({ size = 48, className }) {
-  const id = useIds('unit', 'shield')
+  const id = useIds('body', 'badge')
   return (
     <Svg size={size} className={className}>
       <defs>
-        <linearGradient id={id.unit} x1="6" y1="6" x2="38" y2="40">
-          <stop stopColor="#6B7684" />
-          <stop offset="1" stopColor="#333D4B" />
-        </linearGradient>
-        <linearGradient id={id.shield} x1="28" y1="26" x2="44" y2="46">
-          <stop stopColor="#5F86B0" />
-          <stop offset="1" stopColor="#1B3D60" />
-        </linearGradient>
+        <Grad id={id.body} from={SILVER[0]} to={SILVER[1]} x1={6} y1={6} x2={38} y2={40} />
+        <Grad id={id.badge} from={BADGE[0]} to={BADGE[1]} x1={28} y1={28} x2={44} y2={44} />
       </defs>
-      {[6, 24].map((y) => (
+      {[7, 24].map((y) => (
         <g key={y}>
-          <rect x="4" y={y} width="36" height="15" rx="5" fill={`url(#${id.unit})`} />
-          <rect x="4" y={y} width="36" height="5" rx="2.5" fill="#fff" opacity="0.12" />
-          <circle cx="11" cy={y + 7.5} r="2.2" fill="#3DDC84" />
-          <circle cx="17.5" cy={y + 7.5} r="2.2" fill="#8BA9C9" />
-          <rect x="24" y={y + 6} width="11" height="3" rx="1.5" fill="#fff" opacity="0.28" />
+          <rect x="4" y={y} width="34" height="14" rx="4.5" fill={`url(#${id.body})`} />
+          <rect x="6" y={y + 1.5} width="30" height="3" rx="1.5" fill="#fff" opacity="0.7" />
+          <circle cx="10.5" cy={y + 8.5} r="2" fill="#3DDC84" />
+          <rect x="15.5" y={y + 7.3} width="12" height="2.4" rx="1.2" fill="#5F7A99" opacity="0.45" />
         </g>
       ))}
-      <path
-        d="M36 26.5l8 3v5.6c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10v-5.6z"
-        fill={`url(#${id.shield})`}
-        stroke="#fff"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-      <path d="M32.6 35.6l2.4 2.4 4.4-4.6" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <Badge id={id.badge}>
+        <path d="M32.3 36.2l2.5 2.5 4.6-4.8" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      </Badge>
     </Svg>
   )
 }
 
-// A face reduced to mosaic blocks — "privacy blur".
+// A portrait whose face is a mosaic, with an AI sparkle badge — automatic blur.
 export function IconBlurFace3d({ size = 48, className }) {
-  const id = useIds('tile')
-  const blocks = [
-    [18, 10, 0.95], [24, 10, 0.75],
-    [15, 16, 0.8], [21, 16, 0.55], [27, 16, 0.9],
-    [15, 22, 0.65], [21, 22, 0.95], [27, 22, 0.6],
-    [18, 28, 0.85], [24, 28, 0.7],
-  ]
+  const id = useIds('body', 'badge', 'clip')
+  // 3×3 mosaic over the head; varied shades read as a pixelated face.
+  const tiles = [0.55, 0.3, 0.5, 0.35, 0.6, 0.3, 0.5, 0.35, 0.55]
   return (
     <Svg size={size} className={className}>
       <defs>
-        <linearGradient id={id.tile} x1="4" y1="4" x2="44" y2="44">
-          <stop stopColor="#B7A3FF" />
-          <stop offset="1" stopColor="#6B4BFF" />
-        </linearGradient>
+        <Grad id={id.body} from={SILVER[0]} to={SILVER[1]} x1={4} y1={5} x2={36} y2={40} />
+        <Grad id={id.badge} from={BADGE[0]} to={BADGE[1]} x1={28} y1={28} x2={44} y2={44} />
+        <clipPath id={id.clip}>
+          <rect x="4" y="5" width="32" height="34" rx="7" />
+        </clipPath>
       </defs>
-      <rect x="4" y="4" width="40" height="40" rx="12" fill={`url(#${id.tile})`} />
-      <rect x="4" y="4" width="40" height="12" rx="6" fill="#fff" opacity="0.12" />
-      {blocks.map(([x, y, o]) => (
-        <rect key={`${x}-${y}`} x={x} y={y} width="6" height="6" rx="1.5" fill="#fff" opacity={o} />
+      <rect x="4" y="5" width="32" height="34" rx="7" fill={`url(#${id.body})`} />
+      <rect x="6" y="7" width="28" height="4" rx="2" fill="#fff" opacity="0.6" />
+      <g clipPath={`url(#${id.clip})`}>
+        <path d="M8.5 40v-2a8.5 8.5 0 0 1 8.5-8.5h6a8.5 8.5 0 0 1 8.5 8.5v2z" fill="#5F7A99" opacity="0.55" />
+      </g>
+      {tiles.map((o, i) => (
+        <rect key={i} x={13.6 + (i % 3) * 4.6} y={12.4 + Math.floor(i / 3) * 4.6} width="4.2" height="4.2" rx="1" fill="#3F5D80" opacity={o} />
       ))}
-      <path d="M12 44v-3a8 8 0 0 1 8-8h8a8 8 0 0 1 8 8v3z" fill="#fff" opacity="0.5" />
+      <Badge id={id.badge}>
+        <path d="M36 31.2c.5 2.6 2.2 4.3 4.8 4.8-2.6.5-4.3 2.2-4.8 4.8-.5-2.6-2.2-4.3-4.8-4.8 2.6-.5 4.3-2.2 4.8-4.8z" fill="#fff" />
+      </Badge>
     </Svg>
   )
 }

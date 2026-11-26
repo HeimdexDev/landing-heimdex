@@ -23,7 +23,7 @@ const PILL =
 const PILL_SOLID = `${PILL} bg-hx text-white hover:bg-primary-600`
 const PILL_LINE = `${PILL} border border-ink text-ink hover:bg-ink/[0.04]`
 
-const WRAP = 'mx-auto max-w-[1200px]'
+const WRAP = 'mx-auto max-w-content'
 
 function Shell({ tab, title, lead, hero, children }) {
   const { lang, t } = useLang()
@@ -156,7 +156,7 @@ function AboutHero() {
           Insight Moves.
         </h1>
         <p className="mt-7 text-[26px] font-bold tracking-[-0.03em] text-ink max-sm:text-[19px]">
-          {t('영상은 그 자리에, 인사이트만 움직이는 하임덱스', 'Heimdex — the video stays put, only the insight moves')}
+          {t('영상은 그 자리에, 인사이트만 움직이는 하임덱스', 'Heimdex: the video stays put, only the insight moves')}
         </p>
       </Reveal>
     </section>
@@ -166,7 +166,7 @@ function AboutHero() {
 const PRODUCT_CARDS = [
   {
     key: 'heimdex',
-    name: 'HEIMDEX',
+    name: 'Heimdex',
     mark: '/assets/logo-mark-white.svg',
     img: '/assets/stage/stage-8.jpg',
     desc: '팀 · 기업 · 기관을 위한 온프레미스 AI 영상 검색',
@@ -178,7 +178,7 @@ const PRODUCT_CARDS = [
   { key: 'auto-recut', img: '/assets/creative/mkt-scene-3.jpg', tall: true },
   {
     key: 'heimlog',
-    name: 'heimlog',
+    name: 'Heimlog',
     mark: '/assets/heimlog-mark-white.svg',
     img: '/assets/vlog/clip-3.jpg',
     desc: '찍어둔 여행 · 일상 영상을 AI가 브이로그로 만들어 주는 서비스',
@@ -250,13 +250,13 @@ export function CompanyAbout() {
                 <p>
                   {t(
                     '영상에는 대화, 얼굴, 사물, 장면, 감정 등 풍부한 정보가 담겨 있습니다. 하지만 대부분의 조직은 수천 시간의 영상 중 특정 순간을 찾는 데 어려움을 겪습니다.',
-                    'Video is rich with conversations, faces, objects, scenes and emotion — yet most organizations struggle to find a single moment in thousands of hours of footage.',
+                    'Video is rich with conversations, faces, objects, scenes and emotion, yet most organizations struggle to find a single moment in thousands of hours of footage.',
                   )}
                 </p>
                 <p>
                   {t(
                     '하임덱스는 영상을 의미 수준에서 이해하는 AI로 모든 초를 검색 가능하게, 모든 장면을 재사용 가능하게 만듭니다. 원본은 그 자리에 둔 채로요.',
-                    'Heimdex uses AI that understands video at the level of meaning to make every second searchable and every scene reusable — with the originals left where they are.',
+                    'Heimdex uses AI that understands video at the level of meaning to make every second searchable and every scene reusable, with the originals left where they are.',
                   )}
                 </p>
               </div>
@@ -562,7 +562,7 @@ export function CompanyBrand() {
     <Shell
       tab="brand"
       title={t('하임덱스 브랜드', 'The Heimdex brand')}
-      lead={t('로고 · 컬러 · 타이포그래피 등 하임덱스를 표현하는 기본 요소를 소개해요.', 'The basics that make Heimdex look like Heimdex — logo, color and type.')}
+      lead={t('로고 · 컬러 · 타이포그래피 등 하임덱스를 표현하는 기본 요소를 소개해요.', 'The basics that make Heimdex look like Heimdex: logo, color and type.')}
     >
       <SloganBanner
         body={t(
@@ -592,7 +592,7 @@ export function CompanyBrand() {
             >
               <span className="flex items-center gap-[9px]">
                 <img src="/assets/logo-symbol.svg" alt="" className="h-[42px] w-[39px]" />
-                <img src="/assets/logo-wordmark.svg" alt="heimdex" className="h-[28px] w-[136px]" />
+                <img src="/assets/logo-wordmark.svg" alt="Heimdex" className="h-[28px] w-[136px]" />
               </span>
             </LogoTile>
             <LogoTile
@@ -605,7 +605,7 @@ export function CompanyBrand() {
             >
               <span className="flex items-center gap-[9px]">
                 <img src="/assets/logo-mark-white.svg" alt="" className="h-[40px] w-[40px]" />
-                <img src="/assets/logo-wordmark-white.svg" alt="heimdex" className="h-[28px] w-[136px]" />
+                <img src="/assets/logo-wordmark-white.svg" alt="Heimdex" className="h-[28px] w-[136px]" />
               </span>
             </LogoTile>
             <LogoTile label={t('심볼', 'Symbol')} files={[{ label: 'SVG', href: '/assets/logo-symbol.svg' }]}>
@@ -650,7 +650,7 @@ export function CompanyBrand() {
                 {t('영상 속 원하는 장면', 'The scene you need')}
               </p>
               <p className="mt-4 text-[16px] leading-[1.7] text-ink-sub">
-                {t('검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로 만들어 드립니다.', 'One search finds the scene — and builds the short-form for you.')}
+                {t('검색 한 줄로 필요한 장면을 찾고 숏폼까지 자동으로 만들어 드립니다.', 'One search finds the scene and builds the short-form for you.')}
               </p>
               <div className="mt-8 flex gap-6 text-[14px] text-ink-sub">
                 <span className="font-normal">Regular 400</span>
@@ -662,7 +662,7 @@ export function CompanyBrand() {
               <p className="text-[13px] font-semibold text-white/60">{t('슬로건 · 영문 브랜드명', 'Slogan · English brand names')}</p>
               <p className="mt-2 font-product text-[28px] font-bold">Product Sans</p>
               <p className="mt-8 font-product text-[44px] font-bold leading-[1.15] max-sm:text-[34px]">Data Stays, Insight Moves.</p>
-              <p className="mt-4 font-product text-[18px] text-white/70">HEIMDEX · Scene Intelligence · Rights Monitor · Auto Recut</p>
+              <p className="mt-4 font-product text-[18px] text-white/70">Heimdex · Scene Intelligence · Rights Monitor · Auto Recut</p>
               <div className="mt-8 flex gap-6 font-product text-[14px] text-white/70">
                 <span className="font-normal">Regular 400</span>
                 <span className="font-bold">Bold 700</span>
@@ -678,26 +678,26 @@ export function CompanyBrand() {
           <div>
             <Head
               eyebrow={t('서브 브랜드', 'Sub-brand')}
-              title="HEIMLOG by HEIMDEX"
+              title="Heimlog by Heimdex"
               lead={t(
-                '개인 크리에이터용 제품 하임로그는 하임덱스의 서브 브랜드예요. 자체 코랄 컬러를 쓰고, 푸터와 회사 소개에는 "HEIMLOG by HEIMDEX"로 귀속을 표기해요.',
-                'heimlog, our product for individual creators, is a Heimdex sub-brand. It has its own coral color and is credited as "HEIMLOG by HEIMDEX" in footers and company copy.',
+                '개인 크리에이터용 제품 하임로그는 하임덱스의 서브 브랜드예요. 자체 코랄 컬러를 쓰고, 푸터와 회사 소개에는 "Heimlog by Heimdex"로 귀속을 표기해요.',
+                'Heimlog, our product for individual creators, is a Heimdex sub-brand. It has its own coral color and is credited as "Heimlog by Heimdex" in footers and company copy.',
               )}
             />
             <Reveal className="mt-8 grid grid-cols-2 gap-4">
               <div className="flex aspect-[16/9] items-center justify-center rounded-[16px] bg-white ring-1 ring-black/[0.05]">
-                <img src="/assets/heimlog-lockup-dark.svg" alt="heimlog" className="h-[30px] w-auto" />
+                <img src="/assets/heimlog-lockup-dark.svg" alt="Heimlog" className="h-[30px] w-auto" />
               </div>
-              <Swatch c={{ name: 'heimlog coral', ko: '하임로그 코랄', hex: '#FF7A66', text: 'ink' }} />
+              <Swatch c={{ name: 'Heimlog coral', ko: '하임로그 코랄', hex: '#FF7A66', text: 'ink' }} />
             </Reveal>
           </div>
           <Reveal delay={100} className="rounded-[20px] bg-white p-8 max-sm:p-6">
             <p className="text-[17px] font-bold text-ink">{t('표기 원칙', 'Naming rules')}</p>
             <ul className="mt-5 flex flex-col gap-4 text-[15px] leading-[1.6]">
               {[
-                [true, t('제품 하위는 "HEIMDEX / 하임로그"로 표기해요.', 'Products are written "HEIMDEX / heimlog".')],
+                [true, t('제품 하위는 "Heimdex / 하임로그"로 표기해요.', 'Products are written "Heimdex / Heimlog".')],
                 [true, t('비즈니스용 · 개인용으로 구분해요. "B2B · B2C"라는 말은 쓰지 않아요.', 'Say "for business / for individuals", not "B2B / B2C".')],
-                [true, t('하임로그는 "HEIMLOG by HEIMDEX"로 귀속을 밝혀요.', 'Credit heimlog as "HEIMLOG by HEIMDEX".')],
+                [true, t('하임로그는 "Heimlog by Heimdex"로 귀속을 밝혀요.', 'Credit Heimlog as "Heimlog by Heimdex".')],
                 [false, t('heimlight · 하임라이트 · Heimdex Vlog AI · 하임덱스 브이로그 표기는 쓰지 않아요.', 'Don’t use heimlight, Heimdex Vlog AI or "Heimdex vlog".')],
               ].map(([ok, text]) => (
                 <li key={text} className="flex gap-3">
@@ -736,16 +736,16 @@ export function CompanyCareers() {
       {/* 우리가 만드는 것 */}
       <section className="hx-section py-[120px] max-sm:py-20">
         <div className={WRAP}>
-          <Head eyebrow={t('우리가 만드는 것', 'What we build')} title={t('비즈니스와 크리에이터, 두 개의 제품', 'Two products — for business and for creators')} />
+          <Head eyebrow={t('우리가 만드는 것', 'What we build')} title={t('비즈니스와 크리에이터, 두 개의 제품', 'Two products: for business and for creators')} />
           <Reveal className="mt-12 grid grid-cols-2 gap-5 max-md:grid-cols-1">
             <div className="relative overflow-hidden rounded-[20px] bg-hx p-8 text-white max-sm:p-6">
               <div aria-hidden className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-primary-500/50 blur-[80px]" />
               <p className="relative text-[13px] font-semibold text-primary-300">{t('비즈니스용', 'For business')}</p>
-              <p className="relative mt-1 font-product text-[28px] font-bold">HEIMDEX</p>
+              <p className="relative mt-1 font-product text-[28px] font-bold">Heimdex</p>
               <p className="relative mt-3 text-[15px] leading-[1.7] text-white/70">
                 {t(
                   '원본을 옮기지 않고 영상 아카이브에서 장면을 찾고, 지키고, 다시 만드는 온프레미스 AI.',
-                  'On-premise AI that finds, protects and remakes scenes in a video archive — without moving the originals.',
+                  'On-premise AI that finds, protects and remakes scenes in a video archive, without moving the originals.',
                 )}
               </p>
               <div className="relative mt-6 flex flex-wrap gap-1.5">
@@ -758,7 +758,7 @@ export function CompanyCareers() {
             </div>
             <div className="relative overflow-hidden rounded-[20px] bg-heimlog-cream p-8 max-sm:p-6">
               <p className="text-[13px] font-semibold text-heimlog-ink">{t('개인용', 'For individuals')}</p>
-              <img src="/assets/heimlog-lockup-dark.svg" alt="heimlog" className="mt-2.5 h-[26px] w-auto" />
+              <img src="/assets/heimlog-lockup-dark.svg" alt="Heimlog" className="mt-2.5 h-[26px] w-auto" />
               <p className="mt-3 text-[15px] leading-[1.7] text-ink-sub">
                 {t(
                   '찍어둔 여행 · 일상 영상을 AI가 골라 자막 · 블러까지 입혀 브이로그로 만들어 주는 서비스.',

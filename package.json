@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/check-hubspot-options.mjs && vite build && node scripts/prerender.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:mobile": "node scripts/check-mobile.mjs",
+    "build:check": "npm run build && node scripts/add-mobile-check.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.460.0",
@@ -17,6 +19,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "playwright": "^1.48.2",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
     "vite": "^5.4.11"

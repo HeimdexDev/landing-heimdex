@@ -4,16 +4,16 @@
 // product facts here without checking them.
 export const FAQ = [
   {
-    q: '하임덱스(HEIMDEX)는 어떤 서비스인가요?',
-    qEn: 'What is HEIMDEX?',
+    q: '하임덱스(Heimdex)\u2060는 어떤 서비스인가요?',
+    qEn: 'What is Heimdex?',
     a: '하임덱스는 쌓여 있는 영상 아카이브에서 원하는 장면을 말하듯 검색해 찾고(Scene Intelligence), 무단 유통을 감지하고(Rights Monitor), 찾은 장면을 숏폼·하이라이트로 자동 재편집하는(Auto Recut) AI 영상 검색 솔루션입니다.',
-    aEn: 'HEIMDEX is an AI video search solution: search your video archive for any scene the way you’d describe it (Scene Intelligence), detect unauthorized distribution (Rights Monitor), and automatically re-cut what you find into shorts and highlights (Auto Recut).',
+    aEn: 'Heimdex is an AI video search solution: search your video archive for any scene the way you’d describe it (Scene Intelligence), detect unauthorized distribution (Rights Monitor), and automatically re-cut what you find into shorts and highlights (Auto Recut).',
   },
   {
     q: '영상을 외부 서버나 클라우드에 업로드해야 하나요?',
     qEn: 'Do I have to upload my video to an outside server or cloud?',
-    a: '아니요. 원본 영상은 NAS·서버·PC 등 원래 저장소에 그대로 두고, 검색에 필요한 인덱스만 로컬에서 만듭니다. 대용량 영상을 올리는 시간도, 외부 유출 걱정도 없습니다.',
-    aEn: 'No. Your source video stays where it is — NAS, servers, PCs — and only the search index is built locally. No time spent uploading large files, and no leak risk.',
+    a: '아니요. 원본 영상은 NAS·서버·PC 등 원래 저장소에 그대로 두고, 검색에 필요한\u00A0인덱스만 로컬에서 만듭니다. 대용량 영상을 올리는 시간도, 외부 유출 걱정도 없습니다.',
+    aEn: 'No. Your source video stays where it is (NAS, servers, PCs) and only the search index is built locally. No time spent uploading large files, and no leak risk.',
   },
   {
     q: '온프레미스나 폐쇄망 환경에서도 사용할 수 있나요?',
@@ -42,7 +42,7 @@ export const FAQ = [
   {
     q: '개인 크리에이터도 사용할 수 있나요?',
     qEn: 'Can individual creators use it?',
-    a: '개인 크리에이터를 위한 하임로그(HEIMLOG by HEIMDEX)가 있습니다. 직접 찍은 여행·일상 영상을 올리면 AI가 장면을 골라 자막·블러까지 넣어 브이로그로 자동 편집해 줍니다.',
-    aEn: 'Yes — heimlog (HEIMLOG by HEIMDEX) is built for individual creators. Upload your travel and everyday clips and AI picks the scenes and adds captions and blur to edit them into a vlog.',
+    a: '개인 크리에이터를 위한 하임로그(Heimlog by Heimdex)가 있습니다. 직접 찍은 여행·일상 영상을 올리면 AI가 장면을\u00A0골라 자막·블러까지 넣어 브이로그로 자동 편집해 줍니다.',
+    aEn: 'Yes, Heimlog by Heimdex is built for individual creators. Upload your travel and everyday clips and AI picks the scenes and adds captions and blur to edit them into a vlog.',
   },
 ]
